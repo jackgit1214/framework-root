@@ -1,0 +1,20 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.framework</groupId>
+    <artifactId>framework-root</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.museum</groupId>
+  <artifactId>museum_bootstrap</artifactId>
+  <packaging>war</packaging>
+  <name>museum_bootstrap</name>
+  <description>museum_bootstrap</description>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.framework</groupId>
+  		<artifactId>framework-core</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+</project>

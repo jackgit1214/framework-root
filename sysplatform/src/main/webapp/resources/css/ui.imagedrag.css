@@ -1,0 +1,18 @@
+@charset "utf-8";
+.ui-picture-div
+{
+	padding:0;
+	float:left;
+	overflow:auto;
+	position:relative;
+	cursor:move;
+}
+.ui-icon-operator-div {
+	position: absolute;
+	z-index: 100px;
+}
+.ui-operator-icon{
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}

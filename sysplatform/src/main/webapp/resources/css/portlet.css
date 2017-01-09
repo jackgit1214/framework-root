@@ -1,0 +1,76 @@
+
+.portletscontainer {
+	margin:0px 200px 0px 200px;
+}
+
+.portletscontainer a {
+	display: block; 
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;	
+	text-decoration:none;
+	color:#000000;
+}
+.portletscontainer a:hover{
+	color: #008bcc;
+	cursor:pointer;
+	text-decoration:none;
+}
+
+.column {
+	float: left;
+	padding-bottom: 10px;
+}
+.portlet {
+	margin:10px 5px;
+	height:290px;
+	background-color: #e6e6e6;
+	color:black;
+}
+.portlet-header {
+	margin: 0.3em;
+	height:20px;
+	padding-top:4px;
+	padding-bottom: 4px;
+	padding-left:10px;
+	font-weight: 700;
+}
+.portlet-header span {
+	float:right;
+	margin-right:20px;
+}
+.portlet-header .ui-icon {
+	float: left;
+}
+
+.portlet-content {
+	padding: 0.4em;
+	margin-left: 10px;
+	margin-right:10px;
+	height:230px;
+	border: 1px solid #7b7b7b;
+	background-color:#ffffff;
+}
+.portlet-content ul {
+	list-style-type: none;
+	width: 100%;
+}
+.portlet-content ul  li {
+	padding: 2px;
+	font-size: 10pt;
+	height: 18px;
+	border-bottom: 1px dotted #CCC;
+}
+
+.portlet-content ul  li span {
+	padding:2px 8px;
+}
+.portlet-content ul  li span.before {
+	float:left;
+}
+.portlet-content ul  li span.after {
+	float:right;
+	
+}
+
+

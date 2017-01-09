@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- spring 4由表单到model转换的几种方式................. -->
+
+	<!-- 1、定制全局转换服务............ <mvc:annotation-driven conversion-service="conversionService" 
+		/> <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean"> 
+		<property name="converters"> <set> <bean class="com.control.ConvertNull2Zero"/> 
+		</set> </property> </bean> -->
+
+	<!-- 2、实现PropertyEditorSupport类，实现相应方法 在控制类的initBinder方法中注册转换类， binder.registerCustomEditor(int.class,new 
+		UserBeanEditor()); 其中 int.class为目标类，UserBeanEditor为转换器 -->
+
+	<!-- 3、注册全局转换器 实现 WebBindingInitializer接口，并在其实现方法initBinder注册相应的转换器 注意：
+		会对返回json有影响.................
+		<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		 -->
+
+	<!-- 4、运用@ControllerAdvice,并对方法添加@InitBinder 进行处理 -->
+</beans>

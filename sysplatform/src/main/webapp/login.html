@@ -1,0 +1,110 @@
+<#include "/commons/common.html"/>
+<!doctype html>	
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+<title>登录</title>
+<script type="text/javascript" src="js/jquery-1.10.js"></script>
+<script type="text/javascript" src="js/jquery.validate.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery.ui.dialogE.js"></script>
+<link rel="stylesheet" type="text/css"	href="css/themes/start/jquery-ui.css" />
+<link rel="stylesheet" type="text/css"	href="css/themes/start/jquery.ui.theme.css" />
+<link rel="stylesheet" type="text/css"  href="css/ui_custom.css" />
+</head>
+<body>
+	<div id="maincon">
+		<form id="loginform" method="post" action="/login" target="_self">
+			<br/> <label>用户名：</label><input id="loginid" name="loginid" /><br/> <br/> 
+			<label>密&nbsp;&nbsp;&nbsp;码：</label><input
+				id="password" name="password" />
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+
+	$(function() {
+		var dialogP = {
+			height : 200,
+			width : 400,
+			resizable : false,
+			draggable: true,
+			closeText : "hide",
+			title : "登录",
+			disabled : true,
+			buttons : [
+			           {
+							text: "登录",
+							click: function() {
+								$("#loginform").submit();
+							}
+						},
+						{
+							text: "重置",
+							click: function() {
+								loginform.reset();
+							}
+						}
+			]
+		};
+		$("#maincon").dialogE(dialogP);
+	});
+	
+	
+	var login = {
+			loginIn:function(){
+				var $data = $("#loginform").serializeArray();
+				$.ajax({
+					type : "POST",
+					url : "<@projectpath/>/checkUserPassword",
+					data : $data,
+					success : function(msg) {
+						if (msg.isSuccess == false) {
+							alert("用户名或密码不正确！")
+						} else {
+							window.location = "<@projectpath/>/loginSuccess";
+						}
+					}
+				});
+				return;	
+			}
+	}
+
+	$.validator.setDefaults({
+		submitHandler : function() {
+			login.loginIn();
+		}
+	});
+
+	$().ready(function() {
+		$("#loginform").validate({
+			onfocusout:false,
+			rules : {
+				username : {
+					required : true
+				},
+				password: {
+	                required: true
+	            }
+			},
+			messages : {
+				username: {
+	                required: "请输入登录名！"
+	            },
+	            password: {
+	            	required:"请输入密码"
+	            }
+			},
+			showErrors: function(errorMap, errorList) {  
+	            var msg = "";  
+	            $.each( errorList, function(i,v){  
+	              msg += (v.message+"\r\n");  
+	            });  
+	            if(msg!="") alert(msg);  
+	        }  
+		});
+		
+	});	
+</script>
+</html>

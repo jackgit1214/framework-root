@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.SysModule" >
+    <id column="funcid" property="funcid" jdbcType="VARCHAR" />
+    <result column="funcname" property="funcname" jdbcType="VARCHAR" />
+    <result column="funtype" property="funtype" jdbcType="TINYINT" />
+    <result column="moddesc" property="moddesc" jdbcType="VARCHAR" />
+    <result column="IsInUse" property="isinuse" jdbcType="TINYINT" />
+    <result column="SuperModID" property="supermodid" jdbcType="VARCHAR" />
+    <result column="funicon" property="funicon" jdbcType="VARCHAR" />
+    <result column="funorder" property="funorder" jdbcType="TINYINT" />
+    <result column="SYSTEM" property="system" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    funcid, funcname, funtype, moddesc, IsInUse, SuperModID, funicon, funorder, urllink,targetdiv,SYSTEM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_module
+    where funcid = #{funcid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_module
+    where funcid = #{funcid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.system.model.SysModule" >
+    insert into sys_module (funcid, funcname, funtype, 
+      moddesc, IsInUse, SuperModID, 
+      funicon,urllink,targetdiv,funorder, SYSTEM
+      )
+    values (#{funcid,jdbcType=VARCHAR}, #{funcname,jdbcType=VARCHAR}, #{funtype,jdbcType=TINYINT}, 
+      #{moddesc,jdbcType=VARCHAR}, #{isinuse,jdbcType=TINYINT}, #{supermodid,jdbcType=VARCHAR}, 
+      #{funicon,jdbcType=VARCHAR}, #{urllink,jdbcType=VARCHAR}, #{targetdiv,jdbcType=VARCHAR},
+       #{funorder,jdbcType=TINYINT}, #{system,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.SysModule" >
+    insert into sys_module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="funcid != null" >
+        funcid,
+      </if>
+      <if test="funcname != null" >
+        funcname,
+      </if>
+      <if test="funtype != null" >
+        funtype,
+      </if>
+      <if test="moddesc != null" >
+        moddesc,
+      </if>
+      <if test="isinuse != null" >
+        IsInUse,
+      </if>
+      <if test="supermodid != null" >
+        SuperModID,
+      </if>
+      <if test="funicon != null" >
+        funicon,
+      </if>
+		<if test="urllink != null" >
+        urllink,
+      </if>
+      
+		<if test="targetdiv != null" >
+        targetdiv,
+      </if>
+      
+      <if test="funorder != null" >
+        funorder,
+      </if>
+      <if test="system != null" >
+        SYSTEM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="funcid != null" >
+        #{funcid,jdbcType=VARCHAR},
+      </if>
+      <if test="funcname != null" >
+        #{funcname,jdbcType=VARCHAR},
+      </if>
+      <if test="funtype != null" >
+        #{funtype,jdbcType=TINYINT},
+      </if>
+      <if test="moddesc != null" >
+        #{moddesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isinuse != null" >
+        #{isinuse,jdbcType=TINYINT},
+      </if>
+      <if test="supermodid != null" >
+        #{supermodid,jdbcType=VARCHAR},
+      </if>
+      <if test="funicon != null" >
+        #{funicon,jdbcType=VARCHAR},
+      </if>
+       <if test="urllink != null" >
+        #{urllink,jdbcType=VARCHAR},
+      </if>
+      <if test="targetdiv != null" >
+        #{targetdiv,jdbcType=VARCHAR},
+      </if>
+      <if test="funorder != null" >
+        #{funorder,jdbcType=TINYINT},
+      </if>
+      <if test="system != null" >
+        #{system,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysModule" >
+    update sys_module
+    <set >
+      <if test="funcname != null" >
+        funcname = #{funcname,jdbcType=VARCHAR},
+      </if>
+      <if test="funtype != null" >
+        funtype = #{funtype,jdbcType=TINYINT},
+      </if>
+      <if test="moddesc != null" >
+        moddesc = #{moddesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isinuse != null" >
+        IsInUse = #{isinuse,jdbcType=TINYINT},
+      </if>
+      <if test="supermodid != null" >
+        SuperModID = #{supermodid,jdbcType=VARCHAR},
+      </if>
+      <if test="funicon != null" >
+        funicon = #{funicon,jdbcType=VARCHAR},
+      </if>
+		<if test="urllink != null" >
+        urllink = #{urllink,jdbcType=VARCHAR},
+      </if>
+      
+	 <if test="targetdiv != null" >
+        targetdiv= #{targetdiv,jdbcType=VARCHAR},
+      </if>      
+      <if test="funorder != null" >
+        funorder = #{funorder,jdbcType=TINYINT},
+      </if>
+      <if test="system != null" >
+        SYSTEM = #{system,jdbcType=TINYINT},
+      </if>
+    </set>
+    where funcid = #{funcid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.SysModule" >
+    update sys_module
+    set funcname = #{funcname,jdbcType=VARCHAR},
+      funtype = #{funtype,jdbcType=TINYINT},
+      moddesc = #{moddesc,jdbcType=VARCHAR},
+      IsInUse = #{isinuse,jdbcType=TINYINT},
+      SuperModID = #{supermodid,jdbcType=VARCHAR},
+      funicon = #{funicon,jdbcType=VARCHAR},
+      urllink = #{urllink,jdbcType=VARCHAR},
+      targetdiv = #{targetdiv,jdbcType=VARCHAR},
+      funorder = #{funorder,jdbcType=TINYINT},
+      SYSTEM = #{system,jdbcType=TINYINT}
+    where funcid = #{funcid,jdbcType=VARCHAR}
+  </update>
+  
+    
+  <select id = "getModuleByUser" resultMap="BaseResultMap" >
+  	select 
+	<include refid="Base_Column_List" />
+  	from sys_module where funcid in (
+		SELECT
+			distinct b.funcid
+		FROM
+			sys_role_user A,
+			sys_role_func b
+		WHERE
+		A.ROLEID = b.ROLEID and A.UserID =#{userid,jdbcType=INTEGER})
+		<if test="queryModel != null">
+			<include refid="public.and_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+  </select>
+  
+    <select id = "getModuleByRole" resultMap="BaseResultMap" >
+		SELECT
+			a.funcid, a.funcname,a.moddesc,
+		 	case 
+				when  b.roleid is null then '0'
+				else '1'
+			end as 'system',
+			a.SuperModID as supermodid
+		FROM
+		    sys_module a
+		        LEFT JOIN
+		    sys_role_func b ON b.roleid = #{roleid,jdbcType=VARCHAR} AND a.funcid = b.funcid
+		WHERE
+		1=1
+		<if test="queryModel != null and queryModel.oredCriteria.size > 0">
+			<include refid="public.and_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+  </select>
+  
+  
+  <!--  公共方法 -->
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_module
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+  	<delete id="deleteByCondition" parameterType="com.framework.mybatis.model.QueryModel">
+		delete from sys_module
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" parameterType="com.framework.mybatis.model.QueryModel"
+		resultType="java.lang.Integer">
+		select count(*) from sys_module
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective" parameterType="map">
+		update sys_module
+		 <set >
+      <if test="record.funcname != null" >
+        funcname = #{record.funcname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.funtype != null" >
+        funtype = #{record.funtype,jdbcType=TINYINT},
+      </if>
+      <if test="record.moddesc != null" >
+        moddesc = #{record.moddesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isinuse != null" >
+        IsInUse = #{record.isinuse,jdbcType=TINYINT},
+      </if>
+      <if test="record.supermodid != null" >
+        SuperModID = #{record.supermodid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.funicon != null" >
+        funicon = #{record.funicon,jdbcType=VARCHAR},
+      </if>
+      	<if test="record.urllink != null" >
+        urllink = #{record.urllink,jdbcType=VARCHAR},
+      </if>
+      
+	 <if test="record.targetdiv != null" >
+        targetdiv= #{record.targetdiv,jdbcType=VARCHAR},
+      </if>    
+      <if test="record.funorder != null" >
+        funorder = #{record.funorder,jdbcType=TINYINT},
+      </if>
+      <if test="record.system != null" >
+        SYSTEM = #{record.system,jdbcType=TINYINT},
+      </if>
+    </set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition" parameterType="map">
+		update sys_module
+		 set funcname = #{record.funcname,jdbcType=VARCHAR},
+      funtype = #{record.funtype,jdbcType=TINYINT},
+      moddesc = #{record.moddesc,jdbcType=VARCHAR},
+      IsInUse = #{record.isinuse,jdbcType=TINYINT},
+      SuperModID = #{record.supermodid,jdbcType=VARCHAR},
+      funicon = #{record.funicon,jdbcType=VARCHAR},
+      urllink = #{record.urllink,jdbcType=VARCHAR},
+      targetdiv = #{record.targetdiv,jdbcType=VARCHAR},      
+      funorder = #{record.funorder,jdbcType=TINYINT},
+      SYSTEM = #{record.system,jdbcType=TINYINT}
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>	
+  
+</mapper>

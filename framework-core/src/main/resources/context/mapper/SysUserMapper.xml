@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysUserMapper">
+	<resultMap id="BaseResultMap" type="com.system.model.SysUser">
+		<id column="USERID" property="userid" jdbcType="VARCHAR" />
+		<result column="LOGINCODE" property="logincode" jdbcType="VARCHAR" />
+		<result column="VALID" property="valid" jdbcType="TINYINT" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="gender" property="gender" jdbcType="TINYINT" />
+		<result column="age" property="age" jdbcType="TINYINT" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
+		<result column="qq" property="qq" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="userorder" property="userorder" jdbcType="TINYINT" />
+		<result column="USERSTATUS" property="userstatus" jdbcType="TINYINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		USERID, LOGINCODE, VALID, username, PASSWORD, gender, age, birthday, qq,
+		email, address,
+		phone, userorder, USERSTATUS
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		where USERID = #{userid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_user
+		where USERID = #{userid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.system.model.SysUser">
+		insert into sys_user (USERID, LOGINCODE, VALID,
+		username, PASSWORD, gender,
+		age, birthday, qq, email,
+		address, phone, userorder,
+		USERSTATUS)
+		values (#{userid,jdbcType=VARCHAR}, #{logincode,jdbcType=VARCHAR},
+		#{valid,jdbcType=TINYINT},
+		#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT},
+		#{age,jdbcType=TINYINT}, #{birthday,jdbcType=DATE},
+		#{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+		#{userorder,jdbcType=TINYINT},
+		#{userstatus,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.system.model.SysUser">
+		insert into sys_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				USERID,
+			</if>
+			<if test="logincode != null">
+				LOGINCODE,
+			</if>
+			<if test="valid != null">
+				VALID,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="password != null">
+				PASSWORD,
+			</if>
+			<if test="gender != null">
+				gender,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="qq != null">
+				qq,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="userorder != null">
+				userorder,
+			</if>
+			<if test="userstatus != null">
+				USERSTATUS,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="logincode != null">
+				#{logincode,jdbcType=VARCHAR},
+			</if>
+			<if test="valid != null">
+				#{valid,jdbcType=TINYINT},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null">
+				#{gender,jdbcType=TINYINT},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=TINYINT},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="qq != null">
+				#{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="userorder != null">
+				#{userorder,jdbcType=TINYINT},
+			</if>
+			<if test="userstatus != null">
+				#{userstatus,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysUser">
+		update sys_user
+		<set>
+			<if test="logincode != null">
+				LOGINCODE = #{logincode,jdbcType=VARCHAR},
+			</if>
+			<if test="valid != null">
+				VALID = #{valid,jdbcType=TINYINT},
+			</if>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				PASSWORD = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null">
+				gender = #{gender,jdbcType=TINYINT},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=TINYINT},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="qq != null">
+				qq = #{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="userorder != null">
+				userorder = #{userorder,jdbcType=TINYINT},
+			</if>
+			<if test="userstatus != null">
+				USERSTATUS = #{userstatus,jdbcType=TINYINT},
+			</if>
+		</set>
+		where USERID = #{userid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.system.model.SysUser">
+		update sys_user
+		set LOGINCODE = #{logincode,jdbcType=VARCHAR},
+		VALID = #{valid,jdbcType=TINYINT},
+		username = #{username,jdbcType=VARCHAR},
+		PASSWORD = #{password,jdbcType=VARCHAR},
+		gender = #{gender,jdbcType=TINYINT},
+		age = #{age,jdbcType=TINYINT},
+		birthday = #{birthday,jdbcType=DATE},
+		qq = #{qq,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		address = #{address,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		userorder = #{userorder,jdbcType=TINYINT},
+		USERSTATUS = #{userstatus,jdbcType=TINYINT}
+		where USERID = #{userid,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="selectUserByDeptId" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from sys_user 
+		where user_id  in 
+		(select userid from sys_dept_user where DeptID=#{deptid,jdbcType=VARCHAR})
+	</select>
+	
+
+	<!-- 公共方法 -->
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByCondition" parameterType="com.framework.mybatis.model.QueryModel">
+		delete from sys_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" parameterType="com.framework.mybatis.model.QueryModel"
+		resultType="java.lang.Integer">
+		select count(*) from sys_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective" parameterType="map">
+		update sys_user
+		<set>
+			<if test="record.logincode != null">
+				LOGINCODE = #{record.logincode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.valid != null">
+				VALID = #{record.valid,jdbcType=TINYINT},
+			</if>
+			<if test="record.username != null">
+				username = #{record.username,jdbcType=VARCHAR},
+			</if>
+			<if test="record.password != null">
+				PASSWORD = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gender != null">
+				gender = #{record.gender,jdbcType=TINYINT},
+			</if>
+			<if test="record.age != null">
+				age = #{record.age,jdbcType=TINYINT},
+			</if>
+			<if test="record.birthday != null">
+				birthday = #{record.birthday,jdbcType=DATE},
+			</if>
+			<if test="record.qq != null">
+				qq = #{record.qq,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.address != null">
+				address = #{record.address,jdbcType=VARCHAR},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userorder != null">
+				userorder = #{record.userorder,jdbcType=TINYINT},
+			</if>
+			<if test="record.userstatus != null">
+				USERSTATUS = #{record.userstatus,jdbcType=TINYINT},
+			</if>
+		</set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition">
+		update sys_user
+		set LOGINCODE = #{record.logincode,jdbcType=VARCHAR},
+		VALID = #{record.valid,jdbcType=TINYINT},
+		username = #{record.username,jdbcType=VARCHAR},
+		PASSWORD = #{record.password,jdbcType=VARCHAR},
+		gender = #{record.gender,jdbcType=TINYINT},
+		age = #{record.age,jdbcType=TINYINT},
+		birthday = #{record.birthday,jdbcType=DATE},
+		qq = #{record.qq,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		address = #{record.address,jdbcType=VARCHAR},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		userorder = #{record.userorder,jdbcType=TINYINT},
+		USERSTATUS = #{record.userstatus,jdbcType=TINYINT}
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+</mapper>

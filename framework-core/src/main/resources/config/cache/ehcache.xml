@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false">
+	<diskStore path="java.io.tmpdir" />
+	<defaultCache eternal="false" maxElementsInMemory="1000"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU" />
+
+	<!-- objects are evicted from the cache every 60 seconds -->
+	<cache name="testCache" timeToLiveSeconds="60"
+		maxElementsInMemory="100" eternal="false" overflowToDisk="false"
+		maxElementsOnDisk="10000000" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="1" memoryStoreEvictionPolicy="LRU" />
+
+</ehcache>

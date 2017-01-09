@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/jdbc
+         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+         http://www.springframework.org/schema/jee
+         http://www.springframework.org/schema/jee/spring-jee.xsd
+         http://www.springframework.org/schema/util 
+         http://www.springframework.org/schema/util/spring-util.xsd">
+ 
+	<jdbc:initialize-database data-source="dataSource" enabled="false">
+		<jdbc:script location="${jdbc.delLocation}" />
+		<jdbc:script location="${jdbc.initLocation}" />
+	</jdbc:initialize-database>
+
+	<bean id="emails"
+		class="org.springframework.beans.factory.config.ListFactoryBean">
+		<property name="sourceList">
+			<list>
+				<value>pechorin@hero.org</value>
+				<value>raskolnikov@slums.org</value>
+				<value>stavrogin@gov.org</value>
+				<value>porfiry@gov.org</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

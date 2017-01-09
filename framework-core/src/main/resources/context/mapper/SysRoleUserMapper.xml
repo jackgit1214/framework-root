@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysRoleUserMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.SysRoleUser" >
+    <result column="ROLEID" property="roleid" jdbcType="VARCHAR" />
+    <result column="USERID" property="userid" jdbcType="VARCHAR" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+    ROLEID,userid
+  </sql>  
+  
+  <insert id="insert" parameterType="com.system.model.SysRoleUser" >
+    insert into sys_role_user (ROLEID, USERID)
+    values (#{roleid,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.SysRoleUser" >
+    insert into sys_role_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleid != null" >
+        ROLEID,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleid != null" >
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+<!--  公共方法 -->
+  
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_role_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+  	<delete id="deleteByCondition" parameterType="com.framework.mybatis.model.QueryModel">
+		delete from sys_role_user
+		<if test="queryModel != null">
+		</if>
+	</delete>
+	<select id="countByCondition" parameterType="com.framework.mybatis.model.QueryModel"
+		resultType="java.lang.Integer">
+		select count(*) from sys_role_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.SysRole" >
+    <id column="ROLEID" property="roleid" jdbcType="VARCHAR" />
+    <result column="ROLENAME" property="rolename" jdbcType="VARCHAR" />
+    <result column="roledesc" property="roledesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ROLEID, ROLENAME, roledesc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role
+    where ROLEID = #{roleid,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="getSysRoleByUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		SELECT 
+    a.roleid,a.rolename ,
+    case when 
+		b.userid is null then '0'
+        else '1' 
+	end as roledesc
+FROM
+    sys_role a
+        LEFT JOIN
+    sys_role_user b ON b.userid = #{userid,jdbcType=VARCHAR} and a.ROLEID = b.roleid 
+    WHERE
+		1=1
+		<if test="queryModel != null and queryModel.oredCriteria.size > 0">
+			<include refid="public.and_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_role
+    where ROLEID = #{roleid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.system.model.SysRole" >
+    insert into sys_role (ROLEID, ROLENAME, roledesc
+      )
+    values (#{roleid,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR}, #{roledesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.SysRole" >
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleid != null" >
+        ROLEID,
+      </if>
+      <if test="rolename != null" >
+        ROLENAME,
+      </if>
+      <if test="roledesc != null" >
+        roledesc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleid != null" >
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="rolename != null" >
+        #{rolename,jdbcType=VARCHAR},
+      </if>
+      <if test="roledesc != null" >
+        #{roledesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysRole" >
+    update sys_role
+    <set >
+      <if test="rolename != null" >
+        ROLENAME = #{rolename,jdbcType=VARCHAR},
+      </if>
+      <if test="roledesc != null" >
+        roledesc = #{roledesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ROLEID = #{roleid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.SysRole" >
+    update sys_role
+    set ROLENAME = #{rolename,jdbcType=VARCHAR},
+      roledesc = #{roledesc,jdbcType=VARCHAR}
+    where ROLEID = #{roleid,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+  
+<!--  公共方法 -->
+ 	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_role
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+  	<delete id="deleteByCondition">
+		delete from sys_role
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" parameterType="com.framework.mybatis.model.QueryModel"
+		resultType="java.lang.Integer">
+		select count(*) from sys_role
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective">
+		update sys_role
+		 <set >
+      <if test="record.rolename != null" >
+        ROLENAME = #{record.rolename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roledesc != null" >
+        roledesc = #{record.roledesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition">
+		update sys_role
+		 set ROLENAME = #{record.rolename,jdbcType=VARCHAR},
+      roledesc = #{record.roledesc,jdbcType=VARCHAR}
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>  
+</mapper>

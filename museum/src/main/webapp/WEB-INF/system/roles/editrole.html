@@ -1,0 +1,51 @@
+<div id="editrole" class="div_detail">
+	<form id="roleform" name="roleform" class="form-validation-1 form-horizontal">
+		<input type="hidden" id="roleid" name='roleid'
+			value="${role.roleid!''}" />
+		<div class="form-group">
+			<label for="rolename" class="col-md-2 control-label">角色名称：</label>
+			<div class="col-md-10">
+				<input type="text" id="rolename" name="rolename" data-label="角色名称"
+					value="${role.rolename!''}"
+					class="input-sm validate[required] form-control"
+					placeholder="enter content" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="roledesc" class="col-md-2 control-label">描述：</label>
+			<div class="col-md-10">
+				<input type="text" id="roledesc" name="roledesc"
+					class="input-sm validate[required] form-control"
+					value="${role.roledesc!''}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="tab-container tile m-15">
+				<ul class="nav tab nav-tabs">
+					<li class="active"><a href="#menu_authority">菜单权限</a></li>
+					<li><a href="#fun_authority">功能权限</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div class="tab-pane active overflow" id="menu_authority"  style="height:280px;overflow-y:auto">
+						<ul id="moduleTree" class="ztree"></ul>
+					</div>
+					<div class="tab-pane" id="fun_authority"></div>
+				</div>
+			</div>
+		</div>
+
+	</form>
+	<div class="modal-footer">
+		<div class="text-center">
+			<button type="submit" class="btn btn-sm" onclick="roleJscript.dataSave('#roleform');">保存</button>
+			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+</div>
+<script type=text/javascript>
+	$(function() {
+		roleJscript.roleEditJscript.init_UI();
+		roleJscript.roleEditJscript.init_tree(${treeModules});
+	});
+</script>

@@ -1,0 +1,49 @@
+<#include "commons/plugin.html"/>
+<@pub.htmlHead title="test系统"> 
+
+</@pub.htmlHead>
+
+<@pub.htmlBody>
+
+ 	<@bodyHeader/>
+ 	<div class="clearfix"></div>
+	<section id="main" class="p-relative" role="main" >
+
+		<@menuSider/>
+
+		<!-- Content -->
+		<section id="content" class="container" >
+	
+			<!-- Breadcrumb -->
+			<ol class="breadcrumb hidden-xs">
+				<li><a href="#" onclick="$('#code_add').modal('show');">首页</a></li>
+				<li><a href="javascript:void('0');">菜单</a></li>
+				<li class="active">Data</li>
+			</ol>
+
+			<div id="time" class="pull-right breadcrumb hidden-xs">
+                 <span id="hours"></span> :<span id="min"></span>:<span id="sec"></span>
+            </div>
+
+			<hr class="whiter hidden-xs" />
+
+			<div class="block-area p-5">
+				<div class="row m-container"  id="main-content">
+				</div>
+			</div> 
+		</section>
+		<@skinSider/>
+		<@htmlfooter/>
+	</section>
+
+</@pub.htmlBody> 
+<script type="text/javascript">
+$(function() {
+	
+	$.SystemApp.initMenu("/func/getFunction");
+	
+});	
+</script>
+
+
+

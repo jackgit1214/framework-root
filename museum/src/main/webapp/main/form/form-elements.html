@@ -1,0 +1,188 @@
+<!-- Text Input -->
+<div class="block-area" id="text-input">
+	<h3 class="block-title">Text Input</h3>
+
+	<p>Text Inputs with different sizes by height and column.</p>
+
+	<input class="form-control input-lg m-b-10" type="text"
+		placeholder=".input-lg"> <input type="text"
+		class="form-control m-b-10" placeholder="Default"> <input
+		class="form-control input-sm m-b-10" type="text"
+		placeholder=".input-sm">
+
+	<div class="row">
+		<div class="col-lg-2">
+			<input type="text" class="form-control m-b-10"
+				placeholder=".col-lg-2">
+		</div>
+		<div class="col-lg-3">
+			<input type="text" class="form-control m-b-10"
+				placeholder=".col-lg-3">
+		</div>
+		<div class="col-lg-4">
+			<input type="text" class="form-control m-b-10"
+				placeholder=".col-lg-4">
+		</div>
+		<div class="col-lg-5">
+			<input type="text" class="form-control m-b-10"
+				placeholder=".col-lg-5">
+		</div>
+		<div class="col-lg-6">
+			<input type="text" class="form-control m-b-10"
+				placeholder=".col-lg-6">
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<p></p>
+	<p>Input focus</p>
+	<input class="form-control input-focused" type="text"
+		value="This is focused...">
+	<p></p>
+	<p>Disabled</p>
+	<input class="form-control" type="text" value="This is disabled..."
+		disabled>
+</div>
+
+<hr class="whiter m-t-20" />
+
+<!-- Textarea -->
+<div class="block-area" id="textarea">
+	<h3 class="block-title">Textarea</h3>
+
+	<p>Form control which supports multiple lines of text. Change
+		'rows' attribute as necessary.</p>
+	<textarea class="form-control overflow" rows="3"
+		placeholder="This is a default Textarea..."></textarea>
+
+	<p></p>
+
+	<p>Textarea with auto-grow height</p>
+	<textarea class="form-control auto-size m-b-10"
+		placeholder="This is an auto sizing Textarea..."></textarea>
+
+	<p>Textarea Disabled</p>
+	<textarea class="form-control" placeholder="This is disabled" disabled></textarea>
+</div>
+
+<hr class="whiter m-t-20" />
+
+<!-- Select -->
+<div class="block-area" id="select">
+	<h3 class="block-title">Select</h3>
+	<p>Use Grid classes to adjust column sizes</p>
+
+	<select class="form-control input-lg m-b-10">
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option>Option 3</option>
+	</select> <select class="form-control m-b-10">
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option>Option 3</option>
+	</select> <select class="form-control input-sm m-b-10">
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option>Option 3</option>
+	</select>
+
+	<div class="select-container">
+		<!-- Hack to hide scrollbars -->
+		<select multiple class="form-control">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+		</select>
+	</div>
+
+	<p></p>
+	<p>Disabled</p>
+	<select class="form-control" disabled>
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option>Option 3</option>
+	</select>
+</div>
+
+<hr class="whiter m-t-20" />
+
+<!-- Checkbox + Radio-->
+<div class="block-area" id="check">
+	<h3 class="block-title">Checkbox + Radio</h3>
+	<p>Default Checkbox</p>
+
+	<div class="checkbox m-b-5">
+		<label> <input type="checkbox" checked> This is an
+			awesome sample Checkbox
+		</label>
+	</div>
+
+	<div class="clearfix"></div>
+
+	<div class="checkbox m-b-5">
+		<label> <input type="checkbox"> This is another
+			awesome sample Checkbox
+		</label>
+	</div>
+
+	<div class="clearfix"></div>
+
+	<div class="checkbox m-b-5">
+		<label> <input type="checkbox"> One more awesome
+			sample Checkbox
+		</label>
+	</div>
+
+	<br />
+
+	<p>Inline Checkboxes</p>
+	<label class="checkbox-inline"> <input type="checkbox">
+		1
+	</label> <label class="checkbox-inline"> <input type="checkbox">
+		2
+	</label> <label class="checkbox-inline"> <input type="checkbox">
+		3
+	</label>
+
+	<p class="m-t-20">Radio</p>
+	<div class="radio">
+		<label> <input type="radio" name="radio"> Option one
+			is this and that&mdash;be sure to include why it's great
+		</label>
+	</div>
+
+	<div class="radio">
+		<label> <input type="radio" name="radio"> Option one
+			is this and that&mdash;be sure to include why it's great
+		</label>
+	</div>
+
+	<div class="clearfix"></div>
+
+	<p class="m-t-20">Disabled</p>
+	<div class="radio">
+		<label> <input type="radio" checked disabled> This
+			Radio is checked and disabled
+		</label>
+	</div>
+	<div class="radio">
+		<label> <input type="radio" disabled> This Radio is
+			not checked and disabled
+		</label>
+	</div>
+
+	<div class="checkbox m-t-10 m-b-5">
+		<label> <input type="checkbox" checked disabled> This
+			is an awesome sample Checkbox checked and disabled
+		</label>
+	</div>
+
+	<div class="checkbox">
+		<label class="m-t-10"> <input type="checkbox" disabled>
+			This is too disabled
+		</label>
+	</div>
+
+</div>
+

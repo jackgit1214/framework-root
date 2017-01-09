@@ -1,0 +1,227 @@
+<!--footer-->
+<#macro htmlfooter>
+	<div class=" panel-footer  mejs-captions-position pie-title ">
+		<span>版权所有：某某公司</span>
+	</div>
+</#macro>
+
+<#macro bodyHeader >
+ <header id="header" class="main-header">
+		<a href="" id="menu-toggle"></a> 
+		<a class="logo"	href="index.html">XXX管理系统 1.0</a> 
+		
+		<nav class="navbar navbar-static-top">
+			
+			<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav ">
+	          <!-- Messages: style can be found in dropdown.less-->
+	          <li class="dropdown messages-menu">
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	              <i class="fa fa-envelope-o"></i>
+	              <span class="label label-success">4</span>
+	            </a>
+	            <div  class="dropdown-menu dropdown-menu-alt">
+                    <div class="listview narrow">
+                        <div class="media">
+                            <a href="">Send a New Message</a>
+                            <span class="drawer-close">&times;</span>
+                        </div>
+                        <div class="overflow" style="height: 224px">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img width="40" src="img/profile-pics/1.jpg" alt="">
+                                </div>
+                                <div class="media-body">
+                                    <small class="text-muted">Nadin Jackson - 2 Hours ago</small><br>
+                                    <a class="t-overflow" href="">Mauris consectetur urna nec tempor adipiscing. Proin sit amet nisi ligula. Sed eu adipiscing lectus</a>
+                                </div>
+                            </div>
+                            
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img width="40" src="img/profile-pics/5.jpg" alt="">
+                                </div>
+                                <div class="media-body">
+                                    <small class="text-muted">Wendy Mitchell - On 19/12/2013</small><br>
+                                    <a class="t-overflow" href="">Integer a eros dapibus, vehicula quam accumsan, tincidunt purus</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media text-center whiter l-100">
+                            <a href=""><small>VIEW ALL</small></a>
+                        </div>
+                    </div>
+                </div>
+	          </li>
+	          <!-- Notifications: style can be found in dropdown.less -->
+	          <li class="dropdown notifications-menu">
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	              <i class="fa fa-bell-o"></i>
+	              <span class="label label-warning">10</span>
+	            </a>
+	            <div class="dropdown-menu dropdown-menu-alt tile drawer animated">
+					<div class="listview narrow">
+						<div class="media">
+							<a href="">Notification Settings</a> <span class="drawer-close">&times;</span>
+						</div>
+						<div class="overflow" style="height: 224px">
+	
+							<div class="media">
+								<div class="pull-left">
+									<img width="40" src="img/profile-pics/1.jpg" alt="">
+								</div>
+								<div class="media-body">
+									<small class="text-muted">Nadin Jackson - On 15/12/2013</small><br>
+									<a class="t-overflow" href="">Ipsum wintoo consectetur urna
+										nec tempor adipiscing. Proin sit amet nisi ligula. Sed eu
+										adipiscing lectus</a>
+								</div>
+							</div>
+							<div class="media">
+								<div class="pull-left">
+									<img width="40" src="img/profile-pics/2.jpg" alt="">
+								</div>
+								<div class="media-body">
+									<small class="text-muted">David Villa - On 16/12/2013</small><br>
+									<a class="t-overflow" href="">Suspendisse in purus ut nibh
+										placerat Cras pulvinar euismod nunc quis gravida. Suspendisse
+										pharetra</a>
+								</div>
+							</div>
+						</div>
+						<div class="media text-center whiter l-100">
+							<a href=""><small>VIEW ALL</small></a>
+						</div>
+					</div>
+				</div>
+	          </li>
+	          <!-- Tasks: style can be found in dropdown.less -->
+	          <li class="dropdown tasks-menu">
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	              <i class="fa fa-flag-o"></i>
+	              <span class="label label-danger">9</span>
+	            </a>
+	            <ul class="dropdown-menu dropdown-menu-alt">
+	              <li class="header">You have 9 tasks</li>
+	              <li>
+	                <!-- inner menu: contains the actual data -->
+	                <ul class="menu">
+	                  <li><!-- Task item -->
+	                    <a href="#">
+	                      <h3>
+	                        Design some buttons
+	                        <small class="pull-right">20%</small>
+	                      </h3>
+	                      <div class="progress xs">
+	                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+	                          <span class="sr-only">20% Complete</span>
+	                        </div>
+	                      </div>
+	                    </a>
+	                  </li>
+	                  <!-- end task item -->
+	
+	                </ul>
+	              </li>
+	              <li class="footer">
+	                <a href="#">View all tasks</a>
+	              </li>
+	            </ul>
+	          </li>
+	          <!-- User Account: style can be found in dropdown.less -->
+	          <li class="dropdown user user-menu">
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	              <img src="img/profile-pic.jpg" class="user-image" alt="User Image">
+	              <span class="hidden-xs">Alexander Pierce</span>
+	            </a>
+	            <ul class="dropdown-menu dropdown-menu-alt">
+	             <!-- User image -->
+              <li class="user-header">
+                <img src="img/profile-pic.jpg" class="img-circle" alt="User Image">
+
+                <p>
+                  姓名，单位，（角色）
+                  <small>登录时间</small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <li class="user-body">
+              	<!-- 用户的统计信息 -->
+                <div class="row">
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Followers</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Sales</a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">Friends</a>
+                  </div>
+                </div>
+                <!-- /.row -->
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer block-area">
+                <div class="pull-left " >
+                  <a href="#" class="btn btn-sm m-r-5">详细</a>
+                </div>
+                
+                <div class="pull-right">
+                  <a href="#" class="btn btn-sm m-r-5">退出</a>
+                </div>
+              </li>
+	            </ul>
+	          </li>
+	          <!-- Control Sidebar Toggle Button -->
+	          <li>
+	            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+	          </li>
+	        </ul>
+			</div>
+		</nav>
+	</header>
+</#macro>
+
+
+<#macro skinSider >
+	<aside  class="control-sidebar control-sidebar-dark">
+			<div class="row template-skins">
+				<a data-skin="skin-blur-violate" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-violate.jpg" alt=""></a> <a
+					data-skin="skin-blur-lights" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-lights.jpg" alt=""></a> <a
+					data-skin="skin-blur-city" class="col-sm-6 col-xs-6  col-md-4"
+					href=""><img src="img/skin-city.jpg" alt=""></a> <a
+					data-skin="skin-blur-greenish" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-greenish.jpg" alt=""></a> <a
+					data-skin="skin-blur-night" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-night.jpg" alt=""></a> <a
+					data-skin="skin-blur-blue" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-blue.jpg" alt=""></a> <a
+					data-skin="skin-blur-sunny" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-sunny.jpg" alt=""></a> <a
+					data-skin="skin-cloth" class="col-sm-6 col-xs-6 col-md-4" href=""><img
+					src="img/skin-cloth.jpg" alt=""></a> <a
+					data-skin="skin-tectile" class="col-sm-6 col-xs-6  col-md-4"
+					href=""><img src="img/skin-tectile.jpg" alt=""></a> <a
+					data-skin="skin-blur-chrome" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-chrome.jpg" alt=""></a> <a
+					data-skin="skin-blur-ocean" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-ocean.jpg" alt=""></a> <a
+					data-skin="skin-blur-sunset" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-sunset.jpg" alt=""></a> <a
+					data-skin="skin-blur-yellow" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-yellow.jpg" alt=""></a> <a
+					data-skin="skin-blur-kiwi" class="col-sm-6 col-xs-6 col-md-4"
+					href=""><img src="img/skin-kiwi.jpg" alt=""></a>
+			</div>
+		</aside>
+</#macro>
+
+<#macro menuSider>
+	<!-- Sidebar -->
+		<aside id="sidebar">
+
+			
+		</aside>
+</#macro>

@@ -1,0 +1,179 @@
+<script type=text/javascript>
+	var userJscript = {
+		dialogObj : null,
+		init_UI : function() {
+
+		},
+		showEditUser : function(isEdit) {
+
+			var _params = {};
+			var _this = this;
+			if (isEdit) {
+				var selectValue = $.SystemApp.checkbox("#tableHover_user");
+				if (selectValue == null || selectValue == ''
+						|| selectValue.length <= 0) {
+					alert("请选择要编辑的数据");
+					return;
+				}
+				_params = {
+					'userid' : selectValue[0]
+				};
+			}
+
+			_this.dialogObj = $.SystemApp.openDialog($.SystemApp.contextPath
+					+ "/system/user/showEditUser", {
+				data : _params,
+				height : 500,
+				width : 700,
+				title : "用户编辑"
+			});
+			return;
+		},
+		delUser : function() {
+
+			var selectValue = $.SystemApp.checkbox("#tableHover_user");
+
+			if (selectValue == null || selectValue == ''
+					|| selectValue.length <= 0) {
+				alert("请选择要删除的数据");
+				return;
+			}
+			if (!confirm("您确定删除这些数据吗？"))
+				return;
+			var data = {
+				ids : selectValue
+			};
+			$.post($.SystemApp.contextPath + "/system/user/deleteUser", data,
+					function(data) {
+						if (data.successRows > 0) {
+							$.SystemApp.pagetoolbar.refreshData();
+
+							alert("数据删除成功！");
+						}
+					});
+		},
+		userSave : function(formObject) {
+			var $this = this;
+			var $formObject = $(formObject);
+			var validateResult = $formObject.validationEngine('validate');
+			if (!validateResult)
+				return false;
+
+			var data = $formObject.serializeArray();
+			$.post($.SystemApp.contextPath + "/system/user/updateUser",
+							data, function(data) {
+								if (data.successRows > 0) {
+									alert("数据保存成功！");
+									$this.dialogObj.modal("hide");
+									$.SystemApp.pagetoolbar.refreshData();
+								} else {
+									alert("数据保存失败！");
+								}
+
+							});
+		},
+		findUser : function() {
+			var data = $("#queryForm").serialize();
+
+			$.SystemApp.divLoad("#systemData", "/system/user/list", data,
+					function() {
+
+					});
+		}
+	};
+
+	$(function() {
+		userJscript.init_UI();
+		$.SystemApp.initComponents();
+
+		$.SystemApp.pagetoolbar.toolbarInit();
+	});
+</script>
+<div class="col-md-12 ">
+	<!-- 查询区域 -->
+	<div class="block-area tile p-5 m-b-5" style="height: 45px;">
+		<form id="queryForm" class="form-horizontal" role="form">
+			<div class="row">
+				<div class="col-md-4 m-b-15 form-group">
+					<label class="col-md-2 control-label" for="param['username']">姓名：</label>
+					<div class="col-md-10">
+						<input class="form-control m-b-10" name="param['username']"
+							id="param['username']" value="" />
+					</div>
+				</div>
+				<div class="col-md-4 m-b-15 form-group">
+					<label class="col-md-2 control-label" for="param['logincode']">登录名：</label>
+					<div class="col-md-10">
+						<input class="form-control m-b-10" name="param['logincode']"
+							id="param['logincode']" value="" />
+					</div>
+				</div>
+				<div class="col-md-4 m-b-15">
+					<button type="button" title="查询" class="btn btn-sm m-r-5"
+						onclick="userJscript.findUser();" value="查询">查询</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 数据显示区域 -->
+	<div id="systemData" class="listview list-container">
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="userJscript.showEditUser();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="userJscript.showEditUser(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="userJscript.delUser();">删除</button>
+		</header>
+
+		<div class=" table-con">
+			<div id="tableHover_user" class=" tile table-data m-b-5">
+				<div class="table-responsive overflow  " data-checkbox="#chk_select">
+					<table class="table table-bordered table-hover table-striped tile">
+						<thead>
+							<tr>
+								<td style="width: 20px;"><input type="checkbox"
+									class="list-parent-check" id="chk_select"
+									data-subcheck="subcheck" /></td>
+								<td style="width: 48px;">序号</td>
+								<td style="width: 180px;">姓名</td>
+								<td style="width: 100px;">登录名</td>
+								<td style="width: 60px;">性别</td>
+								<td style="width: 100px;">电话</td>
+								<td style="width: 100px;">Email</td>
+								<td >地址</td>
+							</tr>
+						</thead>
+						<#if page.pageDatas??> <#list page.pageDatas as user>
+						<tr>
+							<td><input type="checkbox" name="subcheck"
+								class="list-check" value="${(user.userid)!}"></td>
+							<td>${user_index+1}</td>
+							<td>${user.username?html}</td>
+							<td>${user.logincode?html}</td>
+							<td><#if '${(user.gender)!}' == "1">男<#else>女</#if></td>
+							<td>${(user.phone)!}</td>
+							<td>${(user.email)!}</td>
+							<td>${(user.address)!}</td>
+						</tr>
+						</#list> </#if>
+
+					</table>
+				</div>
+			</div>
+			<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}" data-totalpage="${page.lastPage}"
+				data-param='${param!""}' data-recordcount="${page.pageSize}"
+				data-linktarget="#systemData" data-pagelink="/system/user/list">
+				<div class="pull-left attrs">
+					第${page.curPage}页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

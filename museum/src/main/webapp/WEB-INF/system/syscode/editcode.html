@@ -1,0 +1,45 @@
+<div id="editCode" class="div_detail">
+	<form id="codeform" name="codeform" class="form-validation-1 form-horizontal">
+		<input type="hidden" name="token" value="${token}">
+		<input type="hidden" id="codeid" name='codeid'
+			value="${sysCode.codeid!''}" /> <input type="hidden" id="codetype"
+			name='codetype' value="${sysCode.codetype!''}" /> <input
+			type="hidden" id="content" name='content'
+			value="${sysCode.content!''}" /> <input type="hidden" id="superid"
+			name='superid' value="${sysCode.superid!''}" /> <input type="hidden"
+			id="leve" name='leve' value="${sysCode.leve!''}" /> <input
+			type="hidden" id="applyto" name='applyto'
+			value="${sysCode.applyto!''}" />
+		 <div class="form-group">
+		 	<label for="code" class="col-md-2 control-label">编码：</label>			
+            <div class="col-md-10">
+				<input type="text" id="code" name="code" data-label="编码"	value="${sysCode.code!''}" class="input-sm validate[required] form-control" placeholder="enter content" />
+            </div>
+		</div>
+		<div class="form-group">
+			<label for="codename" class="col-md-2 control-label">名称：</label>	
+			 <div class="col-md-10">
+			<input type="text" id="codename" name="codename"
+					data-label="名称" value="${sysCode.codename!''}" class="input-sm validate[required] form-control" 
+					placeholder="enter content" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="remark" class="col-md-2 control-label">备注：</label>	
+			 <div class="col-md-10">
+				<textarea id="remark" name="remark"
+					data-label="备注" value="${sysCode.remark!''}" class="form-control auto-size input-sm">${sysCode.remark!''}</textarea>
+			</div>
+		</div>		
+	</form>
+	<div class="modal-footer">
+		<div class="text-center">
+			<button type="submit" class="btn btn-sm" onclick="sysCodeJscript.dataSave('#codeform');">保存</button>
+			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+</div>
+
+<script type=text/javascript>
+
+</script>

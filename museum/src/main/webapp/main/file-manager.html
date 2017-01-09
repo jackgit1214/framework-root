@@ -1,0 +1,28 @@
+<div id="fileManager"></div>
+
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$('#fileManager')
+								.elfinder(
+										{
+											resizable : false,
+											url : 'php/connector.minimal.php', // connector URL (REQUIRED)
+											uiOptions : {
+												toolbar : [
+														[ 'back', 'forward',
+																'home',
+																'reload' ],
+														[ 'mkdir', 'mkfile',
+																'upload' ],
+														[ 'view', 'sort' ],
+														[ 'search' ] ]
+											},
+											height : 500
+										});
+
+						$('.elfinder-cwd-wrapper, .elfinder-navbar')
+								.niceScroll();
+					});
+</script>

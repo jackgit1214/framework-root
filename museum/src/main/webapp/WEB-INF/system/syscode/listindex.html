@@ -1,0 +1,219 @@
+<script type=text/javascript>
+	var sysCodeJscript = {
+		dialogObj : null,
+		codetree:null,
+		setting:function(){
+			var tmpsetting = $.SystemApp.treesetting;
+			 $.extend(tmpsetting,{
+				 check:{
+						enable: false
+					},
+			 	async: {
+					enable: true,
+					url:$.SystemApp.contextPath + "/system/code/getCodedata",
+					autoParam:["id","codetype"]
+				},
+				callback: {
+					onClick: function(event, treeId, treeNode){
+						sysCodeJscript.refreshDataList(treeNode);
+					},
+					beforeClick:function(treeId, treeNode){
+						
+						if (!treeNode.parent){ //末级代码直接修改
+							
+							sysCodeJscript.codetree.selectNode(treeNode.getParentNode(),false);
+							sysCodeJscript.refreshDataList(treeNode.getParentNode());
+							sysCodeJscript.showEdit(true,treeNode.data);
+							return false;
+						}else {
+					        return true;
+					    }
+					}
+				}
+			 });
+			return tmpsetting;
+		},
+		refreshDataList:function(treeNode){
+			var pid = treeNode.code ;
+			var cond= {};
+			cond['superid'] = pid;
+			cond['codetype']=treeNode.codetype;
+			var param1 ={
+				pageNo:1,
+				param:cond
+			};
+			$.SystemApp.divLoad("#systemData","/system/code/list",param1,function(){
+				
+			});
+		},
+		init_tree : function(treeData) {
+			this.codetree = $.fn.zTree.init($("#codetree"), this.setting(), treeData);
+			var nodes = this.codetree.getNodes();
+			
+			if (nodes.length >0)
+				this.codetree.expandNode(nodes[0]);
+		},
+		init_UI : function() {
+			var nodes = this.codetree.getNodes();
+			if (nodes.length>0) {
+				this.codetree.selectNode(nodes[0]);
+				sysCodeJscript.refreshDataList(nodes[0]);
+			}
+		},
+		dataSave: function(formObject){
+		
+			var $this = this;
+			var $formObject = $(formObject);
+			var validateResult  =$formObject.validationEngine('validate');
+			if (!validateResult)
+				return false;
+			var data = $formObject.serializeArray();
+			var nodes = $this.codetree.getSelectedNodes();
+			var isEdit = $formObject.find("#codeid").val()===""?false:true;
+			
+			$.post($.SystemApp.contextPath + "/system/code/updateCode",data, function(data) {
+					if (data.successRows > 0) {
+						alert("数据保存成功！");
+						$this.refreshTree(nodes[0],data.codedata,isEdit);
+						$this.dialogObj.modal("hide");
+						$.SystemApp.pagetoolbar.refreshData();
+					} else {
+						alert("数据保存失败！");
+					}
+			});
+		},
+		showEdit : function(isEdit,dataid) {
+			
+			var $this = this;
+			var _params = {};
+			var nodes = this.codetree.getSelectedNodes();
+			if (isEdit) {
+				if (dataid ==null || dataid == ''){
+					var selectValue = $.SystemApp.checkbox("#tableHover_code");
+					if (selectValue == null || selectValue == ''
+							|| selectValue.length <= 0) {
+						alert("请选择要编辑的数据");
+						return;
+					}
+					_params = {
+						'id' : selectValue[0]
+					};
+				}else{
+					//_params = nodes[0]; 通过树形结构点击修改
+					_params.id = dataid;
+				}
+			}else{
+				if (nodes.length <= 0){
+					alert("请选择上级节点！");
+					return ;
+				}
+				$.extend(true,_params,nodes[0]); //复制对象
+				_params.children="";//这儿不需要children
+			}
+			
+			$this.dialogObj = $.SystemApp.openDialog(
+				$.SystemApp.contextPath + "/system/code/showEditCode",
+				{
+					data:_params,
+					height:500,
+					width:700,
+					title: "系统代码编辑"
+				}
+			);
+			return ;
+		},
+		refreshTree:function(node,data,isEdit){
+			var $this = this;
+			if (node.open==true){
+				var newNode = {name:data.codename,id:data.code,data:data.codeid};
+				if (isEdit){
+					newNode=$this.codetree.getNodeByParam("code",data.code, null);
+					newNode.name = data.codename;
+					$this.codetree.updateNode(newNode);
+				}else
+					$this.codetree.addNodes(node, newNode);
+			}
+			else
+				$this.codetree.expandNode(node,true,false,false,false);
+		},
+		del : function() {
+			var $this = this;
+			var selectValue = $.SystemApp.checkbox("#tableHover_code");
+			
+			if (selectValue == null || selectValue == '' || selectValue.length <= 0) {
+				alert("请选择要删除的数据");
+				return;
+			}
+			if (!confirm("您确定删除这些数据吗？"))
+				return;
+			var data = {
+				ids : selectValue
+			};
+			$.post($.SystemApp.contextPath+ "/system/code/delete", data,
+					function(data) {
+						if (data.successRows > 0) {
+							$.SystemApp.pagetoolbar.refreshData();
+							$.each(selectValue,function(i,obj){
+								var node = $this.codetree.getNodeByParam("data",obj, null);
+								$this.codetree.removeNode(node,false);
+							});
+							alert("数据删除成功！");
+						}
+					}
+			);
+		},
+		finddata : function() {
+			var data = $("#queryForm").serialize();
+			$.SystemApp.divLoad("#systemData","/system/code/list",data,function(){
+				
+			});
+		},
+		test:function(){
+			var $this = this;
+			var node = $this.codetree.getNodeByParam("code","B", null);
+			alert(node);
+		}
+	};
+
+	$(function() {
+		sysCodeJscript.init_tree(${codeTrees});
+		sysCodeJscript.init_UI();
+		
+	});
+</script>
+<div class="col-md-2">
+	<div class="tile p-5 con-main " >
+		<ul id="codetree" class="ztree" ></ul>
+	</div>
+</div>
+
+<div class="col-md-10 ">
+	<!-- 查询区域 -->
+	<div class="block-area tile p-5 m-b-5" style="height: 45px;">
+		<form id="queryForm" class="form-horizontal" role="form">
+			<div class="row">
+				<div class="col-md-4 m-b-15 form-group">
+					<label class="col-md-2 control-label" for="param['code']">代码：</label>
+					<div class="col-md-10">
+						<input class="form-control m-b-10" name="param['code']"
+							id="param['code']" value="" />
+					</div>
+				</div>
+				<div class="col-md-4 m-b-15 form-group">
+					<label class="col-md-2 control-label" for="param['codename']">名称：</label>
+					<div class="col-md-10">
+						<input class="form-control m-b-10" name="param['codename']"
+							id="param['codename']" value="" />
+					</div>
+				</div>
+				<div class="col-md-4 m-b-15">
+					<button type="button" title="查询" class="btn btn-sm m-r-5"
+						onclick="sysCodeJscript.finddata();" value="查询">查询</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- 数据显示区域 -->
+	<div id="systemData" class="listview list-container"></div>
+</div>

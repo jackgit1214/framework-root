@@ -1,0 +1,63 @@
+<header class="listview-header media p-5">
+	<input type="button" value="新增" class="btn btn-sm m-r-5"
+		onclick="indexJscript.showEditIndex();" /> <input id="" type="button"
+		class="btn btn-sm m-r-5" value="修改"
+		onclick="indexJscript.showEditIndex(true);" />
+	<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+		onclick="indexJscript.delIndex();">删除</button>
+	<!-- 
+	<button id="button" title="find" value="find" class="btn btn-sm m-r-5"
+		onclick="indexJscript.findtreeIndex();">find</button>  -->
+</header>
+<div class=" table-con">
+	<div id="tableHover_index" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox" id="chk_select"
+							class="list-parent-check" data-subcheck="subcheck" /></td>
+						<td style="width: 100px;">指标编码</td>
+						<td style="width: 180px;">指标名称</td>
+						<td style="width: 100px;">数据类型</td>
+						<td style="width: 100px;">上级指标</td>
+						<td style="width: 100px;">是否核心</td>
+						<td>摘要</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas??> <#list page.pageDatas as indexdata>
+				<tr>
+					<td><input type="checkbox" name="subcheck"
+						value="${(indexdata.id)!}" class="list-check"></td>
+					<td>${indexdata.indexid?html}</td>
+					<td>${indexdata.indexname?html}</td>
+					<td>${indexdata.idatatype?html}</td>
+					<td>${(indexdata.superid)!}</td>
+					<td>${(indexdata.iscore)!}</td>
+					<td>${(indexdata.breviary)!}</td>
+				</tr>
+				</#list> </#if>
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+		data-curpage="${page.curPage}" data-totalpage="${page.lastPage}" data-param='${param!}'
+		data-recordcount="${page.pageSize}" data-linktarget="#systemData"
+		data-pagelink="/system/dataindex/list">
+			<div class="pull-left attrs">
+				第${page.curPage}页，共${page.lastPage}页
+			</div>
+			<div class="pull-right">		
+				<ul class="pagination">
+					
+				</ul>
+			</div>
+	</div>
+</div>
+
+<script>
+	(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	})();
+</script>

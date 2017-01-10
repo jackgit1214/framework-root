@@ -24,9 +24,9 @@
 	<mvc:annotation-driven/>
 	
 	<mvc:default-servlet-handler default-servlet-name="default"/>
-   
+    
 	 <import resource="mvc-interceptor-config.xml" />
-	 <!-- 项目中配置资源
+	 <!--项目中配置资源
 	 <import resource="mvc-convertServices.xml" /> -->
 	 <mvc:resources mapping="js/**" location="/resources/js/**" /> 
 	 <mvc:resources mapping="css/**" location="/resources/css/**" />

@@ -1,7 +1,7 @@
 package com.system.mybatis.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.framework.common.util.UUIDUtil;
 import com.framework.mybatis.dao.Base.BaseDao;
@@ -10,17 +10,18 @@ import com.system.model.SysLog;
 import com.system.mybatis.dao.SysLogMapper;
 import com.system.mybatis.service.ISystemLogService;
 
-@Component
+@Service
 public class SystemLogServiceImpl extends AbstractBusinessService<SysLog>
 		implements ISystemLogService {
 
 	@Autowired
 	public SysLogMapper sysLogMapper;
-
+//
 	@Override
 	public BaseDao getDao() {
 		// TODO Auto-generated method stub
 		return this.sysLogMapper;
+		//return null;
 	}
 
 	/**

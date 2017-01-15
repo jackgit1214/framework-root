@@ -113,7 +113,7 @@
 		dept_desc = #{deptDesc,jdbcType=VARCHAR}
 		where DEPTID = #{deptid,jdbcType=VARCHAR}
 	</update>
-	<select id="selectDepotTree" resultMap="sysDepotTreeMap" parameterType="">
+	<select id="selectDepotTree" resultMap="sysDepotTreeMap">
 		select
 		<include refid="Base_Column_List" />
 		,

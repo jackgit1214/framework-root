@@ -18,6 +18,7 @@ public @interface SystemLog {
 	 String operId() default "";
 	 
 	 public enum LogAnnoDefi  {
+		 
 			DESC(1),MODULE(2),OPER(3);
 
 			private LogAnnoDefi(int value) {

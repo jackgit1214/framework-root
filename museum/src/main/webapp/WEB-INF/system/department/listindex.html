@@ -1,0 +1,223 @@
+<script type=text/javascript>
+	var depotJscript = {
+		dialogObj : null,
+		depottree:null,
+		setting:function(){
+			var tmpsetting = $.SystemApp.treesetting;
+			 $.extend(tmpsetting,{
+				 check:{
+						enable: false
+					},
+			 	async: {
+					enable: true,
+					//contentType:"application/json",
+					url:$.SystemApp.contextPath + "/system/department/getDepotdata",
+					autoParam:["id","pId"]
+				},
+				callback: {
+					onClick: function(event, treeId, treeNode){
+						depotJscript.refreshDataList(treeNode);
+					},
+					beforeClick:function(treeId, treeNode){
+						if (!treeNode.parent){ //末级指标直接修改
+							depotJscript.depottree.selectNode(treeNode.getParentNode(),false);
+							depotJscript.refreshDataList(treeNode.getParentNode());
+							depotJscript.showEditIndex(true,treeNode.data);
+							return false;
+						}else {
+					        return true;
+					    }
+					}
+				}
+			 });
+			return tmpsetting;
+		},
+		refreshDataList:function(treeNode){
+			var pid = treeNode.id ;
+			var cond= {};
+			cond['superid'] = pid;
+			
+			var param1 ={
+					pageNo:1,
+					param:cond
+			};
+			
+			$.SystemApp.divLoad("#systemData","/system/department/list",param1,function(){
+				
+			});
+		},
+		init_tree : function(treeData) {
+			
+			this.depottree = $.fn.zTree.init($("#departmenttree"), this.setting(), treeData);
+			var nodes = this.depottree.getNodes();
+			
+			if (nodes.length >0)
+				this.depottree.expandNode(nodes[0]);
+		},
+		init_UI : function() {
+			var nodes = this.depottree.getNodes();
+			if (nodes.length>0) {
+				this.depottree.selectNode(nodes[0]);
+				this.refreshDataList(nodes[0]);
+			}			
+		},
+		dataSave: function(formObject){
+		
+			var $this = this;
+			var $formObject = $(formObject);
+			var validateResult  =$formObject.validationEngine('validate');
+			if (!validateResult)
+				return false;
+			var data = $formObject.serializeArray();
+			var nodes = $this.depottree.getSelectedNodes();
+			var isEdit = $formObject.find("#id").val()===""?false:true;
+			console.log(nodes[0]);
+			$.post($.SystemApp.contextPath + "/system/department/update",data, function(data) {
+					if (data.successRows > 0) {
+						alert("数据保存成功！");
+						$this.refreshTree(nodes[0],data.indexdata,isEdit);
+						$this.dialogObj.modal("hide");
+						$.SystemApp.pagetoolbar.refreshData();
+					} else {
+						alert("数据保存失败！");
+					}
+			});
+		},		
+		showEditIndex : function(isEdit,indexid) {
+			var $this = this;
+			var _params = {};
+			var nodes = this.depottree.getSelectedNodes();
+			if (isEdit) {
+				if (indexid ==null || indexid == ''){
+					var selectValue = $.SystemApp.checkbox("#tableHover_department");
+					if (selectValue == null || selectValue == ''
+							|| selectValue.length <= 0) {
+						alert("请选择要编辑的数据");
+						return;
+					}
+					_params = {
+						'id' : selectValue[0]
+					};
+				}else{
+					_params.id = indexid;
+				}
+				_params.indexid=nodes[0].indexid;
+				_params.indexname=nodes[0].indexname;
+			}else{
+				if (nodes.length <= 0){
+					alert("请选择上级节点！");
+					return ;
+				}
+				$.extend(true,_params,nodes[0]); //复制对象
+				console.log(_params);
+				_params.children="";//这儿不需要children
+			}
+			
+			
+			$this.dialogObj = $.SystemApp.openDialog(
+				$.SystemApp.contextPath + "/system/department/showEdit",
+				{
+					data:_params,
+					height:500,
+					width:700,
+					title: "藏品指标编辑"
+				}
+			);
+			return ;			
+		},
+		refreshTree:function(node,data,isEdit){
+			var $this = this;
+			if (node.open==true){
+				var newNode = {name:data.indexname,id:data.indexid,data:data.id};
+				if (isEdit){
+					//console.log(data);
+					newNode=$this.depottree.getNodeByParam("data",data.id, node);
+					//console.log(newNode);
+					newNode.name = data.indexname;
+					$this.depottree.updateNode(newNode);
+				}else
+					$this.depottree.addNodes(node, newNode);
+			}
+			else
+				$this.depottree.expandNode(node,true,false,false,false);
+			
+		},
+		delIndex : function() {
+			var $this = this;
+			var selectValue = $.SystemApp.checkbox("#tableHover_department");
+
+			if (selectValue == null || selectValue == ''
+					|| selectValue.length <= 0) {
+				alert("请选择要删除的数据");
+				return;
+			}
+			if (!confirm("您确定删除这些数据吗？"))
+				return;
+			var data = {
+				ids : selectValue
+			};
+			
+			$.post($.SystemApp.contextPath + "/system/department/delete", data,
+					function(data) {
+						if (data.successRows > 0) {
+							$.SystemApp.pagetoolbar.refreshData();
+							$.each(selectValue,function(i,obj){
+								var node = $this.depottree.getNodeByParam("data",obj, null);
+								$this.depottree.removeNode(node,false);
+							});
+							alert("数据删除成功！");
+					}
+			});
+		},
+		finddata : function() {
+			var data = $("#queryForm").serialize();
+			$.SystemApp.divLoad("#systemData","/system/department/list",data,function(){
+				
+			});
+		},
+		findtreeIndex:function(){
+			var $this = this;
+			var node = $this.depottree.getNodeByParam("data","93da9f1dec834f53b75edd29575e930a", null);
+			//console.log(node);
+		}
+	};
+
+	$(function() {
+		depotJscript.init_tree(${departmentTree});
+		depotJscript.init_UI();
+	});
+</script>
+
+
+<div class="col-md-2">
+	<div class="tile p-5 con-main " >
+		<ul id="departmenttree" class="ztree"></ul>
+	</div>
+</div>
+
+<div class="col-md-10 ">
+	<!-- 查询区域 -->
+	<div class="block-area tile p-5 m-b-5" style="height: 45px;">
+		<form id="queryForm" class="form-horizontal" role="form">
+			<div class="row">
+				<div class="col-md-4 m-b-15 form-group">
+					
+					<label class="col-md-3 control-label" for="param['deptName']">库房名称：</label>
+					<div class="col-md-9">
+						<input class="form-control m-b-10" name="param['deptName']"
+							id="param['deptName']" value="" />
+					</div>
+				</div>
+				<div class="col-md-4 m-b-15">
+					<button type="button" title="查询" class="btn btn-sm m-r-5"
+						onclick="depotJscript.finddata();" value="查询">查询</button>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+
+	<!-- 数据显示区域 -->
+	<div id="systemData" class="listview list-container"></div>
+	
+</div>

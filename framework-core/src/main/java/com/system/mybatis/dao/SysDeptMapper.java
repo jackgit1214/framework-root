@@ -2,7 +2,7 @@ package com.system.mybatis.dao;
 
 import java.util.List;
 
-import org.springframework.data.repository.query.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.framework.mybatis.dao.Base.IDataMapper;

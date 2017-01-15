@@ -130,5 +130,18 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 	public void testSelectByConditionQueryModelPageResultOfT() {
 		//fail("Not yet implemented");
 	}
+	
+	@Test
+	public void testselectDepotTree() {
+		QueryModel queryModel = new QueryModel();
+		QueryModel.Criteria criteria = queryModel.createCriteria();
+		
+		criteria.andEqualTo("a.superid", "XXX");
+		
+		List list =this.sysDeptMapper.selectDepotTree(queryModel);
+		Assert.assertNotNull(list);
+		
+	}
+	
 
 }

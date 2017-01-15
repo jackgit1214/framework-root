@@ -12,7 +12,9 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-     <!--  -->
+     <!-- 
+       使用<mvc:annotation-driven/>注解，会默认创建此bean，如果在这里
+     	配置此属性，必须有order配合 ，提高优先级才起作用 -->
 	<bean id="handlerMapping"
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 		<property name="interceptors">
@@ -20,19 +22,22 @@
 				<ref bean="customInterceptor" />
 				<ref bean="duplicateSubmissionInterceptor"/>
 				<ref bean="localeChangeInterceptor"/>
+				
 			</list>
 		</property>
+		<property name="order" value="-1"/>
 	</bean>  
 	
 	<mvc:interceptors>
 		<!--<ref  bean="localeChangeInterceptor"/>
-		 
+		 -->
 		<mvc:interceptor>
 			<mvc:mapping path="/update*"/>
 			<mvc:mapping path="/showEdit*"/>
 			<ref bean="duplicateSubmissionInterceptor"/>  
+			
 		</mvc:interceptor> 
-		<mvc:interceptor>
+		<!--<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/" />
 			<ref bean="localeChangeInterceptor"/>

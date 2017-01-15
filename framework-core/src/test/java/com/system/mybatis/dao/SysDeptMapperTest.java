@@ -138,7 +138,7 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 		
 		criteria.andEqualTo("a.superid", "XXX");
 		
-		List list =this.sysDeptMapper.selectDepotTree(queryModel);
+		List list =this.sysDeptMapper.selectDepartmentTree(queryModel);
 		Assert.assertNotNull(list);
 		
 	}

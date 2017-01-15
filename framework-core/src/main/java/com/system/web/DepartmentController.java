@@ -17,14 +17,13 @@ import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
 import com.framework.web.controller.BaseController;
 import com.system.common.SysConstant;
-import com.system.model.DataIndexTree;
-import com.system.model.SysDepotTree;
+import com.system.model.SysDepartmentTree;
 import com.system.model.SysDept;
 import com.system.mybatis.service.ISysDeptService;
 
 @Controller
-@RequestMapping("/system/depot")
-public class DepotController extends BaseController {
+@RequestMapping("/system/department")
+public class DepartmentController extends BaseController {
 
 	@Autowired
 	@Qualifier("sysDeptServiceImpl")
@@ -39,9 +38,9 @@ public class DepotController extends BaseController {
 	@RequestMapping("/index")
 	public ModelAndView index() {
 		
-		List<SysDepotTree> depotTree = this.sysDeptService.getDeptBySupperId("XXX");
-		ModelAndView mav = new ModelAndView("system/depot/listindex");
-		mav.addObject("depotTree",JSON.toJSON(depotTree).toString());
+		List<SysDepartmentTree> depotTree = this.sysDeptService.getDeptBySupperId("xxx");
+		ModelAndView mav = new ModelAndView("system/department/listindex");
+		mav.addObject("departmentTree",JSON.toJSON(depotTree).toString());
 
 		return mav;
 	}
@@ -69,7 +68,7 @@ public class DepotController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("system/depot/listdata");
+		ModelAndView mav = new ModelAndView("system/department/listdata");
 		log.debug(JSON.toJSONString(queryModel));
 		mav.addObject("param", JSON.toJSONString(queryModel));
 		mav.addObject("page", page);
@@ -85,7 +84,7 @@ public class DepotController extends BaseController {
 	 */
 	@RequestMapping("/showEdit")
 	public ModelAndView showEdit(String depotid) {
-		ModelAndView mav = new ModelAndView("system/depot/edit");
+		ModelAndView mav = new ModelAndView("system/department/edit");
 		SysDept sysDepot = this.sysDeptService.findObjectById(depotid);
 
 		if (sysDepot == null)
@@ -129,8 +128,8 @@ public class DepotController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value="/getDepotdata",method=RequestMethod.POST)
-	public List<SysDepotTree> getDepotData(@RequestParam(value = "id", required = false)String id,@RequestParam(value = "pId", required = false)String pId){
-		List<SysDepotTree> dataindexs = this.sysDeptService.getDeptBySupperId(id);
+	public List<SysDepartmentTree> getDepotData(@RequestParam(value = "id", required = false)String id,@RequestParam(value = "pId", required = false)String pId){
+		List<SysDepartmentTree> dataindexs = this.sysDeptService.getDeptBySupperId(id);
 		return dataindexs;
 	}
 	

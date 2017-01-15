@@ -9,7 +9,7 @@ import com.framework.mybatis.dao.Base.IDataMapper;
 import com.framework.mybatis.dao.Base.IDataMapperByPage;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
-import com.system.model.SysDepotTree;
+import com.system.model.SysDepartmentTree;
 import com.system.model.SysDept;
 
 @Repository
@@ -29,6 +29,6 @@ public interface SysDeptMapper extends IDataMapper<SysDept>,IDataMapperByPage<Sy
     
     int updateByPrimaryKey(SysDept record);
     
-    List<SysDepotTree>  selectDepotTree(@Param("queryModel") QueryModel queryModel);
+    List<SysDepartmentTree>  selectDepartmentTree(@Param("queryModel") QueryModel queryModel);
     
 }

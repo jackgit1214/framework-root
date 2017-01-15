@@ -2,7 +2,7 @@ package com.system.model;
 
 import com.framework.common.model.ITreeData;
 
-public class SysDepotTree extends SysDept implements ITreeData {
+public class SysDepartmentTree extends SysDept implements ITreeData {
 
 	
 	/**

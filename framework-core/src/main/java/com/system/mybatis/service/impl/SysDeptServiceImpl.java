@@ -10,8 +10,7 @@ import com.framework.common.util.UUIDUtil;
 import com.framework.mybatis.dao.Base.BaseDao;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
-import com.system.model.DataIndexTree;
-import com.system.model.SysDepotTree;
+import com.system.model.SysDepartmentTree;
 import com.system.model.SysDept;
 import com.system.mybatis.dao.SysDeptMapper;
 import com.system.mybatis.dao.SysDeptUserMapper;
@@ -70,7 +69,7 @@ public class SysDeptServiceImpl extends AbstractBusinessService<SysDept> impleme
 	}
 
 	@Override
-	public List<SysDepotTree> getDeptBySupperId(String superid) {
+	public List<SysDepartmentTree> getDeptBySupperId(String superid) {
 		
 		QueryModel queryModel = new QueryModel();
 		QueryModel.Criteria criteria = queryModel.createCriteria();
@@ -78,7 +77,7 @@ public class SysDeptServiceImpl extends AbstractBusinessService<SysDept> impleme
 		queryModel.setOrderByClause("deptid");
 		this.log.debug(queryModel.getCondition());
 		
-		List<SysDepotTree> datas = this.sysDeptMapper.selectDepotTree(queryModel);
+		List<SysDepartmentTree> datas = this.sysDeptMapper.selectDepartmentTree(queryModel);
 		return datas;
 	}
 

@@ -109,7 +109,9 @@
 	<!-- 注册全局转换器 实现 WebBindingInitializer接口，并在其实现方法initBinder注册相应的转换器 
 	      注意： 会对返回json有影响................. 
 		配置这个东西会影响@valid,必须配置<property name="webBindingInitializer">,
-		才可以， 可能也会影响其它参数，目前不知 -->
+		才可以， 可能也会影响其它参数，目前不知
+		使用<mvc:annotation-driven/>注解，会默认创建此bean，使配置起使用
+   -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="synchronizeOnSession" value="true" />
@@ -136,6 +138,8 @@
 				<property name="validator" ref="validator" />
 			</bean>
 		</property>
+		
+		<property name="order" value="-1"/>
 		<!-- <property name="webBindingInitializer" ref="customWebBindingInitializer" 
 			/> -->
 	</bean>

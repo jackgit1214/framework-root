@@ -38,6 +38,7 @@
 
 		<context:component-scan base-package="com.system.jpa" />
 		<context:component-scan base-package="com.framework.jpa" />
+		<aop:aspectj-autoproxy proxy-target-class="true"/>  
 	</beans>
 	<beans profile="mybatis">
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

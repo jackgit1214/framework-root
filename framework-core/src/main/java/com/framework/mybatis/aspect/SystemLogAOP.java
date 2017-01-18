@@ -1,4 +1,4 @@
-package com.framework.common.aspect;
+package com.framework.mybatis.aspect;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -32,11 +32,9 @@ public class SystemLogAOP {
 	@Resource
 	protected SessionManager sessionManager;
 
-	
 	@Resource
 	protected ISystemLogService systemLogServiceImpl;
 
-	
 	private final Logger logger = LoggerFactory.getLogger(SystemLogAOP.class);
 
 	// Service层切点
@@ -55,7 +53,7 @@ public class SystemLogAOP {
 		SysLog log = this.genSystemLog(joinPoint);
 		logger.debug("-------------------日志记录成功--------------------------");
 		this.systemLogServiceImpl.saveLog(log);
-		
+
 	}
 
 	/**
@@ -72,7 +70,7 @@ public class SystemLogAOP {
 
 		logger.debug("-------------------日志异常记录成功--------------------------");
 		this.systemLogServiceImpl.saveLog(log);
-		
+
 	}
 
 	/**

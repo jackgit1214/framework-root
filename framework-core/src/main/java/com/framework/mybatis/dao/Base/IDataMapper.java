@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.framework.mybatis.model.QueryModel;
 
-@Repository
+
 public interface IDataMapper<T> extends BaseDao {
 
     int countByCondition(@Param("queryModel")QueryModel queryModel);

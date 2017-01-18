@@ -32,7 +32,7 @@
       )
     values (#{funcid,jdbcType=VARCHAR}, #{funcname,jdbcType=VARCHAR}, #{funtype,jdbcType=TINYINT}, 
       #{moddesc,jdbcType=VARCHAR}, #{isinuse,jdbcType=TINYINT}, #{supermodid,jdbcType=VARCHAR}, 
-      #{funicon,jdbcType=VARCHAR}, #{urllink,jdbcType=VARCHAR}, #{targetdiv,jdbcType=VARCHAR},
+      #{funicon,jdbcType=VARCHAR}, #{urllink,jdbcType=VARCHAR}, #{targetDiv,jdbcType=VARCHAR},
        #{funorder,jdbcType=TINYINT}, #{system,jdbcType=TINYINT}
       )
   </insert>

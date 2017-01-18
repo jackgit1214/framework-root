@@ -15,19 +15,19 @@ public class SysModule implements Serializable,ITreeData {
 
 	private String funcname;
 
-	private Byte funtype;
+	private int funtype;
 
 	private String moddesc;
 
-	private Byte isinuse;
+	private int isinuse;
 
 	private String supermodid;
 
 	private String funicon;
 
-	private Byte funorder;
+	private int funorder;
 
-	private Byte system;
+	private int system;
 
 	private String targetDiv;
 
@@ -49,13 +49,6 @@ public class SysModule implements Serializable,ITreeData {
 		this.funcname = funcname;
 	}
 
-	public Byte getFuntype() {
-		return funtype;
-	}
-
-	public void setFuntype(Byte funtype) {
-		this.funtype = funtype;
-	}
 
 	public String getModdesc() {
 		return moddesc;
@@ -65,13 +58,7 @@ public class SysModule implements Serializable,ITreeData {
 		this.moddesc = moddesc;
 	}
 
-	public Byte getIsinuse() {
-		return isinuse;
-	}
 
-	public void setIsinuse(Byte isinuse) {
-		this.isinuse = isinuse;
-	}
 
 	public String getSupermodid() {
 		return supermodid;
@@ -89,21 +76,9 @@ public class SysModule implements Serializable,ITreeData {
 		this.funicon = funicon;
 	}
 
-	public Byte getFunorder() {
-		return funorder;
-	}
 
-	public void setFunorder(Byte funorder) {
-		this.funorder = funorder;
-	}
 
-	public Byte getSystem() {
-		return system;
-	}
 
-	public void setSystem(Byte system) {
-		this.system = system;
-	}
 
 	public String getTargetDiv() {
 		return targetDiv;
@@ -121,6 +96,7 @@ public class SysModule implements Serializable,ITreeData {
 		this.urllink = urllink;
 	}
 
+	
 
 	public String getId() {
 	
@@ -164,5 +140,39 @@ public class SysModule implements Serializable,ITreeData {
 	public boolean getIsParent() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public int getFuntype() {
+		return funtype;
+	}
+
+	public void setFuntype(int funtype) {
+		this.funtype = funtype;
+	}
+
+	public int getIsinuse() {
+		return isinuse;
+	}
+
+	public void setIsinuse(int isinuse) {
+		this.isinuse = isinuse;
+	}
+
+	public int getFunorder() {
+		return funorder;
+	}
+
+	public void setFunorder(int funorder) {
+		this.funorder = funorder;
+	}
+
+	public int getSystem() {
+		return system;
+	}
+
+	public void setSystem(int system) {
+		this.system = system;
 	}	
+	
+	
 }

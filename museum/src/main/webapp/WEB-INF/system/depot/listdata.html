@@ -1,0 +1,59 @@
+<header class="listview-header media p-5">
+	<input type="button" value="新增" class="btn btn-sm m-r-5"
+		onclick="depotJscript.showEditIndex();" /> <input id="" type="button"
+		class="btn btn-sm m-r-5" value="修改"
+		onclick="depotJscript.showEditIndex(true);" />
+	<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+		onclick="depotJscript.delIndex();">删除</button>
+	<!-- 
+	<button id="button" title="find" value="find" class="btn btn-sm m-r-5"
+		onclick="depotJscript.findtreeIndex();">find</button>  -->
+</header>
+<div class=" table-con">
+	<div id="tableHover_depot" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox" id="chk_select"
+							class="list-parent-check" data-subcheck="subcheck" /></td>
+						<td style="width: 70px;">序号</td>
+						<td style="width: 180px;">代码</td>
+						<td style="width: 180px;">名称</td>
+						<td>责任人</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas??> <#list page.pageDatas as depot>
+				<tr>
+					<td><input type="checkbox" name="subcheck"
+						value="${(depot.depotId)!}" class="list-check"></td>
+					<td>${depot_index}</td>
+					<td>${depot.depotCode?html}</td>
+					<td>${depot.depotName?html}</td>
+					<td>${depot.dutyMan!''}</td>
+				</tr>
+				</#list> </#if>
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+		data-curpage="${page.curPage}" data-totalpage="${page.lastPage}" data-param='${param!}'
+		data-recordcount="${page.pageSize}" data-linktarget="#systemData"
+		data-pagelink="/system/depot/list">
+			<div class="pull-left attrs">
+				第${page.curPage}页，共${page.lastPage}页
+			</div>
+			<div class="pull-right">		
+				<ul class="pagination">
+					
+				</ul>
+			</div>
+	</div>
+</div>
+
+<script>
+	(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	})();
+</script>

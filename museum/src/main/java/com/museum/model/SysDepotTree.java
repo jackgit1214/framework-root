@@ -10,7 +10,7 @@ public class SysDepotTree extends SysDepot implements ITreeData {
 	private static final long serialVersionUID = -2676673129373317392L;
 
 	private boolean isParent;
-	
+
 	@Override
 	public String getId() {
 		return this.getDepotId();
@@ -37,7 +37,7 @@ public class SysDepotTree extends SysDepot implements ITreeData {
 	@Override
 	public boolean getIsParent() {
 		// TODO Auto-generated method stub
-		return false;
+		return isParent;
 	}
 
 	@Override
@@ -51,7 +51,6 @@ public class SysDepotTree extends SysDepot implements ITreeData {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 
 	public boolean isParent() {
 		return isParent;

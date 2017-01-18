@@ -12,5 +12,9 @@ public interface SysConstant {
 	public static final String SYSDEFAULTPASSWORD = "123456";
 
 	/** 系统缺省显示行数 */
-	public static final int SYSDEFAULTROWNUM = 10; //暂时测试行数
+	public static final int SYSDEFAULTROWNUM = 10; // 暂时测试行数
+
+	/* 系统常用分隔常量* */
+	public static final String SYSSEPARATOR = "SYSTEM_SEPARATOR";
+
 }

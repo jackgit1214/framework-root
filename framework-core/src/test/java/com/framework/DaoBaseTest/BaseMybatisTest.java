@@ -60,29 +60,7 @@ public abstract class BaseMybatisTest {
 	//2
 	public void setUp() throws Exception {
 
-		/**
-		 * 最后找到的方法 ,执行脚本初始化数据库
-		 */
-//		DataSourceInitializer dataSourceInitializer = applicationContext.getBean(DataSourceInitializer.class);
-//		dataSourceInitializer.setEnabled(true);
-//		dataSourceInitializer.afterPropertiesSet();		
-		Field[] fields = this.getClass().getDeclaredFields();
-		if (fields == null || fields.length <=0 )
-			return ;
-		for (Field field :fields){
-			EntityName entityName = field.getAnnotation(EntityName.class);
-			if ( entityName!=null && (field.getType() == ICommonDao.class ||field.getType()==IQueryPageDao.class)){
-				field.setAccessible(true);
-				try {
-					ICommonDao commonDao = (ICommonDao)field.get(this);
-					String tmpname = "".equals(entityName.name())?entityName.value().getSimpleName():entityName.name();
-					commonDao.setEntityName(entityName.value(),tmpname);
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
-			}
-		}
-
+	
 	}
 	
 	@BeforeTransaction

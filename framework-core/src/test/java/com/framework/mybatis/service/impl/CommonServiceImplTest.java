@@ -24,7 +24,7 @@ public class CommonServiceImplTest extends BaseMybatisTest {
 		
 		List<SysModule> modules = this.commonService.findAllObjects();
 		Assert.assertNotNull(modules);
-		Assert.assertEquals(modules.size(),19);
+		Assert.assertEquals(10,modules.size());
 	}
 	
 	@Test
@@ -33,7 +33,30 @@ public class CommonServiceImplTest extends BaseMybatisTest {
 		List<SysModule> modules = this.commonService.findAllObjects();
 		
 		Assert.assertNotNull(modules);
-		Assert.assertEquals(modules.size(),20);
+		Assert.assertEquals(10,modules.size());
 	}
 
+	@Override
+	public void setUp() throws Exception {
+		this.sysModuleMapper.deleteByCondition(null);
+		
+		List<SysModule> modules = this.sysModuleMapper.selectByCondition(null);
+		
+		Assert.assertEquals(0, modules.size());
+		
+		for (int i=0;i<10;i++){
+			SysModule module = new SysModule();
+			module.setFuncid("id"+i);
+			module.setFuncname("vvvvvvvvvvvvv");
+			module.setSupermodid("1");
+			module.setTargetDiv("maindiv");
+
+			module.setIsinuse(i);
+			module.setSystem(i);
+			module.setFunorder(Byte.parseByte(String.valueOf(i)));
+			module.setModdesc("ttttttttttt");
+			this.sysModuleMapper.insert(module);
+		}
+		
+	}
 }

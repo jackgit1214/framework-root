@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 //public class QueryModel extends PropertyChangeSupportUtil {
-public class QueryModel  {
-	protected  String orderByClause;
+public class QueryModel {
+	protected String orderByClause;
 
 	protected boolean distinct;
 
@@ -333,38 +333,45 @@ public class QueryModel  {
 
 	/**
 	 * 只作为like参数
+	 * 
 	 * @param param
 	 */
 	public void setParam(Map<String, String> param) {
-	
+
 		this.param = param;
-		//this.reInitCriteria();
-		//firePropertyChange("param", null, param);
+		// this.reInitCriteria();
+		// firePropertyChange("param", null, param);
 	}
 
-	public void reInitCriteria(){
-		
-		if (param ==null)
-			return ;
+	public void reInitCriteria() {
+
+		if (param == null)
+			return;
 		Criteria criteria = this.createCriteria();
 		Iterator<Map.Entry<String, String>> iter = param.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry<String,String> entry = (Map.Entry<String,String>) iter.next();
+			Map.Entry<String, String> entry = (Map.Entry<String, String>) iter
+					.next();
 			String key = entry.getKey();
 			String val = entry.getValue();
-			if (val !=null && !"".endsWith(val)) //空值不作处理
-				criteria.andLike(key, "%"+val+"%");
+			if (val != null && !"".endsWith(val)) {// 空值不作处理
+
+				int pos = val.indexOf(",");
+				if (pos <= 0)
+					criteria.andLike(key, "%" + val + "%");
+				else
+					criteria.andEqualTo(key, val.substring(0, pos));
+			}
 		}
 	}
-	
-//	public class ParamListener implements PropertyChangeListener{
-//
-//		@Override
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			if(evt.getPropertyName().equals("param"))
-//	            System.out.println("BeanTest 的 name 属性变化！");
-//		}
-//		
-//	}
-	
+	// public class ParamListener implements PropertyChangeListener{
+	//
+	// @Override
+	// public void propertyChange(PropertyChangeEvent evt) {
+	// if(evt.getPropertyName().equals("param"))
+	// System.out.println("BeanTest 的 name 属性变化！");
+	// }
+	//
+	// }
+
 }

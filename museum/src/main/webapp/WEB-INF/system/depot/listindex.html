@@ -140,10 +140,11 @@
 			}
 			else{
 				//$this.depottree.expandNode(node,true,false,false,false);
-				if (node.isParent==false){
+				node.isParent=true;
+				/* if (node.isParent==false){
 					node.isParent=true;
 					$this.depottree.updateNode(node);
-				}
+				} */
 				$this.depottree.reAsyncChildNodes(node,"refresh");
 			}
 		},

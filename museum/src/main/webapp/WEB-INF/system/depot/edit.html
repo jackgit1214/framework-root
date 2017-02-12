@@ -1,121 +1,44 @@
 <div id="editIndex" class="div_detail">
-	<form id="indexform" name="indexform" class="form-validation-1 form-horizontal">
-		<input type="hidden" id="id" name='id' value="${sysIndexitem.id!''}" />
-		<input type="hidden" id="iscorevalue" name="iscorevalue" value="${sysIndexitem.iscore!0}"/>
-		<input type="hidden" id="isrequiredvalue" name="isrequiredvalue" value="${sysIndexitem.isrequired!0}"/>
-		<input type="hidden" id="isseltypevalue" name="isseltypevalue" value="${sysIndexitem.iseltype!''}"/>
+	<form id="depotform" name="depotform" class="form-validation-1 form-horizontal">
+		<input type="hidden" id="depotId" name='depotId' value="${sysDepot.depotId!''}" />
 		 <div class="form-group">
-		 	<label for="indexid" class="col-md-2 control-label">指标编码：</label>			
+		 	<label for="depotCode" class="col-md-2 control-label">库房编码：</label>			
             <div class="col-md-10">
-				<input type="text" id="indexid" name="indexid" data-label="指标编码"	value="${sysIndexitem.indexid!''}" class="input-sm validate[required] form-control" placeholder="enter content" />
+				<input type="text" id="depotCode" name="depotCode" data-label="库房编码"	value="${sysDepot.depotCode!''}" class="input-sm validate[required] form-control" placeholder="enter content" />
             </div>
 		</div>
 		<div class="form-group">
-			<label for="indexname" class="col-md-2 control-label">指标名称：</label>	
+			<label for="depotName" class="col-md-2 control-label">名称：</label>	
 			 <div class="col-md-10">
-			<input type="text" id="indexname" name="indexname"
-					data-label="名称" value="${sysIndexitem.indexname!''}" class="input-sm validate[required] form-control" 
+			<input type="text" id="depotName" name="depotName"
+					data-label="名称" value="${sysDepot.depotName!''}" class="input-sm validate[required] form-control" 
 					placeholder="enter content" />
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="idatatype" class="col-md-2 control-label">数据类型：</label>	
+			<label for="dutyMan" class="col-md-2 control-label">责任人：</label>	
 			 <div class="col-md-10">
-			 
-			 	<select id="idatatype" name="idatatype"  class="selectpicker form-control" data-value="${sysIndexitem.idatatype!''}">
-			 		<option value="varchar">字符串</option>
-			 		<option value="integer">数字</option>
-			 		<option value="float">小数数字</option>
-			 		<option value="text">大文本</option>
-			 		<option value="date">日期</option>
-			 	</select>
-			 	<!-- 
-				<input type="text" id="idatatype" name="idatatype"
-					data-label="数据类型" value="${sysIndexitem.idatatype!''}" class="input-sm validate[required] form-control" 
-					placeholder="enter content" />  -->
+			<input type="text" id="dutyMan" name="dutyMan"
+					data-label="责任人" value="${sysDepot.dutyMan!''}" class="input-sm  form-control" 
+					placeholder="enter content" />
 			</div>
 		</div>
+			
 		<div class="form-group">
-			<label for="iseltype" class="col-md-2 control-label">是否选择：</label>	
-			 <div class="col-md-10 ">
-			 	<div class="input-group">
-			 		 <div class="input-group-btn">
-				 		 <div class=" make-switch switch-small" id="iseltype_btn" name="iseltype_btn" data-on-label="是" data-off-label="否">
-	                  	  	<input type="checkbox" >
-	                	</div>
-                	</div>
-                	
-		 			 <select id="iseltype" name="iseltype"  class="selectpicker form-control" data-size="5" data-value="${sysIndexitem.iseltype!''}" >
-		 			 	<#if codes??> <#list codes as code>
-                        	<option value="${code.codetype}">${code.codename}</option> 
-	                        </#list> </#if>
-           			 </select>
-			 	</div>
-                 <!--
-				<input type="text" id="iseltype" name="iseltype"
-					value="${sysIndexitem.iseltype!''}" 
-					placeholder="enter content" /> 
-				 class="input-sm validate[required] form-control"  -->
-			</div>
-		</div>		
-		<div class="form-group">
-			<label for="superid" class="col-md-2 control-label">上级指标：</label>	
+			<label for="superid" class="col-md-2 control-label">上级库房：</label>	
 			 <div class="col-md-10">
 			 	<input type="text" disabled
 			 	
-					 value="${sysIndexitem.remark!''}" class="input-sm validate[required] form-control"  />
+					 value="${sysDepot.superName!''}" class="input-sm validate[required] form-control"  />
 				<input type="hidden" id="superid" name="superid" 
-					data-label="上级指标" value="${sysIndexitem.superid!''}" 
+					data-label="上级库房" value="${sysDepot.superid!''}" 
 					 />
 			</div>
 		</div>		
-		<div class="form-group">
-			<label for="superid" class="col-md-2 control-label">核心指标：</label>	
-			 <div class="col-md-10">
-
-                            <label class="radio-inline">
-                                <span class="checkableBox checkableBox-radio">    
-                                    <input type="radio" id="core1" class="validate[required]" name="iscore" value="1">
-                                </span>
-                                	是
-                            </label>
-                            <label class="radio-inline">
-                                <span class="checkableBox checkableBox-radio"> 
-                                    <input type="radio" id="core2" class="validate[required]" name="iscore" value="0">
-                                </span>
-                                	否
-                            </label>
-			</div>
-		</div>	
-		<div class="form-group">
-			<label for="superid" class="col-md-2 control-label">必填：</label>	
-			 <div class="col-md-10">
-			 	          <label class="radio-inline">
-                                <span class="checkableBox checkableBox-radio">    
-                                    <input type="radio" id="required1" class="validate[required]" name="isrequired" value="1">
-                                </span>
-                                	是
-                            </label>
-                            <label class="radio-inline">
-                                <span class="checkableBox checkableBox-radio"> 
-                                    <input type="radio" id="required2" class="validate[required]" name="isrequired" value="0">
-                                </span>
-                                	否
-                            </label>
-			 </div>
-		</div>							
-		<div class="form-group">
-			<label for="breviary" class="col-md-2 control-label">摘要：</label>	
-			 <div class="col-md-10">
-				<textarea id="breviary" name="breviary"
-					data-label="备注" value="${sysIndexitem.breviary!''}" class="form-control auto-size input-sm">${sysIndexitem.breviary!''}</textarea>
-			</div>
-		</div>	
-
 	</form>
 	<div class="modal-footer">
 		<div class="text-center">
-			<button type="submit" class="btn btn-sm" onclick="indexJscript.dataSave('#indexform');">保存</button>
+			<button type="submit" class="btn btn-sm" onclick="depotJscript.dataSave('#depotform');">保存</button>
 			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
 		</div>
 	</div>
@@ -124,42 +47,7 @@
 <script type=text/javascript>
 
 $(function() {
-	var iscore = $("#iscorevalue").val();
-	var isrequired = $("#isrequiredvalue").val();
-	var isseltype = $("#isseltypevalue").val();
-	
-        
-	if (iscore=="1"){
-		$("#core1").iCheck('check');
-	}else
-		$("#core2").iCheck('check');
-	
-	if (isrequired=="1"){
-		$("#required1").iCheck('check');
-	}else
-		$("#required2").iCheck('check');
-	
-	if (isseltype!=""){
-		//$('#iseltype').selectpicker('val', isseltype);
-		//$('#iseltype').selectpicker('refresh');
-		$("#iseltype_btn").bootstrapSwitch("setState", true);
-		
-	}else{
-		$("#iseltype_btn").bootstrapSwitch("setState", false);
-	}
-	$('#iseltype_btn').on('switch-change', function (e, data) {
-	    var $el = $(data.el) , value = data.value;
-	    var $selobj = $("#iseltype");
-	    if (value==true){
-	    	
-	    	 $selobj.prop('disabled', false);
-	    	 $selobj.selectpicker('refresh');
-	    }else{
-	    	$selobj.prop('disabled', true);
-   	 		$selobj.selectpicker('refresh');
-	    }
-	});
-   
+
 });
 </script>
 

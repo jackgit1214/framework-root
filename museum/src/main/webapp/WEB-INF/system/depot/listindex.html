@@ -19,14 +19,15 @@
 						depotJscript.refreshDataList(treeNode);
 					},
 					beforeClick:function(treeId, treeNode){
-						if (!treeNode.parent){ //末级指标直接修改
+						return true;
+						/* if (!treeNode.parent){ //末级指标直接修改
 							depotJscript.depottree.selectNode(treeNode.getParentNode(),false);
 							depotJscript.refreshDataList(treeNode.getParentNode());
-							depotJscript.showEditIndex(true,treeNode.data);
+							depotJscript.showEdit(true,treeNode.data);
 							return false;
 						}else {
 					        return true;
-					    }
+					    } */
 					}
 				}
 			 });
@@ -70,12 +71,11 @@
 				return false;
 			var data = $formObject.serializeArray();
 			var nodes = $this.depottree.getSelectedNodes();
-			var isEdit = $formObject.find("#id").val()===""?false:true;
-			console.log(nodes[0]);
+			var isEdit = $formObject.find("#depotId").val()===""?false:true;
 			$.post($.SystemApp.contextPath + "/system/depot/update",data, function(data) {
 					if (data.successRows > 0) {
 						alert("数据保存成功！");
-						$this.refreshTree(nodes[0],data.indexdata,isEdit);
+						$this.refreshTree(nodes[0],data.data,isEdit);
 						$this.dialogObj.modal("hide");
 						$.SystemApp.pagetoolbar.refreshData();
 					} else {
@@ -83,12 +83,12 @@
 					}
 			});
 		},		
-		showEditIndex : function(isEdit,indexid) {
+		showEdit : function(isEdit,dataId) {
 			var $this = this;
 			var _params = {};
 			var nodes = this.depottree.getSelectedNodes();
 			if (isEdit) {
-				if (indexid ==null || indexid == ''){
+				if (dataId ==null || dataId == ''){
 					var selectValue = $.SystemApp.checkbox("#tableHover_depot");
 					if (selectValue == null || selectValue == ''
 							|| selectValue.length <= 0) {
@@ -99,28 +99,28 @@
 						'id' : selectValue[0]
 					};
 				}else{
-					_params.id = indexid;
+					_params.id = dataId;
 				}
-				_params.indexid=nodes[0].indexid;
-				_params.indexname=nodes[0].indexname;
+				_params.depotId=nodes[0].depotId;
+				_params.depotName=nodes[0].depotName;
 			}else{
 				if (nodes.length <= 0){
 					alert("请选择上级节点！");
 					return ;
 				}
 				$.extend(true,_params,nodes[0]); //复制对象
-				console.log(_params);
-				_params.children="";//这儿不需要children
+				//console.log(_params);
+				_params.attributeNames=null;
+				_params.children=null;
+				_params.id="";
 			}
-			
-			
 			$this.dialogObj = $.SystemApp.openDialog(
 				$.SystemApp.contextPath + "/system/depot/showEdit",
 				{
 					data:_params,
 					height:500,
 					width:700,
-					title: "藏品指标编辑"
+					title: "库房编辑"
 				}
 			);
 			return ;			
@@ -128,24 +128,28 @@
 		refreshTree:function(node,data,isEdit){
 			var $this = this;
 			if (node.open==true){
-				var newNode = {name:data.indexname,id:data.indexid,data:data.id};
+				console.log(11);
+				var newNode = {name:data.depotName,id:data.depotId,data:data.depotId};
 				if (isEdit){
-					//console.log(data);
-					newNode=$this.depottree.getNodeByParam("data",data.id, node);
-					//console.log(newNode);
-					newNode.name = data.indexname;
+					newNode=$this.depottree.getNodeByParam("data",data.depotId, node);
+					newNode.name = data.depotName;
 					$this.depottree.updateNode(newNode);
-				}else
+				}else{
 					$this.depottree.addNodes(node, newNode);
+				}
 			}
-			else
-				$this.depottree.expandNode(node,true,false,false,false);
-			
+			else{
+				//$this.depottree.expandNode(node,true,false,false,false);
+				if (node.isParent==false){
+					node.isParent=true;
+					$this.depottree.updateNode(node);
+				}
+				$this.depottree.reAsyncChildNodes(node,"refresh");
+			}
 		},
-		delIndex : function() {
+		del : function() {
 			var $this = this;
 			var selectValue = $.SystemApp.checkbox("#tableHover_depot");
-
 			if (selectValue == null || selectValue == ''
 					|| selectValue.length <= 0) {
 				alert("请选择要删除的数据");
@@ -162,7 +166,9 @@
 						if (data.successRows > 0) {
 							$.SystemApp.pagetoolbar.refreshData();
 							$.each(selectValue,function(i,obj){
+								console.log(obj);
 								var node = $this.depottree.getNodeByParam("data",obj, null);
+								console.log(node);
 								$this.depottree.removeNode(node,false);
 							});
 							alert("数据删除成功！");
@@ -175,9 +181,9 @@
 				
 			});
 		},
-		findtreeIndex:function(){
+		findtree:function(){
 			var $this = this;
-			//var node = $this.depottree.getNodeByParam("data","93da9f1dec834f53b75edd29575e930a", null);
+			//var node = $this.depottree.
 			//console.log(node);
 		}
 	};

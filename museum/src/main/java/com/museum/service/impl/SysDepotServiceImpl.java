@@ -16,7 +16,7 @@ import com.museum.model.SysDepotTree;
 import com.museum.service.ISysDepotService;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class SysDepotServiceImpl extends AbstractBusinessService<SysDepot>
 		implements ISysDepotService {
 
@@ -47,7 +47,7 @@ public class SysDepotServiceImpl extends AbstractBusinessService<SysDepot>
 		for (String id : deptids) {
 			QueryModel.Criteria criteria = queryModel.createCriteria();
 
-			criteria.andEqualTo("deptid", id);
+			criteria.andEqualTo("depot_id", id);
 			rows = rows + this.sysDepotMapper.deleteByPrimaryKey(id);
 			this.sysDepotMapper.deleteByCondition(queryModel);
 		}

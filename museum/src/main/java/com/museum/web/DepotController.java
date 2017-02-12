@@ -83,14 +83,17 @@ public class DepotController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/showEdit")
-	public ModelAndView showEdit(String depotid) {
+	public ModelAndView showEdit(String id, SysDepotTree node) {
 		ModelAndView mav = new ModelAndView("system/depot/edit");
-		SysDepot sysDepot = this.sysDepotServiceImpl.findObjectById(depotid);
+		SysDepot sysDepot = this.sysDepotServiceImpl.findObjectById(id);
 
 		if (sysDepot == null)
 			sysDepot = new SysDepot();
 
-		mav.addObject("depots", sysDepot);
+		sysDepot.setSuperName(node.getDepotName());
+		sysDepot.setSuperid(node.getDepotId());
+		sysDepot.setDutyMan(node.getDutyMan());
+		mav.addObject("sysDepot", sysDepot);
 		return mav;
 	}
 
@@ -107,6 +110,7 @@ public class DepotController extends BaseController {
 
 		int rows = this.sysDepotServiceImpl.updateDepot(record);
 		mm.addAttribute("successRows", rows);
+		mm.addAttribute("data", record);
 		return mm;
 	}
 

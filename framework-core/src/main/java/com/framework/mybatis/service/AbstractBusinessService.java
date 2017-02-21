@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 
@@ -30,6 +32,7 @@ public abstract class AbstractBusinessService<T> implements IBusinessService<T> 
 	private IDataMapperCRUD<T> dataMapperCRUD;
 
 	protected final Log log = LogFactory.getLog(this.getClass());
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	SimpleKeyGenerator k = new SimpleKeyGenerator();
 

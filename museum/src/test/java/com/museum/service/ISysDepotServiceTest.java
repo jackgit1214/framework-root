@@ -1,13 +1,17 @@
 package com.museum.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.framework.DaoBaseTest.BaseMybatisTest;
+import com.museum.BaseMybatisTest;
 
 public class ISysDepotServiceTest extends BaseMybatisTest {
+
+	@Autowired
+	private ISysDepotService sysDepotServiceImpl;
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,6 +39,8 @@ public class ISysDepotServiceTest extends BaseMybatisTest {
 
 	@Test
 	public void testFindAllObjects() {
+
+		this.sysDepotServiceImpl.findAllObjects();
 		fail("Not yet implemented");
 	}
 

@@ -16,17 +16,19 @@ public interface IDataMapperCRUD<T> extends BaseDao {
 
 	int updateByPrimaryKey(T record);
 
-    int updateByConditionSelective(@Param("record") T record, @Param("queryModel") QueryModel queryModel);
+	int updateByConditionSelective(@Param("record") T record,
+			@Param("queryModel") QueryModel queryModel);
 
-    int updateByCondition(@Param("record") T record, @Param("queryModel") QueryModel queryModel);
-	
-    int deleteByCondition(@Param("queryModel")QueryModel queryModel);
+	int updateByCondition(@Param("record") T record,
+			@Param("queryModel") QueryModel queryModel);
 
-	int deleteByPrimaryKey(String depotId);
-    
-    List<T> selectByCondition(@Param("queryModel") QueryModel queryModel);
-    
-    int countByCondition(@Param("queryModel")QueryModel queryModel);
-    
-    T selectByPrimaryKey(Object id);
+	int deleteByCondition(@Param("queryModel") QueryModel queryModel);
+
+	int deleteByPrimaryKey(Object recordId);
+
+	List<T> selectByCondition(@Param("queryModel") QueryModel queryModel);
+
+	int countByCondition(@Param("queryModel") QueryModel queryModel);
+
+	T selectByPrimaryKey(Object id);
 }

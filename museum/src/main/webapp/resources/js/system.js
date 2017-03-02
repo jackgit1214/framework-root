@@ -387,7 +387,7 @@ $.SystemApp.initMenu = function(menuUrl) {
                 var link = module.urllink;
 
                 var urlParam = "{id:" + module.funcid + "}";
-                $a.attr("href", "javascript:void('0');");
+                $a.attr("href", link);
 
             }
             $li.append($a);

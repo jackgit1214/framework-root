@@ -159,7 +159,7 @@ $.SystemApp.initComponents = function() {
             }
         });
 
-    }
+    };
 
     /** form components */
     if ($("[class*='form-validation']")[0]) {

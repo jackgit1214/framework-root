@@ -2,9 +2,9 @@ package com.system.model;
 
 import java.io.Serializable;
 
-import com.framework.common.model.ITreeData;
+import com.framework.model.TreeData;
 
-public class SysModule implements Serializable,ITreeData {
+public class SysModule implements Serializable, TreeData {
 
 	/**
 	 * 
@@ -49,7 +49,6 @@ public class SysModule implements Serializable,ITreeData {
 		this.funcname = funcname;
 	}
 
-
 	public String getModdesc() {
 		return moddesc;
 	}
@@ -57,8 +56,6 @@ public class SysModule implements Serializable,ITreeData {
 	public void setModdesc(String moddesc) {
 		this.moddesc = moddesc;
 	}
-
-
 
 	public String getSupermodid() {
 		return supermodid;
@@ -76,10 +73,6 @@ public class SysModule implements Serializable,ITreeData {
 		this.funicon = funicon;
 	}
 
-
-
-
-
 	public String getTargetDiv() {
 		return targetDiv;
 	}
@@ -96,10 +89,8 @@ public class SysModule implements Serializable,ITreeData {
 		this.urllink = urllink;
 	}
 
-	
-
 	public String getId() {
-	
+
 		return this.getFuncid();
 	}
 
@@ -108,19 +99,15 @@ public class SysModule implements Serializable,ITreeData {
 		return this.getSupermodid();
 	}
 
-
-
 	public String getName() {
 		// TODO Auto-generated method stub
 		return this.getFuncname();
 	}
 
-
 	public Object getData() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	public String getUrl() {
 		// TODO Auto-generated method stub
@@ -130,7 +117,7 @@ public class SysModule implements Serializable,ITreeData {
 	@Override
 	public boolean isChecked() {
 		// 这里用system字段，标明树节点是否选中
-		if (1==this.getSystem())
+		if (1 == this.getSystem())
 			return true;
 		else
 			return false;
@@ -172,7 +159,6 @@ public class SysModule implements Serializable,ITreeData {
 
 	public void setSystem(int system) {
 		this.system = system;
-	}	
-	
-	
+	}
+
 }

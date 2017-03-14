@@ -1,17 +1,15 @@
 package com.system.model;
 
-import java.util.List;
+import com.framework.model.TreeData;
 
-import com.framework.common.model.ITreeData;
-
-public class SysCodeTree extends SysCode implements ITreeData {
+public class SysCodeTree extends SysCode implements TreeData {
 
 	private boolean isParent;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3865291059393520985L;
-	
+
 	@Override
 	public String getId() {
 

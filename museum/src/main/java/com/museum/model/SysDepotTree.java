@@ -1,8 +1,8 @@
 package com.museum.model;
 
-import com.framework.common.model.ITreeData;
+import com.framework.model.TreeData;
 
-public class SysDepotTree extends SysDepot implements ITreeData {
+public class SysDepotTree extends SysDepot implements TreeData {
 
 	/**
 	 * 

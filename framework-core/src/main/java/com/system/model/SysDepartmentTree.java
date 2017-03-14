@@ -1,17 +1,16 @@
 package com.system.model;
 
-import com.framework.common.model.ITreeData;
+import com.framework.model.TreeData;
 
-public class SysDepartmentTree extends SysDept implements ITreeData {
+public class SysDepartmentTree extends SysDept implements TreeData {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private boolean isParent;
-	
+
 	@Override
 	public String getId() {
 		return this.getDeptid();
@@ -60,6 +59,5 @@ public class SysDepartmentTree extends SysDept implements ITreeData {
 	public void setParent(boolean isParent) {
 		this.isParent = isParent;
 	}
-	
-	
+
 }

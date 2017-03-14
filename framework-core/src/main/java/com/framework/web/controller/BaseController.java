@@ -2,6 +2,7 @@ package com.framework.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,6 +25,8 @@ import com.framework.common.converter.CustomIntegerEditor;
 import com.framework.common.converter.CustomLongEditor;
 import com.framework.common.converter.CustomShortEditor;
 import com.framework.common.converter.SpecCustomBooleanEditor;
+import com.framework.model.TreeData;
+import com.framework.service.ITreeService;
 import com.framework.web.util.SessionManager;
 import com.framework.web.util.SessionUser;
 
@@ -29,26 +34,30 @@ public abstract class BaseController {
 
 	protected final Log log = LogFactory.getLog(this.getClass());
 
+	protected ITreeService treeService;
+
 	@Autowired
 	protected SessionManager sessionManager;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder, HttpServletRequest request) {
-		//PropertyEditorRegistrySupport
+		// PropertyEditorRegistrySupport
 		// 注册int,float,long,double类型转换
-		binder.registerCustomEditor(int.class,new CustomIntegerEditor() );
-		binder.registerCustomEditor(float.class,new CustomFloatEditor() );
-		binder.registerCustomEditor(double.class,new CustomDoubleEditor() );
-		binder.registerCustomEditor(long.class,new CustomLongEditor() );
-		binder.registerCustomEditor(short.class,new CustomShortEditor() );
-		
-		//注册boolean类型转换，缺省值为false
-		binder.registerCustomEditor(boolean.class,new SpecCustomBooleanEditor(false) );
-		
+		binder.registerCustomEditor(int.class, new CustomIntegerEditor());
+		binder.registerCustomEditor(float.class, new CustomFloatEditor());
+		binder.registerCustomEditor(double.class, new CustomDoubleEditor());
+		binder.registerCustomEditor(long.class, new CustomLongEditor());
+		binder.registerCustomEditor(short.class, new CustomShortEditor());
+
+		// 注册boolean类型转换，缺省值为false
+		binder.registerCustomEditor(boolean.class, new SpecCustomBooleanEditor(
+				false));
+
 		// 注册日期转换
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormat.setLenient(true);
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(
+				dateFormat, true));
 	}
 
 	protected HttpServletRequest getRequest() {
@@ -68,7 +77,6 @@ public abstract class BaseController {
 		return messageinfo;
 	}
 
-
 	protected void getSessionManager(HttpServletRequest request) {
 		this.sessionManager = (SessionManager) request.getSession()
 				.getAttribute("sessionManager");
@@ -80,9 +88,24 @@ public abstract class BaseController {
 		HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder
 				.getRequestAttributes()).getRequest();
 
-		this.sessionManager = (SessionManager) req.getSession().getAttribute("sessionManager");
+		this.sessionManager = (SessionManager) req.getSession().getAttribute(
+				"sessionManager");
 		if (this.sessionManager == null)
 			return null;
 		return (SessionUser) this.sessionManager.getUser();
+	}
+
+	@ResponseBody
+	@RequestMapping("/getTreeData")
+	public List<TreeData> getTreeData(String superid) {
+
+		// this.getTreeService();
+		if (this instanceof ITreeController) {
+			ITreeController treeC = (ITreeController) this;
+			treeC.setTreeService();
+		} else {
+			System.out.println("没有实现树的接口");
+		}
+		return this.treeService.getTreeData(superid);
 	}
 }

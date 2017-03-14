@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.framework.common.model;
+package com.framework.model;
 
 
 /**
@@ -10,7 +10,7 @@ package com.framework.common.model;
  * 
  */
 
-public interface ITreeData  {
+public interface TreeData  {
 
 	public String getId();
 

@@ -1,11 +1,11 @@
 package com.system.model;
 
-import com.framework.common.model.ITreeData;
+import com.framework.model.TreeData;
 
-public class DataIndexTree extends SysIndexitem implements ITreeData {
+public class DataIndexTree extends SysIndexitem implements TreeData {
 
 	private boolean isParent;
-	
+
 	/**
 	 * 
 	 */
@@ -14,7 +14,7 @@ public class DataIndexTree extends SysIndexitem implements ITreeData {
 	@Override
 	public String getPId() {
 		// TODO Auto-generated method stub
-		//org.apache.ibatis.type.JdbcType.BOOLEAN
+		// org.apache.ibatis.type.JdbcType.BOOLEAN
 		return this.getSuperid();
 	}
 
@@ -29,8 +29,6 @@ public class DataIndexTree extends SysIndexitem implements ITreeData {
 		// TODO Auto-generated method stub
 		return super.getId();
 	}
-
-	
 
 	@Override
 	public String getUrl() {
@@ -58,7 +56,7 @@ public class DataIndexTree extends SysIndexitem implements ITreeData {
 		this.isParent = isParent;
 	}
 
-	public boolean getIsParent(){
+	public boolean getIsParent() {
 		return isParent;
 	}
 

@@ -1,4 +1,4 @@
-package com.framework.common.util;
+package com.framework.common;
 
 import java.text.DateFormat;
 import java.text.ParseException;

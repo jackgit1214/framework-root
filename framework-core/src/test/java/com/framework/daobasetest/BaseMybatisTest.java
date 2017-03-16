@@ -1,9 +1,8 @@
 /**
  * 
  */
-package com.framework.DaoBaseTest;
+package com.framework.daobasetest;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import javax.sql.DataSource;
@@ -27,15 +26,12 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.framework.jpa.dao.ICommonDao;
-import com.framework.jpa.dao.IQueryPageDao;
-import com.framework.jpa.dao.queryutil.EntityName;
 /**
  * @author lilj
  *
  */
-//,"classpath:config/db/test-data.xml" 
-@ContextConfiguration(locations = { "classpath:config/application-core.xml"})
+// ,"classpath:config/db/test-data.xml"
+@ContextConfiguration(locations = { "classpath:config/application-core.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -43,87 +39,91 @@ import com.framework.jpa.dao.queryutil.EntityName;
 public abstract class BaseMybatisTest {
 
 	protected final Log log = LogFactory.getLog(this.getClass());
-	
-	protected static  boolean isExec=false;
-	
+
+	protected static boolean isExec = false;
+
 	@Autowired
-    private ApplicationContext applicationContext;
+	private ApplicationContext applicationContext;
 
 	private static int methodTestNum;
 
 	private static int execNum;
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Before
-	//2
+	// 2
 	public void setUp() throws Exception {
 
-	
 	}
-	
+
 	@BeforeTransaction
 	public void verifyInitialDatabaseState() {
-		//1
-		
-		//这里初始化的数据，将自动提交，必须在@AfterTransaction中手动删除
+		// 1
+
+		// 这里初始化的数据，将自动提交，必须在@AfterTransaction中手动删除
 
 		/**
-		 * 手工方法 
+		 * 手工方法
 		 */
 		if (isExec)
-			return ;
+			return;
 
 		ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
-		Resource resouce = applicationContext.getResource("classpath:config/db/testdata/initDB.sql");
+		Resource resouce = applicationContext
+				.getResource("classpath:config/db/testdata/initDB.sql");
 		rdp.addScript(resouce);
-		DataSource dataSource = (DataSource)this.applicationContext.getBean("dataSource");
-		
-		isExec=true;
-		
-		DatabasePopulatorUtils.execute(rdp, dataSource);		
+		DataSource dataSource = (DataSource) this.applicationContext
+				.getBean("dataSource");
 
-		//DataSourceInitializer  di = new DataSourceInitializer();
-		//di.setDatabasePopulator(rdp);
-		//di.setDataSource(dataSource);
-		//di.setEnabled(true);
-		//di.afterPropertiesSet();
+		isExec = true;
+
+		DatabasePopulatorUtils.execute(rdp, dataSource);
+
+		// DataSourceInitializer di = new DataSourceInitializer();
+		// di.setDatabasePopulator(rdp);
+		// di.setDataSource(dataSource);
+		// di.setEnabled(true);
+		// di.afterPropertiesSet();
 		Method[] methods = this.getClass().getDeclaredMethods();
-		for (Method method:methods){
-			//@Test 
+		for (Method method : methods) {
+			// @Test
 			Test test = method.getAnnotation(Test.class);
-			if (test!=null)
+			if (test != null)
 				methodTestNum++;
 		}
-		
-    }
-	
+
+	}
+
 	@AfterTransaction
-	//4
-    public void verifyFinalDatabaseState() {
-	
+	// 4
+	public void verifyFinalDatabaseState() {
+
 		/**
-		 * 手工方法，删除测试数据 
+		 * 手工方法，删除测试数据
 		 */
-		if (execNum!=methodTestNum)
-			return ;
+		if (execNum != methodTestNum)
+			return;
 		ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
-		Resource resouce = applicationContext.getResource("classpath:config/db/testdata/delDB.sql");
+		Resource resouce = applicationContext
+				.getResource("classpath:config/db/testdata/delDB.sql");
 		rdp.addScript(resouce);
-		DataSource dataSource = (DataSource)this.applicationContext.getBean("dataSource");
-		DatabasePopulatorUtils.execute(rdp, dataSource);	
-		isExec=false;
-		
-    }	
-	
+		DataSource dataSource = (DataSource) this.applicationContext
+				.getBean("dataSource");
+		DatabasePopulatorUtils.execute(rdp, dataSource);
+		isExec = false;
+
+	}
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@After
-	//3
+	// 3
 	public void tearDown() throws Exception {
 		execNum++;
-	}	
+	}
 
 }

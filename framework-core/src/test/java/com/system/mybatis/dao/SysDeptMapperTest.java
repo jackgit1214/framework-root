@@ -6,17 +6,16 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.framework.DaoBaseTest.BaseMybatisTest;
+import com.framework.daobasetest.BaseMybatisTest;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
 import com.system.model.SysDept;
-
 
 public class SysDeptMapperTest extends BaseMybatisTest {
 
 	@Autowired
 	private SysDeptMapper sysDeptMapper;
-	
+
 	@Test
 	public void testDeleteByPrimaryKey() {
 		this.sysDeptMapper.deleteByPrimaryKey("0001");
@@ -27,13 +26,14 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 	@Test
 	public void testFindSysdept() {
 		List<SysDept> sysDepts = this.sysDeptMapper.selectByCondition(null);
-		Assert.assertEquals(3,sysDepts.size());
+		Assert.assertEquals(3, sysDepts.size());
 	}
 
 	@Test
 	public void testSelectSysdeptByPage() {
 		PageResult<SysDept> page = new PageResult<SysDept>(2, 1);
-		List<SysDept> sysdepts = this.sysDeptMapper.selectByCondition(null, page);
+		List<SysDept> sysdepts = this.sysDeptMapper.selectByCondition(null,
+				page);
 		Assert.assertEquals(1, sysdepts.size());
 		Assert.assertEquals(3, page.getTotalSize());
 		SysDept sysDept = sysdepts.get(0);
@@ -55,12 +55,12 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 	public void testCountByCondition() {
 		int rows = this.sysDeptMapper.countByCondition(null);
 		Assert.assertEquals(3, rows);
-		
+
 		QueryModel queryModel = new QueryModel();
 		QueryModel.Criteria criteria = queryModel.createCriteria();
 		criteria.andEqualTo("dept_name", "测试部门");
 		rows = this.sysDeptMapper.countByCondition(queryModel);
-		Assert.assertEquals(1,rows);
+		Assert.assertEquals(1, rows);
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 		criteria.andEqualTo("dept_name", "测试部门");
 		this.sysDeptMapper.deleteByCondition(queryModel);
 		int rows = this.sysDeptMapper.countByCondition(null);
-		Assert.assertEquals(2,rows);
+		Assert.assertEquals(2, rows);
 	}
 
 	@Test
@@ -78,10 +78,11 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 		QueryModel queryModel = new QueryModel();
 		QueryModel.Criteria criteria = queryModel.createCriteria();
 		criteria.andEqualTo("dept_name", "测试部门");
-		List<SysDept> sysdepts = this.sysDeptMapper.selectByCondition(queryModel);
-		Assert.assertEquals(1,sysdepts.size());
+		List<SysDept> sysdepts = this.sysDeptMapper
+				.selectByCondition(queryModel);
+		Assert.assertEquals(1, sysdepts.size());
 	}
-	
+
 	@Test
 	public void testUpdateByCondition() {
 		QueryModel queryModel = new QueryModel();
@@ -90,7 +91,7 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 		SysDept sysDept = this.sysDeptMapper.selectByPrimaryKey("0000");
 		sysDept.setDeptName("更改部门名称");
 		this.sysDeptMapper.updateByCondition(sysDept, queryModel);
-		
+
 		SysDept sysDept1 = this.sysDeptMapper.selectByPrimaryKey("0000");
 		Assert.assertEquals("更改部门名称", sysDept1.getDeptName());
 	}
@@ -103,45 +104,42 @@ public class SysDeptMapperTest extends BaseMybatisTest {
 		SysDept sysDept = this.sysDeptMapper.selectByPrimaryKey("0000");
 		sysDept.setDeptName("更改部门名称");
 		this.sysDeptMapper.updateByConditionSelective(sysDept, queryModel);
-		
+
 		SysDept sysDept1 = this.sysDeptMapper.selectByPrimaryKey("0000");
 		Assert.assertEquals("更改部门名称", sysDept1.getDeptName());
 	}
 
-	
-	
 	@Test
 	public void testUpdateByPrimaryKeySelective() {
 
 		SysDept sysDept = this.sysDeptMapper.selectByPrimaryKey("0000");
 		sysDept.setDeptName("更改部门名称");
 		this.sysDeptMapper.updateByPrimaryKeySelective(sysDept);
-		
+
 		SysDept sysDept1 = this.sysDeptMapper.selectByPrimaryKey("0000");
 		Assert.assertEquals("更改部门名称", sysDept1.getDeptName());
 	}
-	
+
 	@Test
 	public void testSelectByPrimaryKeyObject() {
-		//fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test
 	public void testSelectByConditionQueryModelPageResultOfT() {
-		//fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
-	
+
 	@Test
 	public void testselectDepotTree() {
 		QueryModel queryModel = new QueryModel();
 		QueryModel.Criteria criteria = queryModel.createCriteria();
-		
+
 		criteria.andEqualTo("a.superid", "XXX");
-		
-		List list =this.sysDeptMapper.selectDepartmentTree(queryModel);
+
+		List list = this.sysDeptMapper.selectDepartmentTree(queryModel);
 		Assert.assertNotNull(list);
-		
+
 	}
-	
 
 }

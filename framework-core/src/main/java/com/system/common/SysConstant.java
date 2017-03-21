@@ -17,4 +17,12 @@ public interface SysConstant {
 	/* 系统常用分隔常量* */
 	public static final String SYSSEPARATOR = "SYSTEM_SEPARATOR";
 
+	// 单个文件大小允许上传为10M
+	public static long SINGLEFILESIZE = 1024 * 1024 * 10;
+
+	// 总文件大小为100M
+	public static long TOTALFILESIZE = 1024 * 1024 * 100;
+
+	// 文件存储路径
+	public static String filePath = "/upload/";
 }

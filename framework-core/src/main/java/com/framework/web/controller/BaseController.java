@@ -2,6 +2,7 @@ package com.framework.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.framework.common.converter.CustomDoubleEditor;
@@ -29,6 +33,7 @@ import com.framework.model.TreeData;
 import com.framework.service.ITreeService;
 import com.framework.web.util.SessionManager;
 import com.framework.web.util.SessionUser;
+import com.system.common.SysConstant;
 
 public abstract class BaseController {
 
@@ -93,6 +98,29 @@ public abstract class BaseController {
 		if (this.sessionManager == null)
 			return null;
 		return (SessionUser) this.sessionManager.getUser();
+	}
+
+	protected boolean checkAttachMentSize(HttpServletRequest request) {
+
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+				request.getSession().getServletContext());
+
+		if (multipartResolver.isMultipart(request)) {
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			List<MultipartFile> files = multiRequest.getFiles("files");
+			Iterator<MultipartFile> iter = files.iterator();
+			long totalfilesize = 0;
+			while (iter.hasNext()) {
+				MultipartFile file = iter.next();
+				if (file.getSize() > SysConstant.SINGLEFILESIZE) {
+					return false;
+				} else
+					totalfilesize = totalfilesize + file.getSize();
+			}
+			if (totalfilesize > SysConstant.TOTALFILESIZE)
+				return false;
+		}
+		return true;
 	}
 
 	@ResponseBody

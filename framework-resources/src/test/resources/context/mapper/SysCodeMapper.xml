@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.SysCode" >
+    <id column="codeid" property="codeid" jdbcType="VARCHAR" />
+    <result column="CODETYPE" property="codetype" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CODENAME" property="codename" jdbcType="VARCHAR" />
+    <result column="superid" property="superid" jdbcType="VARCHAR" />
+    <result column="LEVE" property="leve" jdbcType="DECIMAL" />
+    <result column="ORDERBY" property="orderby" jdbcType="DECIMAL" />
+    <result column="applyto" property="applyto" jdbcType="INTEGER" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="CodeTreeResultMap" type="com.system.model.SysCodeTree" >
+    <id column="codeid" property="codeid" jdbcType="VARCHAR" />
+    <result column="CODETYPE" property="codetype" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="CODENAME" property="codename" jdbcType="VARCHAR" />
+    <result column="superid" property="superid" jdbcType="VARCHAR" />
+    <result column="LEVE" property="leve" jdbcType="DECIMAL" />
+    <result column="ORDERBY" property="orderby" jdbcType="DECIMAL" />
+    <result column="applyto" property="applyto" jdbcType="INTEGER" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="parent" property="isParent" javaType="boolean" jdbcType="TINYINT" />
+  </resultMap>  
+  <sql id="Base_Column_List" >
+    codeid, CODETYPE, CONTENT, CODE, CODENAME, superid, LEVE, ORDERBY,applyto, REMARK
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_code
+    where codeid = #{codeid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_code
+    where codeid = #{codeid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.system.model.SysCode" >
+    insert into sys_code (codeid, CODETYPE, CONTENT, 
+      CODE, CODENAME, superid, 
+      LEVE, ORDERBY, applyto,REMARK
+      )
+    values (#{codeid,jdbcType=VARCHAR}, #{codetype,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{codename,jdbcType=VARCHAR}, #{superid,jdbcType=VARCHAR}, 
+      #{leve,jdbcType=DECIMAL}, #{orderby,jdbcType=DECIMAL},#{applyto,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.SysCode" >
+    insert into sys_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="codeid != null" >
+        codeid,
+      </if>
+      <if test="codetype != null" >
+        CODETYPE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="codename != null" >
+        CODENAME,
+      </if>
+      <if test="superid != null" >
+        superid,
+      </if>
+      <if test="leve != null" >
+        LEVE,
+      </if>
+      <if test="orderby != null" >
+        ORDERBY,
+      </if>
+      <if test="applyto != null" >
+        applyto,
+      </if>      
+      
+      <if test="remark != null" >
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="codeid != null" >
+        #{codeid,jdbcType=VARCHAR},
+      </if>
+      <if test="codetype != null" >
+        #{codetype,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="codename != null" >
+        #{codename,jdbcType=VARCHAR},
+      </if>
+      <if test="superid != null" >
+        #{superid,jdbcType=VARCHAR},
+      </if>
+      <if test="leve != null" >
+        #{leve,jdbcType=DECIMAL},
+      </if>
+      <if test="orderby != null" >
+        #{orderby,jdbcType=DECIMAL},
+      </if>
+      <if test="applyto != null" >
+        applyto,
+      </if>       
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysCode" >
+    update sys_code
+    <set >
+      <if test="codetype != null" >
+        CODETYPE = #{codetype,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="codename != null" >
+        CODENAME = #{codename,jdbcType=VARCHAR},
+      </if>
+      <if test="superid != null" >
+        superid = #{superid,jdbcType=VARCHAR},
+      </if>
+      <if test="leve != null" >
+        LEVE = #{leve,jdbcType=DECIMAL},
+      </if>
+      <if test="orderby != null" >
+        ORDERBY = #{orderby,jdbcType=DECIMAL},
+      </if>
+      <if test="applyto != null" >
+        applyto = #{applyto,jdbcType=INTEGER},
+      </if>       
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where codeid = #{codeid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.SysCode" >
+    update sys_code
+    set CODETYPE = #{codetype,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      CODENAME = #{codename,jdbcType=VARCHAR},
+      superid = #{superid,jdbcType=VARCHAR},
+      LEVE = #{leve,jdbcType=DECIMAL},
+      ORDERBY = #{orderby,jdbcType=DECIMAL},
+      applyto = #{applyto,jdbcType=INTEGER},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where codeid = #{codeid,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <!-- 代码结构树 -->
+  	<select id="selectCodeTree" resultMap="CodeTreeResultMap">
+		select
+		<include refid="Base_Column_List" />,
+			case when 
+				exists(select * from sys_code b where b.superid = a.code
+					and b.codetype = a.codetype and b.applyto = a.applyto
+				) then 1
+			    else 0
+			end as parent
+		from sys_code a
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>  
+  
+	<!--  公共方法 -->
+ 	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_code
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+  	<delete id="deleteByCondition">
+		delete from sys_code
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" parameterType="com.framework.mybatis.model.QueryModel"
+		resultType="java.lang.Integer">
+		select count(*) from sys_code
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective">
+		update sys_code
+  		 <set >
+		      <if test="codetype != null" >
+		        CODETYPE = #{codetype,jdbcType=VARCHAR},
+		      </if>
+		      <if test="content != null" >
+		        CONTENT = #{content,jdbcType=VARCHAR},
+		      </if>
+		      <if test="code != null" >
+		        CODE = #{code,jdbcType=VARCHAR},
+		      </if>
+		      <if test="codename != null" >
+		        CODENAME = #{codename,jdbcType=VARCHAR},
+		      </if>
+		      <if test="superid != null" >
+		        superid = #{superid,jdbcType=VARCHAR},
+		      </if>
+		      <if test="leve != null" >
+		        LEVE = #{leve,jdbcType=DECIMAL},
+		      </if>
+		      <if test="orderby != null" >
+		        ORDERBY = #{orderby,jdbcType=DECIMAL},
+		      </if>
+		      <if test="applyto != null" >
+		        applyto =#{applyto,jdbcType=INTEGER},
+		      </if> 
+		      <if test="remark != null" >
+		        REMARK = #{remark,jdbcType=VARCHAR},
+		      </if>
+		    </set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition">
+		update sys_code
+		set CODETYPE = #{codetype,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      CODENAME = #{codename,jdbcType=VARCHAR},
+      superid = #{superid,jdbcType=VARCHAR},
+      LEVE = #{leve,jdbcType=DECIMAL},
+      ORDERBY = #{orderby,jdbcType=DECIMAL},
+      applyto= #{applyto,jdbcType=INTEGER},
+      REMARK = #{remark,jdbcType=VARCHAR}
+   
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>     
+</mapper>

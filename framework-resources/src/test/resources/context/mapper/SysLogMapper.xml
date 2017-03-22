@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysLogMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.SysLog" >
+    <id column="logID" property="logid" jdbcType="VARCHAR" />
+    <result column="logTime" property="logtime" jdbcType="TIMESTAMP" />
+    <result column="userid" property="userid" jdbcType="VARCHAR" />
+    <result column="requestIP" property="requestip" jdbcType="VARCHAR" />
+    <result column="requestMethod" property="requestmethod" jdbcType="VARCHAR" />
+    <result column="reqParam" property="reqparam" jdbcType="VARCHAR" />
+    <result column="modelName" property="modelname" jdbcType="VARCHAR" />
+    <result column="modelOperType" property="modelopertype" jdbcType="VARCHAR" />
+    <result column="logType" property="logtype" jdbcType="INTEGER" />
+    <result column="logDescription" property="logdescription" jdbcType="VARCHAR" />
+    <result column="exceCode" property="excecode" jdbcType="VARCHAR" />
+    <result column="exceDescription" property="excedescription" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    logID, logTime, userid, requestIP, requestMethod, reqParam, modelName, modelOperType, 
+    logType, logDescription, exceCode, exceDescription
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_log
+    where logID = #{logid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_log
+    where logID = #{logid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.system.model.SysLog" >
+    insert into sys_log (logID, logTime, userid, 
+      requestIP, requestMethod, reqParam, 
+      modelName, modelOperType, logType, 
+      logDescription, exceCode, exceDescription
+      )
+    values (#{logid,jdbcType=VARCHAR}, #{logtime,jdbcType=TIMESTAMP}, #{userid,jdbcType=VARCHAR}, 
+      #{requestip,jdbcType=VARCHAR}, #{requestmethod,jdbcType=VARCHAR}, #{reqparam,jdbcType=VARCHAR}, 
+      #{modelname,jdbcType=VARCHAR}, #{modelopertype,jdbcType=VARCHAR}, #{logtype,jdbcType=INTEGER}, 
+      #{logdescription,jdbcType=VARCHAR}, #{excecode,jdbcType=VARCHAR}, #{excedescription,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.SysLog" >
+    insert into sys_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logid != null" >
+        logID,
+      </if>
+      <if test="logtime != null" >
+        logTime,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="requestip != null" >
+        requestIP,
+      </if>
+      <if test="requestmethod != null" >
+        requestMethod,
+      </if>
+      <if test="reqparam != null" >
+        reqParam,
+      </if>
+      <if test="modelname != null" >
+        modelName,
+      </if>
+      <if test="modelopertype != null" >
+        modelOperType,
+      </if>
+      <if test="logtype != null" >
+        logType,
+      </if>
+      <if test="logdescription != null" >
+        logDescription,
+      </if>
+      <if test="excecode != null" >
+        exceCode,
+      </if>
+      <if test="excedescription != null" >
+        exceDescription,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logid != null" >
+        #{logid,jdbcType=VARCHAR},
+      </if>
+      <if test="logtime != null" >
+        #{logtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="requestip != null" >
+        #{requestip,jdbcType=VARCHAR},
+      </if>
+      <if test="requestmethod != null" >
+        #{requestmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="reqparam != null" >
+        #{reqparam,jdbcType=VARCHAR},
+      </if>
+      <if test="modelname != null" >
+        #{modelname,jdbcType=VARCHAR},
+      </if>
+      <if test="modelopertype != null" >
+        #{modelopertype,jdbcType=VARCHAR},
+      </if>
+      <if test="logtype != null" >
+        #{logtype,jdbcType=INTEGER},
+      </if>
+      <if test="logdescription != null" >
+        #{logdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="excecode != null" >
+        #{excecode,jdbcType=VARCHAR},
+      </if>
+      <if test="excedescription != null" >
+        #{excedescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysLog" >
+    update sys_log
+    <set >
+      <if test="logtime != null" >
+        logTime = #{logtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="requestip != null" >
+        requestIP = #{requestip,jdbcType=VARCHAR},
+      </if>
+      <if test="requestmethod != null" >
+        requestMethod = #{requestmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="reqparam != null" >
+        reqParam = #{reqparam,jdbcType=VARCHAR},
+      </if>
+      <if test="modelname != null" >
+        modelName = #{modelname,jdbcType=VARCHAR},
+      </if>
+      <if test="modelopertype != null" >
+        modelOperType = #{modelopertype,jdbcType=VARCHAR},
+      </if>
+      <if test="logtype != null" >
+        logType = #{logtype,jdbcType=INTEGER},
+      </if>
+      <if test="logdescription != null" >
+        logDescription = #{logdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="excecode != null" >
+        exceCode = #{excecode,jdbcType=VARCHAR},
+      </if>
+      <if test="excedescription != null" >
+        exceDescription = #{excedescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where logID = #{logid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.system.model.SysLog" >
+    update sys_log
+    set logTime = #{logtime,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=VARCHAR},
+      requestIP = #{requestip,jdbcType=VARCHAR},
+      requestMethod = #{requestmethod,jdbcType=VARCHAR},
+      reqParam = #{reqparam,jdbcType=VARCHAR},
+      modelName = #{modelname,jdbcType=VARCHAR},
+      modelOperType = #{modelopertype,jdbcType=VARCHAR},
+      logType = #{logtype,jdbcType=INTEGER},
+      logDescription = #{logdescription,jdbcType=VARCHAR},
+      exceCode = #{excecode,jdbcType=VARCHAR},
+      exceDescription = #{excedescription,jdbcType=VARCHAR}
+    where logID = #{logid,jdbcType=VARCHAR}
+  </update>
+  
+<!--  公共方法 -->
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_log
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+  	<delete id="deleteByCondition">
+		delete from sys_log
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" 
+		resultType="java.lang.Integer">
+		select count(*) from sys_log
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective">
+		update sys_log
+		 <set >
+		     <if test="logtime != null" >
+        logTime = #{logtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="requestip != null" >
+        requestIP = #{requestip,jdbcType=VARCHAR},
+      </if>
+      <if test="requestmethod != null" >
+        requestMethod = #{requestmethod,jdbcType=VARCHAR},
+      </if>
+      <if test="reqparam != null" >
+        reqParam = #{reqparam,jdbcType=VARCHAR},
+      </if>
+      <if test="modelname != null" >
+        modelName = #{modelname,jdbcType=VARCHAR},
+      </if>
+      <if test="modelopertype != null" >
+        modelOperType = #{modelopertype,jdbcType=VARCHAR},
+      </if>
+      <if test="logtype != null" >
+        logType = #{logtype,jdbcType=INTEGER},
+      </if>
+      <if test="logdescription != null" >
+        logDescription = #{logdescription,jdbcType=VARCHAR},
+      </if>
+      <if test="excecode != null" >
+        exceCode = #{excecode,jdbcType=VARCHAR},
+      </if>
+      <if test="excedescription != null" >
+        exceDescription = #{excedescription,jdbcType=VARCHAR},
+      </if>
+		    </set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition">
+		update sys_log
+		 set logTime = #{logtime,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=VARCHAR},
+      requestIP = #{requestip,jdbcType=VARCHAR},
+      requestMethod = #{requestmethod,jdbcType=VARCHAR},
+      reqParam = #{reqparam,jdbcType=VARCHAR},
+      modelName = #{modelname,jdbcType=VARCHAR},
+      modelOperType = #{modelopertype,jdbcType=VARCHAR},
+      logType = #{logtype,jdbcType=INTEGER},
+      logDescription = #{logdescription,jdbcType=VARCHAR},
+      exceCode = #{excecode,jdbcType=VARCHAR},
+      exceDescription = #{excedescription,jdbcType=VARCHAR}
+    
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>  
+</mapper>

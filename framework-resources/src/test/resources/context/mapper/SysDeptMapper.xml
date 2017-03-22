@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.system.mybatis.dao.SysDeptMapper">
+	<resultMap id="BaseResultMap" type="com.system.model.SysDept">
+		<id column="DEPTID" property="deptid" jdbcType="VARCHAR" />
+		<result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+		<result column="SUPERID" property="superid" jdbcType="VARCHAR" />
+		<result column="SORTID" property="sortid" jdbcType="DECIMAL" />
+		<result column="ENDFLAG" property="endflag" jdbcType="TINYINT" />
+		<result column="dept_desc" property="deptDesc" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="sysDepartmentTreeMap" type="com.system.model.SysDepartmentTree"
+		extends="BaseResultMap">
+		<result column="parent" property="isParent" javaType="boolean"
+			jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		DEPTID, DEPT_NAME, SUPERID, SORTID, ENDFLAG, dept_desc
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_dept
+		where DEPTID = #{deptid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_dept
+		where DEPTID = #{deptid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.system.model.SysDept">
+		insert into sys_dept (DEPTID, DEPT_NAME, SUPERID,
+		SORTID, ENDFLAG, dept_desc
+		)
+		values (#{deptid,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR},
+		#{superid,jdbcType=VARCHAR},
+		#{sortid,jdbcType=DECIMAL}, #{endflag,jdbcType=TINYINT}, #{deptDesc,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.system.model.SysDept">
+		insert into sys_dept
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deptid != null">
+				DEPTID,
+			</if>
+			<if test="deptName != null">
+				DEPT_NAME,
+			</if>
+			<if test="superid != null">
+				SUPERID,
+			</if>
+			<if test="sortid != null">
+				SORTID,
+			</if>
+			<if test="endflag != null">
+				ENDFLAG,
+			</if>
+			<if test="deptDesc != null">
+				dept_desc,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deptid != null">
+				#{deptid,jdbcType=VARCHAR},
+			</if>
+			<if test="deptName != null">
+				#{deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="superid != null">
+				#{superid,jdbcType=VARCHAR},
+			</if>
+			<if test="sortid != null">
+				#{sortid,jdbcType=DECIMAL},
+			</if>
+			<if test="endflag != null">
+				#{endflag,jdbcType=TINYINT},
+			</if>
+			<if test="deptDesc != null">
+				#{deptDesc,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysDept">
+		update sys_dept
+		<set>
+			<if test="deptName != null">
+				DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="superid != null">
+				SUPERID = #{superid,jdbcType=VARCHAR},
+			</if>
+			<if test="sortid != null">
+				SORTID = #{sortid,jdbcType=DECIMAL},
+			</if>
+			<if test="endflag != null">
+				ENDFLAG = #{endflag,jdbcType=TINYINT},
+			</if>
+			<if test="deptDesc != null">
+				dept_desc = #{deptDesc,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where DEPTID = #{deptid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.system.model.SysDept">
+		update sys_dept
+		set DEPT_NAME = #{deptName,jdbcType=VARCHAR},
+		SUPERID = #{superid,jdbcType=VARCHAR},
+		SORTID = #{sortid,jdbcType=DECIMAL},
+		ENDFLAG = #{endflag,jdbcType=TINYINT},
+		dept_desc = #{deptDesc,jdbcType=VARCHAR}
+		where DEPTID = #{deptid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectDepartmentTree" resultMap="sysDepartmentTreeMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		case when
+			exists(select * from sys_dept b where b.SUPERID = a.deptid) then 1
+		else 0
+		end as parent
+		from sys_dept a
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+
+	<!-- 公共方法 -->
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_dept
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByCondition">
+		delete from sys_dept
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" resultType="java.lang.Integer">
+		select count(*) from sys_dept
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective">
+		update sys_dept
+		<set>
+			<if test="record.deptName != null">
+				DEPT_NAME = #{record.deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.superid != null">
+				SUPERID = #{record.superid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sortid != null">
+				SORTID = #{record.sortid,jdbcType=DECIMAL},
+			</if>
+			<if test="record.endflag != null">
+				ENDFLAG = #{record.endflag,jdbcType=TINYINT},
+			</if>
+			<if test="record.deptDesc != null">
+				dept_desc = #{record.deptDesc,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition">
+		update sys_dept
+		set DEPT_NAME = #{record.deptName,jdbcType=VARCHAR},
+		SUPERID = #{record.superid,jdbcType=VARCHAR},
+		SORTID = #{record.sortid,jdbcType=DECIMAL},
+		ENDFLAG = #{record.endflag,jdbcType=TINYINT},
+		dept_desc = #{record.deptDesc,jdbcType=VARCHAR}
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+</mapper>

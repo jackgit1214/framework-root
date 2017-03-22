@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysDeptUserMapper">
+	<resultMap id="BaseResultMap" type="com.system.model.SysDeptUser">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="DeptID" property="deptid" jdbcType="VARCHAR" />
+		<result column="UserID" property="userid" jdbcType="VARCHAR" />
+		<result column="Updating_UID" property="updatingUid" jdbcType="VARCHAR" />
+		<result column="Updating_Date" property="updatingDate"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, DeptID, UserID, Updating_UID, Updating_Date
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_dept_user
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_dept_user
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.system.model.SysDeptUser">
+		insert into sys_dept_user (ID, DeptID, UserID,
+		Updating_UID, Updating_Date)
+		values (#{id,jdbcType=VARCHAR}, #{deptid,jdbcType=VARCHAR},
+		#{userid,jdbcType=VARCHAR},
+		#{updatingUid,jdbcType=VARCHAR}, #{updatingDate,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.system.model.SysDeptUser">
+		insert into sys_dept_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="deptid != null">
+				DeptID,
+			</if>
+			<if test="userid != null">
+				UserID,
+			</if>
+			<if test="updatingUid != null">
+				Updating_UID,
+			</if>
+			<if test="updatingDate != null">
+				Updating_Date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="deptid != null">
+				#{deptid,jdbcType=VARCHAR},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="updatingUid != null">
+				#{updatingUid,jdbcType=VARCHAR},
+			</if>
+			<if test="updatingDate != null">
+				#{updatingDate,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.system.model.SysDeptUser">
+		update sys_dept_user
+		<set>
+			<if test="deptid != null">
+				DeptID = #{deptid,jdbcType=VARCHAR},
+			</if>
+			<if test="userid != null">
+				UserID = #{userid,jdbcType=VARCHAR},
+			</if>
+			<if test="updatingUid != null">
+				Updating_UID = #{updatingUid,jdbcType=VARCHAR},
+			</if>
+			<if test="updatingDate != null">
+				Updating_Date = #{updatingDate,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.system.model.SysDeptUser">
+		update sys_dept_user
+		set DeptID = #{deptid,jdbcType=VARCHAR},
+		UserID = #{userid,jdbcType=VARCHAR},
+		Updating_UID = #{updatingUid,jdbcType=VARCHAR},
+		Updating_Date = #{updatingDate,jdbcType=VARCHAR}
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 公共方法 -->
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_dept_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByCondition">
+		delete from sys_dept_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" resultType="java.lang.Integer">
+		select count(*) from sys_dept_user
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByConditionSelective">
+		update sys_dept_user
+		<set>
+			<if test="record.deptid != null">
+				DeptID = #{record.deptid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userid != null">
+				UserID = #{record.userid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updatingUid != null">
+				Updating_UID = #{record.updatingUid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updatingDate != null">
+				Updating_Date = #{record.updatingDate,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="queryModel != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByCondition" parameterType="map">
+		update sys_dept_user
+		set DeptID = #{deptid,jdbcType=VARCHAR},
+		UserID = #{userid,jdbcType=VARCHAR},
+		Updating_UID = #{updatingUid,jdbcType=VARCHAR},
+		Updating_Date = #{updatingDate,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="public.Update_By_Where_Clause" />
+		</if>
+	</update>
+
+</mapper>

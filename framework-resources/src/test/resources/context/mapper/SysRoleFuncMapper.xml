@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.mybatis.dao.SysRoleFuncMapper" >
+  <resultMap id="BaseResultMap" type="com.system.model.SysRoleFuncKey" >
+    <id column="funcid" property="funcid" jdbcType="VARCHAR" />
+    <id column="roleid" property="roleid" jdbcType="VARCHAR" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+    funcid,roleid
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="com.system.model.SysRoleFuncKey" >
+    delete from sys_role_func
+    where funcid = #{funcid,jdbcType=VARCHAR}
+      and roleid = #{roleid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.system.model.SysRoleFuncKey" >
+    insert into sys_role_func (funcid, roleid)
+    values (#{funcid,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.system.model.SysRoleFuncKey" >
+    insert into sys_role_func
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="funcid != null" >
+        funcid,
+      </if>
+      <if test="roleid != null" >
+        roleid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="funcid != null" >
+        #{funcid,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+	<!--  公共方法 -->
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<if test="queryModel != null and queryModel.distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_role_func
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+		<if test="queryModel != null and queryModel.orderByClause != null">
+			order by ${queryModel.orderByClause}
+		</if>
+	</select>
+  	<delete id="deleteByCondition">
+		delete from sys_role_func
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</delete>
+	<select id="countByCondition" 
+		resultType="java.lang.Integer">
+		select count(*) from sys_role_func
+		<if test="queryModel != null">
+			<include refid="public.Where_Clause" />
+		</if>
+	</select>
+
+  
+</mapper>

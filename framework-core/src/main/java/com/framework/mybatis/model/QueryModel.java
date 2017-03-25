@@ -13,6 +13,8 @@ public class QueryModel {
 
 	public Map<String, String> param;
 
+	public Map<String, String> param_condition;
+
 	protected transient List<Criteria> oredCriteria;
 
 	public QueryModel() {
@@ -354,7 +356,7 @@ public class QueryModel {
 					.next();
 			String key = entry.getKey();
 			String val = entry.getValue();
-			if (val != null && !"".endsWith(val)) {// 空值不作处理
+			if (val != null && !"".equals(val)) {// 空值不作处理
 
 				int pos = val.indexOf(",");
 				if (pos <= 0)

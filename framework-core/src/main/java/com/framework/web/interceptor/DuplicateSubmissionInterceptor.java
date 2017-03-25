@@ -24,13 +24,12 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 
 	private final Log log = LogFactory.getLog(this.getClass());
 
-	private boolean isSuccess = false;
+	private String curToken;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 
-		this.isSuccess = false;
 		HttpSession session = request.getSession();
 		SessionManager sessionManager = (SessionManager) session
 				.getAttribute("sessionManager");
@@ -46,12 +45,11 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 					RandomGUID token = new RandomGUID();
 					request.getSession(false).setAttribute("token",
 							token.toString());
-					this.isSuccess = false;
 				}
 
 				boolean needRemoveSession = annotation.needRemoveToken();
 				if (needRemoveSession) {
-					if (isRepeatSubmit(request) && this.isSuccess) {
+					if (isRepeatSubmit(request)) {
 						log.warn("请不要重复提交,[用户:"
 								+ sessionManager.getUser().toString() + ",url:"
 								+ request.getServletPath() + "]");
@@ -61,6 +59,7 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 				}
 			}
 		}
+
 		return true;
 	}
 
@@ -69,7 +68,9 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		// TODO Auto-generated method stub
-		log.warn("----------------afterCompletion----------------");
+		if (ex != null) {
+			request.getSession(false).setAttribute("token", this.curToken);
+		}
 		super.afterCompletion(request, response, handler, ex);
 	}
 
@@ -78,8 +79,6 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		// TODO Auto-generated method stub
-		log.warn("---------------postHandle-----------------");
-		this.isSuccess = true;
 		super.postHandle(request, response, handler, modelAndView);
 	}
 
@@ -89,6 +88,7 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 		if (serverToken == null) {
 			return true;
 		}
+		this.curToken = serverToken;
 		String clinetToken = request.getParameter("token");
 		if (clinetToken == null) {
 			return true;

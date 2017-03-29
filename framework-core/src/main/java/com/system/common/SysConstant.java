@@ -25,4 +25,9 @@ public interface SysConstant {
 
 	// 文件存储路径
 	public static String filePath = "/upload/";
+
+	// 存储文件分类方法
+	public static int CLASSIFIEDTYPE_DATATYPE = 0; // 按数据分类
+	public static int CLASSIFIEDTYPE_FILETYPE = 1; // 按文件类型分类
+
 }

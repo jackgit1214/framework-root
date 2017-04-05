@@ -1,17 +1,33 @@
+/*
+ * 
+ * 应用@value的方式
+ * <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+	        <property name="properties" value="classpath*:config/config.properties"/>
+	   </bean>
+ */
 package com.framework.resources.services.impl;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -23,20 +39,40 @@ import com.framework.mybatis.service.AbstractBusinessService;
 import com.framework.resources.dao.AttachmentsMapper;
 import com.framework.resources.model.CommAttachments;
 import com.framework.resources.services.AttachmentsService;
+import com.system.common.SysConstant;
 
 @Service
 @Transactional
 public class AttachmentsServiceImpl extends
 		AbstractBusinessService<CommAttachments> implements AttachmentsService {
+
 	@Autowired
 	private AttachmentsMapper attachmentsMapper;
 
 	@Value("#{configProperties[uploadFilePath]}")
 	public String uploadFilePath;
 
-	// # 1为应用服务器路径 ，2为系统路径
+	// # 1为应用服务器相对路径 ，2为系统路径
 	@Value("#{configProperties[uploadFilePathType]}")
 	public String filePathType;
+
+	// 是否对图片进行处理压缩,压缩时的缩略图路径
+	@Value("#{configProperties[isHandleImage]}")
+	public boolean isHandleImage = false;
+
+	// 是否存存储文件流信息
+	@Value("#{configProperties[isSaveFileStream]}")
+	public boolean isSaveFileStream = false;
+
+	// 文件分类方法，是业务ID,还是文件类型
+	@Value("#{configProperties[isClassified]}")
+	public boolean isClassified = true;
+
+	// 0以数据类型进行区分
+	@Value("#{configProperties[classifiedType]}")
+	public int classifiedType = SysConstant.CLASSIFIEDTYPE_DATATYPE;
+
+	//
 
 	public BaseDao getDao() {
 		return this.attachmentsMapper;
@@ -48,16 +84,27 @@ public class AttachmentsServiceImpl extends
 		return rows;
 	}
 
-	public int delete(String[] recordIds) {
-		int rows = 0;
+	public Map<String, Integer> delete(String[] recordIds) {
+		int rows = 0, fileNum = 0;
 		QueryModel queryModel = new QueryModel();
+
+		Map<String, Integer> rtnMap = new HashMap<String, Integer>();
 		for (String id : recordIds) {
 			QueryModel.Criteria criteria = queryModel.createCriteria();
 			criteria.andEqualTo("attaID", id);
+			CommAttachments attachment = this.attachmentsMapper
+					.selectByPrimaryKey(id);
+
+			boolean isSuccess = this.delFileHandle(attachment);
+			if (isSuccess) {
+				fileNum++;
+			}
 			rows = rows + this.attachmentsMapper.deleteByPrimaryKey(id);
 		}
+		rtnMap.put("successRows", rows);
+		rtnMap.put("filerow", fileNum);
 		this.logger.debug("rows: {}", rows);
-		return rows;
+		return rtnMap;
 	}
 
 	public int save(CommAttachments record) {
@@ -73,53 +120,135 @@ public class AttachmentsServiceImpl extends
 		return rows;
 	}
 
-	public String attachmentHandle(HttpServletRequest request,
-			CommAttachments record) throws IllegalStateException, IOException {
+	public List<String> attachmentHandle(HttpServletRequest request,
+			CommAttachments record) {
 
-		String attId = UUIDUtil.getUUID();
-		record.setAttaid(attId);
-		this.fileHandle(request, record);
-		return attId;
+		List<String> attIds = null;
+
+		try {
+			attIds = this.fileHandle(request, record);
+		} catch (IllegalStateException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return attIds;
 	}
 
-	private String fileHandle(HttpServletRequest request,
+	/**
+	 * 删除附件对应的文件
+	 * 
+	 * @param attachment
+	 *            附件信息
+	 * @return
+	 */
+	private boolean delFileHandle(CommAttachments attachment) {
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes()).getRequest();
+
+		String storePath = request.getSession().getServletContext()
+				.getRealPath("/");// 存储路径
+
+		if ("1".equals(filePathType)) // 数据库中存放的路径
+			storePath = storePath + attachment.getFilepath();
+		else
+			storePath = attachment.getFilepath();
+
+		File localFile = new File(storePath);
+		boolean isSuccess = localFile.delete();
+		this.logger.debug(storePath);
+		return isSuccess;
+	}
+
+	private List<String> fileHandle(HttpServletRequest request,
 			CommAttachments attachment) throws IllegalStateException,
 			IOException {
-
-		String attId = attachment.getAttaid();
-
+		List<String> attIds = new ArrayList<String>();
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
 				request.getSession().getServletContext());
-		if (multipartResolver.isMultipart(request)) {
-			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-			List<MultipartFile> files = multiRequest.getFiles("files");
-			Iterator<MultipartFile> iter = files.iterator();
-			String sourcepath = request.getSession().getServletContext()
-					.getRealPath("/");
+		if (!multipartResolver.isMultipart(request)) {
+			throw new RuntimeException("非法的附件上传.....");
 
-			if ("1".equals(filePathType))
-				sourcepath = sourcepath + uploadFilePath;
-			else
-				sourcepath = uploadFilePath;
-			while (iter.hasNext()) {
-				MultipartFile file = iter.next();
-				// 如果文件名为空，不进行下面的保存操作
-				if (file.getOriginalFilename().isEmpty()) {
-					continue;
-				}
-				attachment.setFilename(file.getOriginalFilename());
-				attachment.setFilesize(BigDecimal.valueOf(file.getSize()));
-				String filename = attId + "_" + file.getOriginalFilename();
-				attachment.setAttaname(filename);
-				if (file != null) {
-					String path = sourcepath + "/" + filename;
-					File localFile = new File(path);
-					attachment.setFilepath(uploadFilePath + "/" + filename);
-					file.transferTo(localFile);
-					this.save(attachment);
-				}
-			}
 		}
-		return attId;
+
+		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+
+		List<MultipartFile> files = new ArrayList<MultipartFile>();
+
+		MultiValueMap<String, MultipartFile> fileMaps = multiRequest
+				.getMultiFileMap();
+
+		Set<Entry<String, List<MultipartFile>>> set = fileMaps.entrySet();
+		Iterator<Entry<String, List<MultipartFile>>> setiter = set.iterator();
+		while (setiter.hasNext()) {
+			Entry<String, List<MultipartFile>> entry = setiter.next();
+			files.addAll(entry.getValue());
+		}
+
+		Iterator<MultipartFile> iter = files.iterator();
+		String storePath = request.getSession().getServletContext()
+				.getRealPath("/");// 存储路径
+
+		storePath = storePath + uploadFilePath;
+
+		while (iter.hasNext()) {
+			CommAttachments record = new CommAttachments();
+			String attId = UUIDUtil.getUUID();
+			record.setAttaid(attId);
+			MultipartFile file = iter.next();
+			// 如果文件名为空，不进行下面的保存操作
+			if (file.getOriginalFilename().isEmpty()) {
+				continue;
+			}
+
+			// 复制业务数据，包含业务类型、业务数据ID，业务附加数据、附件类型
+			BeanUtils.copyProperties(attachment, record);
+			if (record.getAttano() == null)
+				record.setAttano(0);
+
+			if (this.isSaveFileStream) // 存储文件流
+				record.setFileblob(file.getBytes());
+
+			record.setFilename(file.getOriginalFilename());
+			record.setFilesize(BigDecimal.valueOf(file.getSize()));
+			String filename = attId + "_" + file.getOriginalFilename();
+			record.setAttaname(filename);
+			if (file != null) {
+				String path = "";
+				String sourcepath = uploadFilePath;
+				// 根据分类方法创建子目录
+				if (this.isClassified) {
+
+					if (this.classifiedType == 0) { // 数据业务分为类，根据ID
+						path = storePath + "/" + attachment.getDataid();
+						sourcepath = sourcepath + "/" + attachment.getDataid();
+					} else { // 附件扩展名分类
+						int pos = filename.lastIndexOf(".");
+						sourcepath = sourcepath + "/"
+								+ filename.substring(pos + 1);
+						path = storePath + "/" + filename.substring(pos + 1);
+					}
+					File dirFile = new File(path);
+					if (!dirFile.exists())
+						dirFile.mkdirs();
+				}
+				path = path + "/" + filename;
+
+				File localFile = new File(path);
+				file.transferTo(localFile); // 存储文件
+
+				if ("1".equals(filePathType)) // 数据库中存放的路径
+					sourcepath = sourcepath + "/" + filename; // 项目相对路径
+				else
+					sourcepath = storePath + "/" + filename; // 绝对路径
+
+				record.setFilepath(sourcepath);
+
+				this.save(record);
+			}
+			attIds.add(attId);
+		}
+
+		return attIds;
 	}
 }

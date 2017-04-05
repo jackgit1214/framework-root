@@ -1,5 +1,10 @@
 package com.framework.resources.web;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.framework.common.anaotation.DuplicateSubmission;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
 import com.framework.resources.model.CommAttachments;
@@ -20,12 +24,13 @@ import com.system.common.SysConstant;
 @Controller
 @RequestMapping("/resources")
 public class AttachmentsController extends BaseController {
+
 	@Autowired
 	private AttachmentsService attachmentsServiceImpl;
 
 	@RequestMapping("/index")
 	public ModelAndView index() {
-		ModelAndView mav = new ModelAndView("commattachments/listindex");
+		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
 
@@ -52,8 +57,32 @@ public class AttachmentsController extends BaseController {
 		return mav;
 	}
 
+	@ResponseBody
+	@RequestMapping("/getAttaData")
+	public ModelMap getDataList(QueryModel queryModel, Integer pageNo,
+			Integer pageNum) {
+		ModelMap modelMap = new ModelMap();
+		queryModel.reInitCriteria();
+		if (pageNum == null || pageNum == 0) {
+			pageNum = SysConstant.SYSDEFAULTROWNUM;
+		}
+		if (pageNo == null || pageNo == 1) {
+			pageNo = 1;
+		}
+		PageResult<CommAttachments> page = new PageResult<CommAttachments>(
+				pageNo, pageNum);
+		try {
+			this.attachmentsServiceImpl.findObjectsByPage(queryModel, page);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		modelMap.addAttribute("attachments", page.getPageDatas());
+		return modelMap;
+	}
+
 	@RequestMapping("/showEdit")
-	@DuplicateSubmission(needSaveToken = true)
 	public ModelAndView showEdit(String id) {
 		CommAttachments commAttachments = this.attachmentsServiceImpl
 				.findObjectById(id);
@@ -66,11 +95,13 @@ public class AttachmentsController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/update")
-	@DuplicateSubmission(needRemoveToken = true)
-	public ModelMap addOrUpdate(CommAttachments record) {
+	public ModelMap addOrUpdate(CommAttachments record,
+			HttpServletRequest request) {
 		ModelMap modelMap = new ModelMap();
-		int rows = this.attachmentsServiceImpl.save(record);
-		modelMap.addAttribute("successRows", rows);
+
+		List<String> attIds = this.attachmentsServiceImpl.attachmentHandle(
+				request, record);
+		modelMap.addAttribute("successRows", attIds.size());
 		modelMap.addAttribute("data", record);
 		return modelMap;
 	}
@@ -80,8 +111,10 @@ public class AttachmentsController extends BaseController {
 	public ModelMap delete(
 			@RequestParam(value = "ids[]", required = false) String[] ids) {
 		ModelMap modelMap = new ModelMap();
-		int rows = this.attachmentsServiceImpl.delete(ids);
-		modelMap.addAttribute("successRows", rows);
+
+		Map<String, Integer> rtnMap = this.attachmentsServiceImpl.delete(ids);
+		modelMap.addAllAttributes(rtnMap);
+
 		return modelMap;
 	}
 }

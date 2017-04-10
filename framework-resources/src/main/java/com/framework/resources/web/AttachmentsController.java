@@ -62,7 +62,9 @@ public class AttachmentsController extends BaseController {
 	public ModelMap getDataList(QueryModel queryModel, Integer pageNo,
 			Integer pageNum) {
 		ModelMap modelMap = new ModelMap();
+
 		queryModel.reInitCriteria();
+		queryModel.setOrderByClause("attaNo");
 		if (pageNum == null || pageNum == 0) {
 			pageNum = SysConstant.SYSDEFAULTROWNUM;
 		}
@@ -115,6 +117,26 @@ public class AttachmentsController extends BaseController {
 		Map<String, Integer> rtnMap = this.attachmentsServiceImpl.delete(ids);
 		modelMap.addAllAttributes(rtnMap);
 
+		return modelMap;
+	}
+
+	/**
+	 * 调整显示顺序
+	 * 
+	 * @param record
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/setShowSort")
+	public ModelMap adjustSorted(CommAttachments record,
+			HttpServletRequest request) {
+		ModelMap modelMap = new ModelMap();
+
+		List<String> attIds = this.attachmentsServiceImpl.attachmentHandle(
+				request, record);
+		modelMap.addAttribute("successRows", attIds.size());
+		modelMap.addAttribute("data", record);
 		return modelMap;
 	}
 }

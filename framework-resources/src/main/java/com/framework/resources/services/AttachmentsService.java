@@ -17,4 +17,6 @@ public interface AttachmentsService extends IBusinessService<CommAttachments> {
 
 	public List<String> attachmentHandle(HttpServletRequest request,
 			CommAttachments record);
+
+	public String getResource(String dataid, String permission);
 }

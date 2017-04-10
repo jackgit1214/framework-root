@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.framework.common.util.UUIDUtil;
+import com.framework.image.ImageService;
 import com.framework.mybatis.dao.Base.BaseDao;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
@@ -48,6 +51,9 @@ public class AttachmentsServiceImpl extends
 
 	@Autowired
 	private AttachmentsMapper attachmentsMapper;
+
+	@Autowired
+	private ImageService imageService;
 
 	@Value("#{configProperties[uploadFilePath]}")
 	public String uploadFilePath;
@@ -72,7 +78,28 @@ public class AttachmentsServiceImpl extends
 	@Value("#{configProperties[classifiedType]}")
 	public int classifiedType = SysConstant.CLASSIFIEDTYPE_DATATYPE;
 
+	private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+
 	//
+
+	public String getResource(String attaid, String permission) {
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes()).getRequest();
+		String storePath = request.getSession().getServletContext()
+				.getRealPath("/");// 存储路径
+
+		CommAttachments attachment = this.findObjectById(attaid);
+
+		String filePath = "";
+		if ("1".equals(this.filePathType)) {
+			filePath = storePath + attachment.getFilepath();
+		} else {
+			filePath = attachment.getFilepath();
+		}
+
+		return filePath;
+	}
 
 	public BaseDao getDao() {
 		return this.attachmentsMapper;
@@ -160,6 +187,15 @@ public class AttachmentsServiceImpl extends
 		return isSuccess;
 	}
 
+	/**
+	 * 上传文件时，文件存储处理
+	 * 
+	 * @param request
+	 * @param attachment
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
 	private List<String> fileHandle(HttpServletRequest request,
 			CommAttachments attachment) throws IllegalStateException,
 			IOException {
@@ -168,7 +204,6 @@ public class AttachmentsServiceImpl extends
 				request.getSession().getServletContext());
 		if (!multipartResolver.isMultipart(request)) {
 			throw new RuntimeException("非法的附件上传.....");
-
 		}
 
 		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
@@ -232,11 +267,12 @@ public class AttachmentsServiceImpl extends
 					if (!dirFile.exists())
 						dirFile.mkdirs();
 				}
+				String tumbFilepath = path + "/tumb" + filename;
 				path = path + "/" + filename;
 
 				File localFile = new File(path);
 				file.transferTo(localFile); // 存储文件
-
+				this.handleImage(path, tumbFilepath);
 				if ("1".equals(filePathType)) // 数据库中存放的路径
 					sourcepath = sourcepath + "/" + filename; // 项目相对路径
 				else
@@ -250,5 +286,21 @@ public class AttachmentsServiceImpl extends
 		}
 
 		return attIds;
+	}
+
+	private void handleImage(final String sourcePath,
+			final String targetTumbPath) {
+
+		cachedThreadPool.execute(new Runnable() {
+			public void run() {
+				try {
+					imageService.getImageThumbnail(sourcePath, targetTumbPath);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
 	}
 }

@@ -1,7 +1,7 @@
 package com.framework.image.handler;
 
-import java.awt.Dimension;
 import java.io.IOException;
+import java.util.Map;
 
 public interface IImageHandler {
 
@@ -11,7 +11,7 @@ public interface IImageHandler {
 	 * @param source
 	 * @throws IOException
 	 */
-	public Dimension getSize(String source) throws IOException;
+	public Map<String, String> getImageInfo(String source) throws IOException;
 
 	/**
 	 * 根据宽度，高度缩放生成图片
@@ -42,12 +42,26 @@ public interface IImageHandler {
 			int width, int height) throws IOException;
 
 	/**
-	 * <p>
-	 * 对图片进行压缩,主要使用场景是上传图片对图片进行压缩，生成缩略图
-	 * </p>
+	 * 对图片进行压缩,主要使用场景是上传图片对图片进行压缩，生成缩略图，根据多个宽度生成不同级别的图
 	 * 
 	 * @param srcImage
+	 * @param width
+	 * @param isWatermark
+	 *            是否使用水印，为true则使用，缺省水印文字
 	 */
-	public void compressionImage(String srcImage, int width);
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark) throws Exception;
 
+	/**
+	 * 对图片进行压缩,主要使用场景是上传图片对图片进行压缩，生成缩略图，根据多个宽度生成不同级别的图
+	 * 
+	 * @param srcImage
+	 * @param width
+	 * @param isWatermark
+	 *            是否使用水印，为true则使用
+	 * @param watermarkWord
+	 *            水印文字
+	 */
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark, String watermarkWord) throws Exception;
 }

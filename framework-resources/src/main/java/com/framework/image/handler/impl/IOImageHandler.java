@@ -8,13 +8,16 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import com.framework.image.IImageConstant;
 import com.framework.image.ImageStrategy;
 import com.framework.image.handler.IImageHandler;
 import com.framework.image.provider.IImageProvider;
@@ -28,10 +31,20 @@ public class IOImageHandler implements IImageHandler {
 		this.imageProvider = imageProvider;
 	}
 
-	public Dimension getSize(String source) throws IOException {
+	public Map<String, String> getImageInfo(String source) throws IOException {
+
+		Map<String, String> imageInfo = new HashMap<>();
 		BufferedImage image = imageProvider.readImage(source);
 
-		return new Dimension(image.getWidth(), image.getHeight());
+		imageInfo.put(IImageConstant.IMAGE_WIDTH,
+				String.valueOf(image.getWidth()));
+		imageInfo.put(IImageConstant.IMAGE_HEIGHT,
+				String.valueOf(image.getHeight()));
+		imageInfo.put(IImageConstant.IMAGE_PATH, source);
+		imageInfo.put(IImageConstant.IMAGE_QUALITY, "");
+		imageInfo.put(IImageConstant.IMAGE_SIZE, "");
+		imageInfo.put(IImageConstant.IMAGE_SUFFIX, "");
+		return imageInfo;
 	}
 
 	public void resizeImage(String source, String target, int width, int height)
@@ -40,8 +53,11 @@ public class IOImageHandler implements IImageHandler {
 		BufferedImage sourceImage = imageProvider.readImage(source);
 		AffineTransform affineTransform = new AffineTransform();
 		// 缩放操作到指定宽高
-		Dimension targetSize = ImageStrategy.getTargetSizeByHeight(
-				this.getSize(source), height);
+		Map<String, String> imageInfo = this.getImageInfo(source);
+		Dimension dim = new Dimension(Integer.parseInt(imageInfo
+				.get(IImageConstant.IMAGE_WIDTH)), Integer.parseInt(imageInfo
+				.get(IImageConstant.IMAGE_HEIGHT)));
+		Dimension targetSize = ImageStrategy.getTargetSizeByHeight(dim, height);
 		affineTransform.scale(targetSize.getWidth() / sourceImage.getWidth(),
 				targetSize.getHeight() / sourceImage.getHeight());
 
@@ -113,7 +129,15 @@ public class IOImageHandler implements IImageHandler {
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int width) {
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark, String watermarkWord) {
 		// TODO Auto-generated method stub
 
 	}

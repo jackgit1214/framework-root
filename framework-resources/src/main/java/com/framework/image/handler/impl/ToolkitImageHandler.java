@@ -12,7 +12,10 @@ import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.framework.image.IImageConstant;
 import com.framework.image.ImageStrategy;
 import com.framework.image.handler.IImageHandler;
 import com.framework.image.provider.IImageProvider;
@@ -27,19 +30,32 @@ public class ToolkitImageHandler implements IImageHandler {
 		this.imageProvider = imageProvider;
 	}
 
-	public Dimension getSize(String source) throws IOException {
+	public Map<String, String> getImageInfo(String source) throws IOException {
 		Image image = Toolkit.getDefaultToolkit().getImage(source);
 
-		return new Dimension(image.getWidth(null), image.getHeight(null));
+		Map<String, String> imageInfo = new HashMap<>();
+
+		imageInfo.put(IImageConstant.IMAGE_WIDTH,
+				String.valueOf(image.getWidth(null)));
+		imageInfo.put(IImageConstant.IMAGE_HEIGHT,
+				String.valueOf(image.getHeight(null)));
+		imageInfo.put(IImageConstant.IMAGE_PATH, source);
+		imageInfo.put(IImageConstant.IMAGE_QUALITY, "");
+		imageInfo.put(IImageConstant.IMAGE_SIZE, "");
+		imageInfo.put(IImageConstant.IMAGE_SUFFIX, "");
+		return imageInfo;
+
 	}
 
 	public void resizeImage(String sourceFile, String targetFile, int width,
 			int height) throws IOException {
 
 		BufferedImage sourceImage = imageProvider.readImage(sourceFile);
-		Dimension test = this.getSize(sourceFile);
-		Dimension targetSize = ImageStrategy
-				.getTargetSizeByHeight(test, height);
+		Map<String, String> imageInfo = this.getImageInfo(sourceFile);
+		Dimension dim = new Dimension(Integer.parseInt(imageInfo
+				.get(IImageConstant.IMAGE_WIDTH)), Integer.parseInt(imageInfo
+				.get(IImageConstant.IMAGE_HEIGHT)));
+		Dimension targetSize = ImageStrategy.getTargetSizeByHeight(dim, height);
 
 		BufferedImage image = new BufferedImage(targetSize.width,
 				targetSize.height, BufferedImage.TYPE_INT_RGB);
@@ -104,7 +120,15 @@ public class ToolkitImageHandler implements IImageHandler {
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int width) {
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark, String watermarkWord) {
 		// TODO Auto-generated method stub
 
 	}

@@ -1,56 +1,37 @@
 package com.framework.image.handler.impl;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import magick.ImageInfo;
-import magick.MagickApiException;
-import magick.MagickException;
-import magick.MagickImage;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.im4java.core.CompositeCmd;
 import org.im4java.core.ConvertCmd;
+import org.im4java.core.GMOperation;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
+import org.im4java.core.IdentifyCmd;
+import org.im4java.core.ImageCommand;
+import org.im4java.core.Operation;
+import org.im4java.process.ArrayListOutputConsumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.framework.common.util.RandomGUID;
 import com.framework.image.IImageConstant;
+import com.framework.image.handler.AbstractImageHandler;
 import com.framework.image.handler.IImageHandler;
 
 @Component(value = "iM4ImageHandler")
-public class IM4ImageHandler implements IImageHandler {
-
-	protected final Log log = LogFactory.getLog(this.getClass());
-
-	// # 1为linux，2为windows
-	@Value("#{configProperties[environment]}")
-	public String environment;
+public class IM4ImageHandler extends AbstractImageHandler implements
+		IImageHandler {
 
 	@Value("#{configProperties[environmentPath]}")
-	public String environmentPath;
-
-	public static String imageMagickPath = null;
-	static {
-		imageMagickPath = "C:/Program Files (x86)/ImageMagick-6.3.9-Q16";
-	}
-
-	public Dimension getSize(String source) throws IOException {
-		try {
-			ImageInfo info = new ImageInfo(source);
-			MagickImage image = new MagickImage(info);
-			return image.getDimension();
-		} catch (MagickApiException ex) {
-			throw new IOException(ex.getMessage());
-		} catch (MagickException ex) {
-			throw new IOException(ex.getMessage());
-		}
-	}
+	public String environmentPath = "C:/Program Files/GraphicsMagick-1.3.25-Q16";;
 
 	public void resizeImage(String source, String target, int width, int height)
 			throws IOException {
@@ -59,23 +40,6 @@ public class IM4ImageHandler implements IImageHandler {
 		op.resize(width, height);
 		op.addImage(target);
 		this.executeIMOp(op);
-	}
-
-	private void executeIMOp(IMOperation op) {
-		ConvertCmd convert = new ConvertCmd();
-		// linux下不要设置此值，不然会报错
-		convert.setSearchPath(imageMagickPath);
-		try {
-			convert.run(op);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IM4JavaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void clipImage(String source, String target, int intx, int inty,
@@ -92,57 +56,22 @@ public class IM4ImageHandler implements IImageHandler {
 	}
 
 	/**
-	 * 按照边框的尺寸生成预览图片
+	 * 按照边框的尺寸生成预览图片<br>
+	 * 存在边框
 	 * 
 	 * @param srcImage
 	 * @param adaptSize
 	 */
-	private void adaptImage(String srcImage, int adaptSize) {
+	public void adaptImage(String srcImage, int adaptSize) {
 		IMOperation op = new IMOperation();
 		op.background("white");
 		op.addRawArgs("-thumbnail", this.getImageAreaSize(adaptSize));
 		op.addRawArgs("-gravity", "center");
 		op.addRawArgs("-extent", this.getImageAreaSize(adaptSize));
-		op.addRawArgs("-quality", IImageConstant.ADAPT);
+		op.addRawArgs("-quality", IImageConstant.QUALITY);
 		op.addImage(srcImage);
+
 		op.addImage(this.getAdaptImageName(srcImage, adaptSize));
-		this.executeIMOp(op);
-	}
-
-	/**
-	 * <p>
-	 * 对很大的图片进行压缩,
-	 * </p>
-	 * 
-	 * @param width
-	 * @param height
-	 * @return
-	 */
-	private String getScaling(int width) {
-		double percent = (IImageConstant.MAX_DETAIL / width) * 100;
-		return percent + "%x" + percent + "%";
-	}
-
-	/**
-	 * 生成默认的图片格式
-	 * 
-	 * @param srcImage
-	 * @param watermark
-	 */
-	public void orgImage(String srcImage, String targetImage, boolean watermark) {
-		IMOperation op = new IMOperation();
-		if (watermark) {
-			op.font("宋体").gravity("southeast").pointsize(24).fill("#BCBFC8")
-					.draw("text 5,5 xx.com");
-		}
-		op.background("white");
-		// op.addRawArgs("-thumbnail", this.getImageAreaSize(srcImage));
-		op.addRawArgs("-gravity", "center");
-		op.addRawArgs("-extent", this.getImageAreaSize(srcImage));
-		// op.addRawArgs("-quality", IImageConstant.QUALITY_ORG);
-		op.addImage(srcImage);
-		op.addImage(targetImage);
-
 		this.executeIMOp(op);
 	}
 
@@ -152,77 +81,346 @@ public class IM4ImageHandler implements IImageHandler {
 	 * @param srcPath 源图片路径
 	 */
 	public void addImgText(String srcPath, String targetPath) {
-		IMOperation op = new IMOperation();
-		op.font("宋体").gravity("southeast").pointsize(18).fill("#BCBFC8")
-				.draw("text 5,5 juziku.com");
+		// IMOperation op = new IMOperation();
+		// op.font("宋体").gravity("southeast").pointsize(18).fill("#BCBFC8")
+		// .draw("text 5,5 aaaa.com");
+		//
+		// op.addImage(srcPath);
+		// op.addImage(targetPath);
+		// GMOperation
+		// IMOperation op = new IMOperation();
+		GMOperation op = new GMOperation();
 
+		String ss;
+		try {
+			ss = new String("A中文测");
+			op.font("宋体").gravity("southeast").pointsize(108).fill("#ff0000")
+					.draw("text 105 , 105 " + ss);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		op.encoding("GBK");
 		op.addImage(srcPath);
 		op.addImage(targetPath);
+
 		this.executeIMOp(op);
-	}
-
-	/**
-	 * <p>
-	 * 获取最大的图片边框，业务规则是 ：<Br>
-	 * 1、如果长比宽大，并少于预设边框800的时候则选择长为压缩的边框做标准;如果大于预设边框的时候则选择800做为标准<br>
-	 * 2、如果宽比长大,并少于预设边框800的时候则选择宽为压缩的边框做标准;如果大于预设边框的时候则选择800做为标准<br>
-	 * </p>
-	 * 
-	 * @param srcImage
-	 * @return
-	 * @throws IOException
-	 */
-	private String getImageAreaSize(String srcImage) {
-		try {
-			BufferedImage bufferedImage = ImageIO.read(new File(srcImage));
-			int height = bufferedImage.getHeight();
-			int width = bufferedImage.getWidth();
-			int tempMaxSelectSize = (height > width ? height : width);
-			int tempMaxSize = (tempMaxSelectSize > IImageConstant.MAX_SIZE ? IImageConstant.MAX_SIZE
-					: tempMaxSelectSize);
-			return tempMaxSize + "x" + tempMaxSize;
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-		}
-		return "1x1";
-	}
-
-	/**
-	 * 获取最后的自适应图片地址，不建议这么做，毕竟这样会影响到.gif的图片。
-	 * 
-	 * @param srcImage
-	 * @param adaptSize
-	 * @return
-	 */
-	private String getAdaptImageName(String srcImage, int adaptSize) {
-		return new StringBuffer(srcImage).append("_").append(adaptSize)
-				.append("x").append(adaptSize).append(".jpg").toString();
-	}
-
-	/**
-	 * 获取自适应图片的规格
-	 * 
-	 * @param adaptSize
-	 * @return
-	 */
-	private String getImageAreaSize(int adaptSize) {
-		return adaptSize + "x" + adaptSize;
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int width) {
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark) throws Exception {
+		this.compressionImage(srcImage, width, isWatermark, this.watermarkWord);
+	}
+
+	@Override
+	public void compressionImage(String srcImage, int[] width,
+			boolean isWatermark, String watermarkWord) throws Exception {
+
 		// TODO Auto-generated method stub
-		IMOperation op = new IMOperation();
-		// 压缩
-		op.addRawArgs("-thumbnail", "100x100");
-		// 图片质量
-		op.addRawArgs("-quality", "100");
-		if (width > IImageConstant.MAX_DETAIL) {
-			// op.addImage("-sample", getScaling(width));
+
+		String sourceFile = srcImage;
+
+		if (isWatermark) {
+			sourceFile = this.addImgWatermark(srcImage, watermarkWord);
 		}
-		op.addImage(srcImage);
-		op.addImage(this.getAdaptImageName(srcImage, 100));
-		this.executeIMOp(op);
+
+		for (int w : width) {
+			IMOperation op = new IMOperation();
+			// 压缩
+			op.addRawArgs("-thumbnail", this.getImageAreaSize(w));
+			// 图片质量
+			op.addRawArgs("-quality", "100");
+			op.addImage(sourceFile);
+			op.addImage(this.getAdaptImageName(srcImage, w));
+
+			this.executeIMOp(op);
+		}
+
+	}
+
+	/**
+	 * width 水印宽度（可以于水印图片大小不同） height 水印高度（可以于水印图片大小不同） x 水印开始X坐标 y 水印开始Y坐标
+	 * 
+	 * @param srcImagePath
+	 * @param watermarkWord
+	 * @throws Exception
+	 */
+
+	private void addWatermark(IMOperation op, String srcImagePath,
+			String watermarkWord) throws Exception {
+
+		RandomGUID ram = new RandomGUID();
+		String waterMarkFile = System.currentTimeMillis() + ram.toString();
+		File waterM = new File(waterMarkFile);
+		ImageIO.write(this.getWatermark(watermarkWord), "png", waterM);
+
+		// 原始图片信息
+		BufferedImage buffimg = ImageIO.read(new File(srcImagePath));
+		int w = buffimg.getWidth();
+		int h = buffimg.getHeight();
+
+		BufferedImage buffimg1 = ImageIO.read(new File(waterMarkFile));
+		int width = buffimg1.getWidth();
+		int height = buffimg1.getHeight();
+
+		// 水印图片位置
+		// op.geometry(width, height, x, y);
+		switch (this.watermarkFontPosition) {
+		case POS_LT:
+			op.geometry(w, h, IImageConstant.WATERMARKMARGIN,
+					IImageConstant.WATERMARKMARGIN);
+		case POS_RT:
+			op.geometry(w, h, w - width - IImageConstant.WATERMARKMARGIN,
+					IImageConstant.WATERMARKMARGIN);
+		case POS_LB:
+			op.geometry(w, h, IImageConstant.WATERMARKMARGIN, h - height
+					- IImageConstant.WATERMARKMARGIN);
+		case POS_RB:
+			op.geometry(width, height, w - width
+					- IImageConstant.WATERMARKMARGIN, h - height
+					- IImageConstant.WATERMARKMARGIN);
+		case POS_ALL:
+
+		}
+		// 水印透明度
+		op.dissolve(this.watermarkDissolve);
+		// 生成水印 图
+		op.addImage(waterMarkFile);
+
+	}
+
+	private void executeIMOp(Operation op) {
+
+		ConvertCmd convert = new ConvertCmd(true);
+		// convert.run(arg0, arg1);
+		// linux下不要设置此值，不然会报错
+		convert.setSearchPath(environmentPath);
+		try {
+			convert.run(op);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IM4JavaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/** * 获取 ImageCommand * * @param command 命令类型 * @return */
+	private ImageCommand getImageCommand(CommandType command) {
+		ImageCommand cmd = null;
+		switch (command) {
+		case convert:
+			cmd = new ConvertCmd(true);
+			break;
+		case identify:
+			cmd = new IdentifyCmd(true);
+			break;
+		case compositecmd:
+			cmd = new CompositeCmd(true);
+			break;
+		}
+		if (cmd != null
+				&& System.getProperty("os.name").toLowerCase()
+						.indexOf("windows") == -1) {
+			cmd.setSearchPath(this.environmentPath);
+		}
+		return cmd;
+	}
+
+	/** * 命令类型 * */
+	private enum CommandType {
+		convert("转换处理"), identify("图片信息"), compositecmd("图片合成");
+		private String name;
+
+		CommandType(String name) {
+			this.name = name;
+		}
+	}
+
+	/**
+	 * * 图片水印 * * @param srcImagePath 源图片路径 * @param destImagePath 目标图片路径 * @param
+	 * dissolve 透明度（0-100） * @throws Exception
+	 */
+
+	/**
+	 * 
+	 * @param srcImagePath
+	 * @param watermarkWord
+	 * @throws Exception
+	 * 
+	 *             width 水印宽度（可以于水印图片大小不同） height 水印高度（可以于水印图片大小不同） x 水印开始X坐标 y
+	 *             水印开始Y坐标
+	 * 
+	 */
+	public String addImgWatermark(String srcImagePath, String watermarkWord)
+			throws Exception {
+		RandomGUID ram = new RandomGUID();
+		String waterMarkFile = System.currentTimeMillis() + ram.toString();
+		File waterM = new File(waterMarkFile);
+		ImageIO.write(this.getWatermark(watermarkWord), "png", waterM);
+		// 原始图片信息
+		BufferedImage buffimg = ImageIO.read(new File(srcImagePath));
+		int w = buffimg.getWidth();
+		int h = buffimg.getHeight();
+
+		BufferedImage buffimg1 = ImageIO.read(new File(waterMarkFile));
+		int width = buffimg1.getWidth();
+		int height = buffimg1.getHeight();
+		IMOperation op = new IMOperation();
+
+		// 水印图片位置
+		// op.geometry(width, height, x, y);
+		switch (this.watermarkFontPosition) {
+		case POS_LT:
+			op.geometry(w, h, IImageConstant.WATERMARKMARGIN,
+					IImageConstant.WATERMARKMARGIN);
+		case POS_RT:
+			op.geometry(w, h, w - width - IImageConstant.WATERMARKMARGIN,
+					IImageConstant.WATERMARKMARGIN);
+		case POS_LB:
+			op.geometry(w, h, IImageConstant.WATERMARKMARGIN, h - height
+					- IImageConstant.WATERMARKMARGIN);
+		case POS_RB:
+			op.geometry(width, height, w - width
+					- IImageConstant.WATERMARKMARGIN, h - height
+					- IImageConstant.WATERMARKMARGIN);
+
+			// op.geometry(width, height, 50, 50);
+		case POS_ALL:
+
+		}
+		// 水印透明度
+		op.dissolve(this.watermarkDissolve);
+
+		// 水印 图
+		op.addImage(waterMarkFile);
+		// 原图
+		op.addImage(srcImagePath);
+		// 目标
+
+		String targetFile = this.getWatermarkImageName(srcImagePath);
+		op.addImage(targetFile);
+		ImageCommand cmd = getImageCommand(CommandType.compositecmd);
+
+		cmd.run(op);
+		if (waterM.exists())
+			log.debug(waterM.delete());
+		return targetFile;
+	}
+
+	/**
+	 * * 查询图片的基本信息:格式,质量，宽度，高度 *
+	 * <p>
+	 * * gm identify -format %w,%h,%d/%f,%Q,%b,%e
+	 * 
+	 * 
+	 * %b file size of image read in <br>
+	 * 
+	 * %c comment property <br>
+	 * 
+	 * %d directory component of path <br>
+	 * %e filename extension or suffix <br>
+	 * %f filename (including suffix) <br>
+	 * %g layer canvas page geometry ( = %Wx%H%X%Y ) <br>
+	 * %h current image height in pixels %i image filename (note: becomes output
+	 * filename for "info:") <br>
+	 * %k number of unique colors <br>
+	 * %l label property <br>
+	 * %m image file format (file magic) <br>
+	 * %n exact number of images in current image sequence <br>
+	 * %o output filename (used for delegates) <br>
+	 * %p index of image in current image list <br>
+	 * %q quantum depth (compile-time constant) <br>
+	 * %r image class and colorspace <br>
+	 * %s scene number (from input unless re-assigned) <br>
+	 * %t filename without directory or extension (suffix) <br>
+	 * %u unique temporary filename (used for delegates) <br>
+	 * %w current width in pixels <br>
+	 * %x x resolution (density) <br>
+	 * %y y resolution (density) <br>
+	 * %z image depth (as read in unless modified, image save depth) <br>
+	 * %A image transparency channel enabled (true/false) <br>
+	 * %C image compression type %D image dispose method %G image size ( = %wx%h
+	 * ) <br>
+	 * %H page (canvas) height <br>
+	 * %M Magick filename (original file exactly as given, including read mods)
+	 * <br>
+	 * %O page (canvas) offset ( = %X%Y ) <br>
+	 * %P page (canvas) size ( = %Wx%H ) <br>
+	 * %Q image compression quality ( 0 = default ) <br>
+	 * %S ?? scenes ?? <br>
+	 * %T image time delay <br>
+	 * %W page (canvas) width <br>
+	 * %X page (canvas) x offset (including sign) %Y page (canvas) y offset
+	 * (including sign) <br>
+	 * %Z unique filename (used for delegates) <br>
+	 * %@ bounding box <br>
+	 * %# signature <br>
+	 * %% a percent sign \n newline \r carriage return
+	 * 
+	 * <p>
+	 * * * @param imagePath * @return
+	 */
+	public Map<String, String> getImageInfo(String imagePath) {
+
+		long startTime = System.currentTimeMillis();
+		Map<String, String> imageInfo = new HashMap<>();
+		try {
+			IMOperation op = new IMOperation();
+			op.format("%w,%h,%d/%f,%Q,%b,%e");
+			op.addImage();
+			ImageCommand identifyCmd = getImageCommand(CommandType.identify);
+			ArrayListOutputConsumer output = new ArrayListOutputConsumer();
+			identifyCmd.setOutputConsumer(output);
+			identifyCmd.run(op, imagePath);
+			ArrayList<String> cmdOutput = output.getOutput();
+			String[] result = cmdOutput.get(0).split(",");
+			if (result.length == 6) {
+				imageInfo.put(IImageConstant.IMAGE_WIDTH, result[0]);
+				imageInfo.put(IImageConstant.IMAGE_HEIGHT, result[1]);
+				imageInfo.put(IImageConstant.IMAGE_PATH, result[2]);
+				imageInfo.put(IImageConstant.IMAGE_QUALITY, result[3]);
+				imageInfo.put(IImageConstant.IMAGE_SIZE, result[4]);
+				imageInfo.put(IImageConstant.IMAGE_SUFFIX, result[5]);
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+			log.error("图片工具获取图片基本信息异常" + e.getMessage(), e);
+		}
+		long endTime = System.currentTimeMillis();
+		log.info("take time: " + (endTime - startTime));
+		return imageInfo;
+	}
+
+	/**
+	 * * 图片旋转(顺时针旋转) * 拼装命令示例: gm convert -rotate 90 /apps/watch.jpg
+	 * /apps/watch_compress.jpg * * @param imagePath 源图片路径 * @param newPath
+	 * 处理后图片路径 * @param degree 旋转角度
+	 */
+	public static boolean rotate(String imagePath, String newPath, double degree) {
+		boolean flag;
+		try {
+			// 1.将角度转换到0-360度之间
+			degree = degree % 360;
+			if (degree <= 0) {
+				degree = 360 + degree;
+			}
+			IMOperation op = new IMOperation();
+			op.rotate(degree);
+			op.addImage(imagePath);
+			op.addImage(newPath);
+			ConvertCmd cmd = new ConvertCmd(true);
+			cmd.run(op);
+			flag = true;
+		} catch (Exception e) {
+			flag = false;
+			System.out.println("图片旋转失败!");
+		}
+		return flag;
 	}
 
 	public static void main(String[] args) {
@@ -231,13 +429,21 @@ public class IM4ImageHandler implements IImageHandler {
 		try {
 			// imageHandler.orgImage("d:\\1.jpg", true);
 			// imageHandler.compressionImage("d:\\1.jpg", 50);
-			imageHandler.addImgText("d:\\1.jpg", "d:\\2.jpg");
-			imageHandler.orgImage("d:\\1.jpg", "d:\\4.jpg", true);
-			imageHandler.resizeImage("d:\\1.jpg", "d:\\5.jpg", 100, 100);
+			// imageHandler.addImgText("d:\\1.jpg", "d:\\2.jpg");
+			// imageHandler.addImgWatermark("d:\\1.jpg", "重新测试！www.sohu.com");
+			int[] width = { 800, 600, 400 };
+			imageHandler.compressionImage("d:\\1.jpg", width, true,
+					"www.sohu.com");
+			// imageHandler.getImageInfo("d:\\1.jpg");
+			// imageHandler.adaptImage("d:\\1.jpg", 800);
+			// imageHandler.orgImage("d:\\1.jpg", "d:\\4.jpg", true);
+			// imageHandler.resizeImage("d:\\1.jpg", "d:\\5.jpg", 100, 100);
+			// imageHandler.compressionImage("d:\\1.jpg", 200);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
+
 }

@@ -1,4 +1,4 @@
-package com.framework.resources.web;
+package com.resources.web;
 
 import java.util.List;
 import java.util.Map;
@@ -16,9 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
-import com.framework.resources.model.CommAttachments;
-import com.framework.resources.services.AttachmentsService;
 import com.framework.web.controller.BaseController;
+import com.resources.model.CommAttachments;
+import com.resources.services.AttachmentsService;
 import com.system.common.SysConstant;
 
 @Controller
@@ -139,4 +139,5 @@ public class AttachmentsController extends BaseController {
 		modelMap.addAttribute("data", record);
 		return modelMap;
 	}
+
 }

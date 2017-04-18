@@ -1,4 +1,4 @@
-package com.framework.resources.services;
+package com.resources.services;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.framework.mybatis.service.IBusinessService;
-import com.framework.resources.model.CommAttachments;
+import com.resources.model.CommAttachments;
 
 public interface AttachmentsService extends IBusinessService<CommAttachments> {
 	int delete(String recordId);

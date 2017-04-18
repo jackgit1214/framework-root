@@ -1,4 +1,4 @@
-package com.framework.resources.model;
+package com.resources.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.framework.resources.web;
+package com.resources.web;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.framework.resources.services.AttachmentsService;
+import com.resources.services.AttachmentsService;
 
 @Controller
 @RequestMapping("/public")

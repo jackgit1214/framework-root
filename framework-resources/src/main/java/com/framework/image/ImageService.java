@@ -50,6 +50,7 @@ public class ImageService {
 	 */
 	public void getImageThumbnail(String sourceFile, String targetFile,
 			int width, int height) throws IOException {
+		
 		iImageHandler.resizeImage(sourceFile, targetFile, width, height);
 	}
 

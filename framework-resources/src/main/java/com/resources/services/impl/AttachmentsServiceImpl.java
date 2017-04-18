@@ -5,7 +5,7 @@
 	        <property name="properties" value="classpath*:config/config.properties"/>
 	   </bean>
  */
-package com.framework.resources.services.impl;
+package com.resources.services.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +39,9 @@ import com.framework.image.ImageService;
 import com.framework.mybatis.dao.Base.BaseDao;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
-import com.framework.resources.dao.AttachmentsMapper;
-import com.framework.resources.model.CommAttachments;
-import com.framework.resources.services.AttachmentsService;
+import com.resources.dao.AttachmentsMapper;
+import com.resources.model.CommAttachments;
+import com.resources.services.AttachmentsService;
 import com.system.common.SysConstant;
 
 @Service

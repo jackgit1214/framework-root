@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.resources.dao.CommAttaThumbnailMapper">
+  <resultMap id="BaseResultMap" type="com.resources.model.CommAttaThumbnail">
+    <id column="trumbnailId" jdbcType="VARCHAR" property="trumbnailid" />
+    <result column="attaId" jdbcType="VARCHAR" property="attaid" />
+    <result column="filepath" jdbcType="VARCHAR" property="filepath" />
+    <result column="filesize" jdbcType="DECIMAL" property="filesize" />
+    <result column="width" jdbcType="DECIMAL" property="width" />
+    <result column="height" jdbcType="VARCHAR" property="height" />
+    <result column="remark" jdbcType="DECIMAL" property="remark" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.resources.model.CommAttaThumbnail">
+    <result column="filename" jdbcType="LONGVARBINARY" property="filename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    trumbnailId, attaId, filepath, filesize, width, height, remark
+  </sql>
+  <sql id="Blob_Column_List">
+    filename
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comm_atta_thumbnail
+    where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from comm_atta_thumbnail
+    where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.resources.model.CommAttaThumbnail">
+    insert into comm_atta_thumbnail (trumbnailId, attaId, filepath, 
+      filesize, width, height, 
+      remark, filename)
+    values (#{trumbnailid,jdbcType=VARCHAR}, #{attaid,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
+      #{filesize,jdbcType=DECIMAL}, #{width,jdbcType=DECIMAL}, #{height,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=DECIMAL}, #{filename,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.resources.model.CommAttaThumbnail">
+    insert into comm_atta_thumbnail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trumbnailid != null">
+        trumbnailId,
+      </if>
+      <if test="attaid != null">
+        attaId,
+      </if>
+      <if test="filepath != null">
+        filepath,
+      </if>
+      <if test="filesize != null">
+        filesize,
+      </if>
+      <if test="width != null">
+        width,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="filename != null">
+        filename,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trumbnailid != null">
+        #{trumbnailid,jdbcType=VARCHAR},
+      </if>
+      <if test="attaid != null">
+        #{attaid,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null">
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null">
+        #{filesize,jdbcType=DECIMAL},
+      </if>
+      <if test="width != null">
+        #{width,jdbcType=DECIMAL},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=DECIMAL},
+      </if>
+      <if test="filename != null">
+        #{filename,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.resources.model.CommAttaThumbnail">
+    update comm_atta_thumbnail
+    <set>
+      <if test="attaid != null">
+        attaId = #{attaid,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null">
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filesize != null">
+        filesize = #{filesize,jdbcType=DECIMAL},
+      </if>
+      <if test="width != null">
+        width = #{width,jdbcType=DECIMAL},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=DECIMAL},
+      </if>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.resources.model.CommAttaThumbnail">
+    update comm_atta_thumbnail
+    set attaId = #{attaid,jdbcType=VARCHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
+      filesize = #{filesize,jdbcType=DECIMAL},
+      width = #{width,jdbcType=DECIMAL},
+      height = #{height,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=DECIMAL},
+      filename = #{filename,jdbcType=LONGVARBINARY}
+    where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.resources.model.CommAttaThumbnail">
+    update comm_atta_thumbnail
+    set attaId = #{attaid,jdbcType=VARCHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
+      filesize = #{filesize,jdbcType=DECIMAL},
+      width = #{width,jdbcType=DECIMAL},
+      height = #{height,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=DECIMAL}
+    where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    select
+    <if test="queryModel != null and queryModel.distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from comm_atta_thumbnail
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+    <if test="queryModel != null and queryModel.orderByClause != null">
+      order by ${queryModel.orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByCondition">
+    delete from comm_atta_thumbnail
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByCondition" resultType="java.lang.Integer">
+    select count(*) from comm_atta_thumbnail
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByConditionSelective">
+    update comm_atta_thumbnail
+    <set>
+      <if test="record.trumbnailid != null">
+        trumbnailId = #{record.trumbnailid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attaid != null">
+        attaId = #{record.attaid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filepath != null">
+        filepath = #{record.filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filesize != null">
+        filesize = #{record.filesize,jdbcType=DECIMAL},
+      </if>
+      <if test="record.width != null">
+        width = #{record.width,jdbcType=DECIMAL},
+      </if>
+      <if test="record.height != null">
+        height = #{record.height,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=DECIMAL},
+      </if>
+      <if test="record.filename != null">
+        filename = #{record.filename,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="queryModel != null">
+      <include refid="public.Update_By_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByCondition">
+    update comm_atta_thumbnail
+    set trumbnailId = #{record.trumbnailid,jdbcType=VARCHAR},
+      attaId = #{record.attaid,jdbcType=VARCHAR},
+      filepath = #{record.filepath,jdbcType=VARCHAR},
+      filesize = #{record.filesize,jdbcType=DECIMAL},
+      width = #{record.width,jdbcType=DECIMAL},
+      height = #{record.height,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=DECIMAL},
+      filename = #{record.filename,jdbcType=LONGVARBINARY}
+    <if test="queryModel != null">
+      <include refid="public.Update_By_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -12,6 +12,9 @@ public class CommAttachments extends BaseModel implements Serializable {
 
 	private String busstype;
 
+	/**
+	 * 附件类型: 0 视频、1图片、2音频、3文档（pdf与word）等
+	 */
 	private String attatype;
 
 	private Integer attano;

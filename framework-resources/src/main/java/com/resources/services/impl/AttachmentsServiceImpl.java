@@ -267,12 +267,12 @@ public class AttachmentsServiceImpl extends
 					if (!dirFile.exists())
 						dirFile.mkdirs();
 				}
-				String tumbFilepath = path + "/tumb" + filename;
+				// String tumbFilepath = path + "/tumb" + filename;
 				path = path + "/" + filename;
 
 				File localFile = new File(path);
 				file.transferTo(localFile); // 存储文件
-				this.handleImage(path, tumbFilepath);
+				// this.handleImage(path, tumbFilepath);
 				if ("1".equals(filePathType)) // 数据库中存放的路径
 					sourcepath = sourcepath + "/" + filename; // 项目相对路径
 				else

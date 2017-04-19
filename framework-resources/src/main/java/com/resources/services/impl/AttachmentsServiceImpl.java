@@ -39,6 +39,7 @@ import com.framework.image.ImageService;
 import com.framework.mybatis.dao.Base.BaseDao;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
+import com.resources.dao.AttaThumbnailMapper;
 import com.resources.dao.AttachmentsMapper;
 import com.resources.model.CommAttachments;
 import com.resources.services.AttachmentsService;
@@ -51,6 +52,8 @@ public class AttachmentsServiceImpl extends
 
 	@Autowired
 	private AttachmentsMapper attachmentsMapper;
+	@Autowired
+	private AttaThumbnailMapper attaThumbnailMapper;
 
 	@Autowired
 	private ImageService imageService;
@@ -126,6 +129,7 @@ public class AttachmentsServiceImpl extends
 			if (isSuccess) {
 				fileNum++;
 			}
+			this.attaThumbnailMapper.deleteByCondition(queryModel);
 			rows = rows + this.attachmentsMapper.deleteByPrimaryKey(id);
 		}
 		rtnMap.put("successRows", rows);
@@ -228,8 +232,7 @@ public class AttachmentsServiceImpl extends
 
 		while (iter.hasNext()) {
 			CommAttachments record = new CommAttachments();
-			String attId = UUIDUtil.getUUID();
-			record.setAttaid(attId);
+
 			MultipartFile file = iter.next();
 			// 如果文件名为空，不进行下面的保存操作
 			if (file.getOriginalFilename().isEmpty()) {
@@ -238,6 +241,8 @@ public class AttachmentsServiceImpl extends
 
 			// 复制业务数据，包含业务类型、业务数据ID，业务附加数据、附件类型
 			BeanUtils.copyProperties(attachment, record);
+			String attId = UUIDUtil.getUUID();
+			record.setAttaid(attId);
 			if (record.getAttano() == null)
 				record.setAttano(0);
 
@@ -272,15 +277,15 @@ public class AttachmentsServiceImpl extends
 
 				File localFile = new File(path);
 				file.transferTo(localFile); // 存储文件
-				// this.handleImage(path, tumbFilepath);
+				this.handleImage(path, attId);
 				if ("1".equals(filePathType)) // 数据库中存放的路径
 					sourcepath = sourcepath + "/" + filename; // 项目相对路径
 				else
 					sourcepath = storePath + "/" + filename; // 绝对路径
 
 				record.setFilepath(sourcepath);
-
-				this.save(record);
+				this.attachmentsMapper.insert(record);
+				// this.save(record);
 			}
 			attIds.add(attId);
 		}
@@ -288,13 +293,12 @@ public class AttachmentsServiceImpl extends
 		return attIds;
 	}
 
-	private void handleImage(final String sourcePath,
-			final String targetTumbPath) {
+	private void handleImage(final String sourcePath, final String dataid) {
 
 		cachedThreadPool.execute(new Runnable() {
 			public void run() {
 				try {
-					imageService.getImageThumbnail(sourcePath, targetTumbPath);
+					imageService.getImageThumbnail(sourcePath, dataid);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

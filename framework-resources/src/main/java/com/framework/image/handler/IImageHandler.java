@@ -1,6 +1,7 @@
 package com.framework.image.handler;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public interface IImageHandler {
@@ -49,7 +50,7 @@ public interface IImageHandler {
 	 * @param isWatermark
 	 *            是否使用水印，为true则使用，缺省水印文字
 	 */
-	public void compressionImage(String srcImage, int[] width,
+	public List<String> compressionImage(String srcImage, int[] width,
 			boolean isWatermark) throws Exception;
 
 	/**
@@ -62,6 +63,6 @@ public interface IImageHandler {
 	 * @param watermarkWord
 	 *            水印文字
 	 */
-	public void compressionImage(String srcImage, int[] width,
+	public List<String> compressionImage(String srcImage, int[] width,
 			boolean isWatermark, String watermarkWord) throws Exception;
 }

@@ -12,7 +12,9 @@ import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.framework.image.IImageConstant;
@@ -120,16 +122,18 @@ public class ToolkitImageHandler implements IImageHandler {
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int[] width,
+	public List<String> compressionImage(String srcImage, int[] width,
 			boolean isWatermark) {
 		// TODO Auto-generated method stub
-
+		List<String> files = new ArrayList<String>();
+		return files;
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int[] width,
+	public List<String> compressionImage(String srcImage, int[] width,
 			boolean isWatermark, String watermarkWord) {
 		// TODO Auto-generated method stub
-
+		List<String> files = new ArrayList<String>();
+		return files;
 	}
 }

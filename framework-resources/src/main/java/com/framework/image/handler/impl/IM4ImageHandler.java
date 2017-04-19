@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -108,17 +109,18 @@ public class IM4ImageHandler extends AbstractImageHandler implements
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int[] width,
+	public List<String> compressionImage(String srcImage, int[] width,
 			boolean isWatermark) throws Exception {
-		this.compressionImage(srcImage, width, isWatermark, this.watermarkWord);
+		return this.compressionImage(srcImage, width, isWatermark,
+				this.watermarkWord);
 	}
 
 	@Override
-	public void compressionImage(String srcImage, int[] width,
+	public List<String> compressionImage(String srcImage, int[] width,
 			boolean isWatermark, String watermarkWord) throws Exception {
 
 		// TODO Auto-generated method stub
-
+		List<String> files = new ArrayList<String>();
 		String sourceFile = srcImage;
 
 		if (isWatermark) {
@@ -131,12 +133,15 @@ public class IM4ImageHandler extends AbstractImageHandler implements
 			op.addRawArgs("-thumbnail", this.getImageAreaSize(w));
 			// 图片质量
 			op.addRawArgs("-quality", "100");
+			String tmpfile = this.getAdaptImageName(srcImage, w);
 			op.addImage(sourceFile);
-			op.addImage(this.getAdaptImageName(srcImage, w));
+			op.addImage(tmpfile);
 
 			this.executeIMOp(op);
-		}
+			files.add(tmpfile);
 
+		}
+		return files;
 	}
 
 	/**

@@ -5,7 +5,7 @@ import com.framework.mybatis.dao.Base.IDataMapperCRUD;
 import com.framework.mybatis.dao.Base.IDataMapperWithBlob;
 import com.resources.model.CommAttaThumbnail;
 
-public interface CommAttaThumbnailMapper extends
+public interface AttaThumbnailMapper extends
 		IDataMapperByPage<CommAttaThumbnail>,
 		IDataMapperCRUD<CommAttaThumbnail>,
 		IDataMapperWithBlob<CommAttaThumbnail> {

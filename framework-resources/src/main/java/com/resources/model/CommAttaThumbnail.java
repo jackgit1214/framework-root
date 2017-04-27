@@ -1,7 +1,6 @@
 package com.resources.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import com.framework.model.BaseModel;
 
@@ -16,17 +15,17 @@ public class CommAttaThumbnail extends BaseModel implements Serializable {
 	 * 级别值越大，缩略图越小<br>
 	 * 
 	 */
-	private String filepath;
+	private String rank;
 
 	private String filename;
 
-	private BigDecimal filesize;
+	private String filesize;
 
-	private BigDecimal width;
+	private String width;
 
 	private String height;
 
-	private BigDecimal remark;
+	private String remark;
 
 	private byte[] filedata;
 
@@ -48,14 +47,6 @@ public class CommAttaThumbnail extends BaseModel implements Serializable {
 		this.attaid = attaid == null ? null : attaid.trim();
 	}
 
-	public String getFilepath() {
-		return filepath;
-	}
-
-	public void setFilepath(String filepath) {
-		this.filepath = filepath == null ? null : filepath.trim();
-	}
-
 	public String getFilename() {
 		return filename;
 	}
@@ -64,19 +55,19 @@ public class CommAttaThumbnail extends BaseModel implements Serializable {
 		this.filename = filename == null ? null : filename.trim();
 	}
 
-	public BigDecimal getFilesize() {
+	public String getFilesize() {
 		return filesize;
 	}
 
-	public void setFilesize(BigDecimal filesize) {
+	public void setFilesize(String filesize) {
 		this.filesize = filesize;
 	}
 
-	public BigDecimal getWidth() {
+	public String getWidth() {
 		return width;
 	}
 
-	public void setWidth(BigDecimal width) {
+	public void setWidth(String width) {
 		this.width = width;
 	}
 
@@ -88,11 +79,11 @@ public class CommAttaThumbnail extends BaseModel implements Serializable {
 		this.height = height == null ? null : height.trim();
 	}
 
-	public BigDecimal getRemark() {
+	public String getRemark() {
 		return remark;
 	}
 
-	public void setRemark(BigDecimal remark) {
+	public void setRemark(String remark) {
 		this.remark = remark;
 	}
 
@@ -107,5 +98,13 @@ public class CommAttaThumbnail extends BaseModel implements Serializable {
 	@Override
 	public Object getPrimaryKey() {
 		return this.getTrumbnailid();
+	}
+
+	public String getRank() {
+		return rank;
+	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
 	}
 }

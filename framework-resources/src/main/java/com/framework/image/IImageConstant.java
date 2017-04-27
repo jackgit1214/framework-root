@@ -16,6 +16,9 @@ public interface IImageConstant {
 	public static final int WATERMARKDISSOLVE = 40;
 	public static final int WATERMARKMARGIN = 20;
 
+	// 最大图像权限
+	public static final String IMAGE_MAXPERMISSION = "ALL";
+
 	// 图片质量
 	public static final String IMAGE_QUALITY = "quality";
 	// 图片高度
@@ -28,6 +31,9 @@ public interface IImageConstant {
 	public static final String IMAGE_SIZE = "size";
 	// 图片路径
 	public static final String IMAGE_PATH = "path";
+	// 文件名
+	public static final String IMAGE_FILENAME = "filename";
+	public static final String IMAGE_DATA = "imagedata";
 
 	public enum WartermarkPosition {
 

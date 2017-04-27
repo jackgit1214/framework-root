@@ -1,3 +1,12 @@
+/*
+ * 取得资源信息
+ * 
+ * 1、根据附件ID以及需要的图像级别取得单个缩略图
+ * 2、根据附件ID取得原图
+ * 3、根据附件ID，取得所有缩略图
+ * 4、取缺省缩略图，缺省级别是1，没有1取0
+ * 5、
+ */
 package com.resources.web;
 
 import java.io.File;
@@ -13,8 +22,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.framework.image.IImageConstant;
 import com.resources.services.AttachmentsService;
 
 @Controller
@@ -24,21 +35,39 @@ public class ShareResources {
 	@Autowired
 	private AttachmentsService attachmentsServiceImpl;
 
-	@RequestMapping(value = "/{attaid}", method = RequestMethod.GET)
-	public void getResource(@PathVariable String attaid, String permission,
+	/**
+	 * 
+	 * @param attaid
+	 *            附件ID
+	 * @param permission
+	 *            影像资源的级别，
+	 * @param response
+	 */
+	@RequestMapping(value = "image/{attaid}", method = RequestMethod.GET)
+	public void getImageResource(@PathVariable String attaid,
+			@RequestParam(required = false) String permission,
 			HttpServletResponse response) {
 
 		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
-		String filePath = this.attachmentsServiceImpl.getResource(attaid,
-				permission);
-		this.getFileStream(filePath, response);
 
-	}
+		if (permission != null
+				&& !IImageConstant.IMAGE_MAXPERMISSION.equals(permission)) {
+			byte[] fileContent = this.attachmentsServiceImpl.getResource(
+					attaid, permission);
 
-	@RequestMapping("/image")
-	public ModelAndView imageResources(String dataid, String busstype) {
-		ModelAndView mav = new ModelAndView("commattachments/listindex");
-		return mav;
+			ServletOutputStream output;
+			try {
+				output = response.getOutputStream();
+				output.write(fileContent, 0, fileContent.length);
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			String filePath = this.attachmentsServiceImpl.getResource(attaid);
+			this.getFileStream(filePath, response);
+		}
 	}
 
 	@RequestMapping("/video")
@@ -47,25 +76,19 @@ public class ShareResources {
 		return mav;
 	}
 
-	@RequestMapping("/doc")
-	public ModelAndView docResources(String dataid, String busstype) {
-		ModelAndView mav = new ModelAndView("commattachments/listindex");
-		return mav;
-	}
+	@RequestMapping(value = "doc/{attaid}", method = RequestMethod.GET)
+	public void getDocumentResources(@PathVariable String attaid,
+			HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
 
-	@RequestMapping("/pdf")
-	public ModelAndView pdfResources(String dataid, String busstype) {
-		ModelAndView mav = new ModelAndView("commattachments/listindex");
-		return mav;
-	}
+		String filePath = this.attachmentsServiceImpl.getResource(attaid);
+		this.getFileStream(filePath, response);
 
-	@RequestMapping("/other")
-	public ModelAndView otherResources(String dataid, String busstype) {
-		ModelAndView mav = new ModelAndView("commattachments/listindex");
-		return mav;
 	}
 
 	private void getFileStream(String filePath, HttpServletResponse response) {
+
+		// response.setContentType("video/avi");
 		ServletOutputStream output = null;
 		InputStream in = null;
 		try {
@@ -92,4 +115,5 @@ public class ShareResources {
 			}
 		}
 	}
+
 }

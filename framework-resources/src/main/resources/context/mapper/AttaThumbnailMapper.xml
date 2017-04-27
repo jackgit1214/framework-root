@@ -4,18 +4,18 @@
   <resultMap id="BaseResultMap" type="com.resources.model.CommAttaThumbnail">
     <id column="trumbnailId" jdbcType="VARCHAR" property="trumbnailid" />
     <result column="attaId" jdbcType="VARCHAR" property="attaid" />
-    <result column="filepath" jdbcType="VARCHAR" property="filepath" />
+    <result column="rank" jdbcType="VARCHAR" property="rank" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
-    <result column="filesize" jdbcType="DECIMAL" property="filesize" />
-    <result column="width" jdbcType="DECIMAL" property="width" />
+    <result column="filesize" jdbcType="VARCHAR" property="filesize" />
+    <result column="width" jdbcType="VARCHAR" property="width" />
     <result column="height" jdbcType="VARCHAR" property="height" />
-    <result column="remark" jdbcType="DECIMAL" property="remark" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.resources.model.CommAttaThumbnail">
     <result column="filedata" jdbcType="BLOB" property="filedata"   typeHandler="org.apache.ibatis.type.BlobTypeHandler" />
   </resultMap>
   <sql id="Base_Column_List">
-    trumbnailId, attaId, filepath, filename, filesize, width, height, remark
+    trumbnailId, attaId, rank, filename, filesize, width, height, remark
   </sql>
   <sql id="Blob_Column_List">
     filedata
@@ -33,13 +33,13 @@
     where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.resources.model.CommAttaThumbnail">
-    insert into comm_atta_thumbnail (trumbnailId, attaId, filepath, 
+    insert into comm_atta_thumbnail (trumbnailId, attaId, rank, 
       filename, filesize, width, 
       height, remark, filedata
       )
-    values (#{trumbnailid,jdbcType=VARCHAR}, #{attaid,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
-      #{filename,jdbcType=VARCHAR}, #{filesize,jdbcType=DECIMAL}, #{width,jdbcType=DECIMAL}, 
-      #{height,jdbcType=VARCHAR}, #{remark,jdbcType=DECIMAL}, #{filedata,jdbcType=LONGVARBINARY}
+    values (#{trumbnailid,jdbcType=VARCHAR}, #{attaid,jdbcType=VARCHAR}, #{rank,jdbcType=VARCHAR}, 
+      #{filename,jdbcType=VARCHAR}, #{filesize,jdbcType=VARCHAR}, #{width,jdbcType=VARCHAR}, 
+      #{height,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{filedata,jdbcType=LONGVARBINARY}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.resources.model.CommAttaThumbnail">
@@ -51,8 +51,8 @@
       <if test="attaid != null">
         attaId,
       </if>
-      <if test="filepath != null">
-        filepath,
+      <if test="rank != null">
+        rank,
       </if>
       <if test="filename != null">
         filename,
@@ -80,23 +80,23 @@
       <if test="attaid != null">
         #{attaid,jdbcType=VARCHAR},
       </if>
-      <if test="filepath != null">
-        #{filepath,jdbcType=VARCHAR},
+      <if test="rank != null">
+        #{rank,jdbcType=VARCHAR},
       </if>
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
       </if>
       <if test="filesize != null">
-        #{filesize,jdbcType=DECIMAL},
+        #{filesize,jdbcType=VARCHAR},
       </if>
       <if test="width != null">
-        #{width,jdbcType=DECIMAL},
+        #{width,jdbcType=VARCHAR},
       </if>
       <if test="height != null">
         #{height,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
-        #{remark,jdbcType=DECIMAL},
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="filedata != null">
         #{filedata,jdbcType=LONGVARBINARY},
@@ -109,23 +109,23 @@
       <if test="attaid != null">
         attaId = #{attaid,jdbcType=VARCHAR},
       </if>
-      <if test="filepath != null">
-        filepath = #{filepath,jdbcType=VARCHAR},
+      <if test="rank != null">
+        rank = #{rank,jdbcType=VARCHAR},
       </if>
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
       </if>
       <if test="filesize != null">
-        filesize = #{filesize,jdbcType=DECIMAL},
+        filesize = #{filesize,jdbcType=VARCHAR},
       </if>
       <if test="width != null">
-        width = #{width,jdbcType=DECIMAL},
+        width = #{width,jdbcType=VARCHAR},
       </if>
       <if test="height != null">
         height = #{height,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
-        remark = #{remark,jdbcType=DECIMAL},
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="filedata != null">
         filedata = #{filedata,jdbcType=LONGVARBINARY},
@@ -136,24 +136,24 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.resources.model.CommAttaThumbnail">
     update comm_atta_thumbnail
     set attaId = #{attaid,jdbcType=VARCHAR},
-      filepath = #{filepath,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
-      filesize = #{filesize,jdbcType=DECIMAL},
-      width = #{width,jdbcType=DECIMAL},
+      filesize = #{filesize,jdbcType=VARCHAR},
+      width = #{width,jdbcType=VARCHAR},
       height = #{height,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
       filedata = #{filedata,jdbcType=LONGVARBINARY}
     where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.resources.model.CommAttaThumbnail">
     update comm_atta_thumbnail
     set attaId = #{attaid,jdbcType=VARCHAR},
-      filepath = #{filepath,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
-      filesize = #{filesize,jdbcType=DECIMAL},
-      width = #{width,jdbcType=DECIMAL},
+      filesize = #{filesize,jdbcType=VARCHAR},
+      width = #{width,jdbcType=VARCHAR},
       height = #{height,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=DECIMAL}
+      remark = #{remark,jdbcType=VARCHAR}
     where trumbnailId = #{trumbnailid,jdbcType=VARCHAR}
   </update>
   <select id="selectByCondition" resultMap="BaseResultMap">
@@ -170,6 +170,22 @@
       order by ${queryModel.orderByClause}
     </if>
   </select>
+  
+  <select id="selectByConditionWithBLOBs" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="queryModel != null and queryModel.distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />,
+     <include refid="Blob_Column_List" />
+    from comm_atta_thumbnail
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+    <if test="queryModel != null and queryModel.orderByClause != null">
+      order by ${queryModel.orderByClause}
+    </if>
+  </select>  
   <delete id="deleteByCondition">
     delete from comm_atta_thumbnail
     <if test="queryModel != null">
@@ -191,23 +207,23 @@
       <if test="record.attaid != null">
         attaId = #{record.attaid,jdbcType=VARCHAR},
       </if>
-      <if test="record.filepath != null">
-        filepath = #{record.filepath,jdbcType=VARCHAR},
+      <if test="record.rank != null">
+        rank = #{record.rank,jdbcType=VARCHAR},
       </if>
       <if test="record.filename != null">
         filename = #{record.filename,jdbcType=VARCHAR},
       </if>
       <if test="record.filesize != null">
-        filesize = #{record.filesize,jdbcType=DECIMAL},
+        filesize = #{record.filesize,jdbcType=VARCHAR},
       </if>
       <if test="record.width != null">
-        width = #{record.width,jdbcType=DECIMAL},
+        width = #{record.width,jdbcType=VARCHAR},
       </if>
       <if test="record.height != null">
         height = #{record.height,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=DECIMAL},
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.filedata != null">
         filedata = #{record.filedata,jdbcType=LONGVARBINARY},
@@ -221,12 +237,12 @@
     update comm_atta_thumbnail
     set trumbnailId = #{record.trumbnailid,jdbcType=VARCHAR},
       attaId = #{record.attaid,jdbcType=VARCHAR},
-      filepath = #{record.filepath,jdbcType=VARCHAR},
+      rank = #{record.rank,jdbcType=VARCHAR},
       filename = #{record.filename,jdbcType=VARCHAR},
-      filesize = #{record.filesize,jdbcType=DECIMAL},
-      width = #{record.width,jdbcType=DECIMAL},
+      filesize = #{record.filesize,jdbcType=VARCHAR},
+      width = #{record.width,jdbcType=VARCHAR},
       height = #{record.height,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=DECIMAL},
+      remark = #{record.remark,jdbcType=VARCHAR},
       filedata = #{record.filedata,jdbcType=LONGVARBINARY}
     <if test="queryModel != null">
       <include refid="public.Update_By_Where_Clause" />

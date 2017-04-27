@@ -41,6 +41,7 @@ import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
 import com.resources.dao.AttaThumbnailMapper;
 import com.resources.dao.AttachmentsMapper;
+import com.resources.model.CommAttaThumbnail;
 import com.resources.model.CommAttachments;
 import com.resources.services.AttachmentsService;
 import com.system.common.SysConstant;
@@ -85,15 +86,13 @@ public class AttachmentsServiceImpl extends
 
 	//
 
-	public String getResource(String attaid, String permission) {
+	public String getResource(String attaid) {
 
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 				.getRequestAttributes()).getRequest();
 		String storePath = request.getSession().getServletContext()
 				.getRealPath("/");// 存储路径
-
 		CommAttachments attachment = this.findObjectById(attaid);
-
 		String filePath = "";
 		if ("1".equals(this.filePathType)) {
 			filePath = storePath + attachment.getFilepath();
@@ -102,6 +101,20 @@ public class AttachmentsServiceImpl extends
 		}
 
 		return filePath;
+
+	}
+
+	public byte[] getResource(String attaid, String permission) {
+
+		QueryModel queryModel = new QueryModel();
+		queryModel.createCriteria().andEqualTo("attaId", attaid)
+				.andEqualTo("rank", permission);
+		List<CommAttaThumbnail> attaThumbnails = this.attaThumbnailMapper
+				.selectByConditionWithBLOBs(queryModel);
+		byte[] filedata = attaThumbnails.get(0).getFiledata();
+
+		return filedata;
+
 	}
 
 	public BaseDao getDao() {
@@ -253,6 +266,16 @@ public class AttachmentsServiceImpl extends
 			record.setFilesize(BigDecimal.valueOf(file.getSize()));
 			String filename = attId + "_" + file.getOriginalFilename();
 			record.setAttaname(filename);
+			// record.setAttatype(attatype);
+			int pos = filename.lastIndexOf(".");
+			// 取文件扩展名
+			String fileExtension = filename.substring(pos + 1);
+			if (this.imageExtension.contains(fileExtension)) {
+				record.setAttatype("1");
+			} else {
+				record.setAttatype("3");
+			}
+
 			if (file != null) {
 				String path = "";
 				String sourcepath = uploadFilePath;
@@ -263,10 +286,8 @@ public class AttachmentsServiceImpl extends
 						path = storePath + "/" + attachment.getDataid();
 						sourcepath = sourcepath + "/" + attachment.getDataid();
 					} else { // 附件扩展名分类
-						int pos = filename.lastIndexOf(".");
-						sourcepath = sourcepath + "/"
-								+ filename.substring(pos + 1);
-						path = storePath + "/" + filename.substring(pos + 1);
+						sourcepath = sourcepath + "/" + fileExtension;
+						path = storePath + "/" + fileExtension;
 					}
 					File dirFile = new File(path);
 					if (!dirFile.exists())

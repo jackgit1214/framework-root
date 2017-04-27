@@ -376,7 +376,7 @@ public class IM4ImageHandler extends AbstractImageHandler implements
 		Map<String, String> imageInfo = new HashMap<>();
 		try {
 			IMOperation op = new IMOperation();
-			op.format("%w,%h,%d/%f,%Q,%b,%e");
+			op.format("%w,%h,%d/%f,%Q,%b,%e,%f");
 			op.addImage();
 			ImageCommand identifyCmd = getImageCommand(CommandType.identify);
 			ArrayListOutputConsumer output = new ArrayListOutputConsumer();
@@ -384,13 +384,15 @@ public class IM4ImageHandler extends AbstractImageHandler implements
 			identifyCmd.run(op, imagePath);
 			ArrayList<String> cmdOutput = output.getOutput();
 			String[] result = cmdOutput.get(0).split(",");
-			if (result.length == 6) {
+			if (result.length == 7) {
 				imageInfo.put(IImageConstant.IMAGE_WIDTH, result[0]);
 				imageInfo.put(IImageConstant.IMAGE_HEIGHT, result[1]);
 				imageInfo.put(IImageConstant.IMAGE_PATH, result[2]);
 				imageInfo.put(IImageConstant.IMAGE_QUALITY, result[3]);
 				imageInfo.put(IImageConstant.IMAGE_SIZE, result[4]);
 				imageInfo.put(IImageConstant.IMAGE_SUFFIX, result[5]);
+				imageInfo.put(IImageConstant.IMAGE_FILENAME, result[6]);
+				// imageInfo.put(IImageConstant.IMAGE_DATA, result[7]);
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();

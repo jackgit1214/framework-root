@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -81,10 +81,17 @@ public class ImageService {
 				CommAttaThumbnail record = new CommAttaThumbnail();
 				record.setTrumbnailid(UUIDUtil.getUUID());
 				record.setAttaid(dataid);
-				record.setFilepath(String.valueOf(level));
+				record.setRank(String.valueOf(level)); // 文件路径不存储，存储图像级别
 				File file = new File(tmpfile);
-				record.setFilename(file.getName());
-				record.setFilesize(BigDecimal.valueOf(file.length()));
+				Map<String, String> fileInfo = iImageHandler
+						.getImageInfo(tmpfile);
+
+				record.setFilename(fileInfo.get(IImageConstant.IMAGE_FILENAME));
+
+				record.setFilesize(fileInfo.get(IImageConstant.IMAGE_SIZE));
+				record.setHeight(fileInfo.get(IImageConstant.IMAGE_HEIGHT));
+				record.setWidth(fileInfo.get(IImageConstant.IMAGE_WIDTH));
+
 				InputStream in = new FileInputStream(file);
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				byte[] buffer = new byte[1024 * 4];

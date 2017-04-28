@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.museum.dao.CollClueMapper">
+  <resultMap id="BaseResultMap" type="com.museum.model.CollClue">
+    <id column="clueID" jdbcType="VARCHAR" property="clueid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sources" jdbcType="VARCHAR" property="sources" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="sourceType" jdbcType="VARCHAR" property="sourcetype" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="coll_collID" jdbcType="VARCHAR" property="collCollid" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    clueID, name, sources, phone, address, email, qq, sourceType, status, coll_collID, 
+    unit, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coll_clue
+    where clueID = #{clueid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from coll_clue
+    where clueID = #{clueid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.museum.model.CollClue">
+    insert into coll_clue (clueID, name, sources, 
+      phone, address, email, 
+      qq, sourceType, status, 
+      coll_collID, unit, remark
+      )
+    values (#{clueid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sources,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{sourcetype,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{collCollid,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.museum.model.CollClue">
+    insert into coll_clue
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clueid != null">
+        clueID,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sources != null">
+        sources,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="sourcetype != null">
+        sourceType,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="collCollid != null">
+        coll_collID,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clueid != null">
+        #{clueid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sources != null">
+        #{sources,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null">
+        #{sourcetype,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="collCollid != null">
+        #{collCollid,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.museum.model.CollClue">
+    update coll_clue
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sources != null">
+        sources = #{sources,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="sourcetype != null">
+        sourceType = #{sourcetype,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="collCollid != null">
+        coll_collID = #{collCollid,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where clueID = #{clueid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.museum.model.CollClue">
+    update coll_clue
+    set name = #{name,jdbcType=VARCHAR},
+      sources = #{sources,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      sourceType = #{sourcetype,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      coll_collID = #{collCollid,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where clueID = #{clueid,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    select
+    <if test="queryModel != null and queryModel.distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coll_clue
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+    <if test="queryModel != null and queryModel.orderByClause != null">
+      order by ${queryModel.orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByCondition">
+    delete from coll_clue
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByCondition" resultType="java.lang.Integer">
+    select count(*) from coll_clue
+    <if test="queryModel != null">
+      <include refid="public.Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByConditionSelective">
+    update coll_clue
+    <set>
+      <if test="record.clueid != null">
+        clueID = #{record.clueid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sources != null">
+        sources = #{record.sources,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq != null">
+        qq = #{record.qq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourcetype != null">
+        sourceType = #{record.sourcetype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collCollid != null">
+        coll_collID = #{record.collCollid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="queryModel != null">
+      <include refid="public.Update_By_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByCondition">
+    update coll_clue
+    set clueID = #{record.clueid,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      sources = #{record.sources,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      qq = #{record.qq,jdbcType=VARCHAR},
+      sourceType = #{record.sourcetype,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      coll_collID = #{record.collCollid,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="queryModel != null">
+      <include refid="public.Update_By_Where_Clause" />
+    </if>
+  </update>
+</mapper>

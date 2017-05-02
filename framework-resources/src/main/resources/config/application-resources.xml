@@ -13,22 +13,24 @@
       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<import resource="application-core.xml" />
-		 <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="locations">
-            <list>
-                <value>classpath*:config/config.properties</value>
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" >
+        <property name="locations"  >
+            <list >
+                <value >classpath*:config/config.properties</value>
+                 <value>classpath:config/config.properties</value>  
             </list>
         </property>
     </bean>
-
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+	<!-- 
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer"  >
 	        <property name="properties" value="classpath*:config/config.properties"/>
-	   </bean>
-	<context:component-scan base-package="com.framework.resources" />
+	   </bean>  -->
+	<context:component-scan base-package="com.resources" />
+	<context:component-scan base-package="com.framework.image" />
 	<beans profile="mybatis">
 
 		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-			<property name="basePackage" value="com.system;com.framework.resources" />
+			<property name="basePackage" value="com.system;com.resources" />
 			<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 		</bean>
 		

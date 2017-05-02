@@ -39,8 +39,8 @@
 		<property name="freemarkerSettings">
 			<props>
 				<prop key="tag_syntax">auto_detect</prop>
-				<!--  -->
-				<prop key="auto_import">/commons/common.html as pub</prop>
+				<!--  
+				<prop key="auto_import">/commons/common.html as pub</prop>-->
 				<prop key="template_update_delay">5</prop>
 				<prop key="defaultEncoding">UTF-8</prop>
 				<prop key="url_escaping_charset">UTF-8</prop>

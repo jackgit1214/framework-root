@@ -54,6 +54,8 @@ public class MainInterceptor extends HandlerInterceptorAdapter {
 	private String otherResourceUrl;
 	@Value("#{configProperties.typeResourceUrl}")
 	private String typeResourceUrl;
+	@Value("#{configProperties.dataDefaultImageResourceUrl}")
+	private String dataDefaultImageResourceUrl;
 
 	/**
 	 * 执行控制类方法之后,视图渲染之前 postHandle(..) is called after the handler is executed;
@@ -79,7 +81,8 @@ public class MainInterceptor extends HandlerInterceptorAdapter {
 
 			// 其它资源路径
 			modelAndView.addObject("docResourceUrl", this.otherResourceUrl);
-
+			modelAndView.addObject("dataDefaultImageResourceUrl",
+					this.dataDefaultImageResourceUrl);
 		}
 
 		super.postHandle(_request, _response, _handler, modelAndView);

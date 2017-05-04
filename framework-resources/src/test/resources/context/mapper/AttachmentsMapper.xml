@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.framework.resources.dao.AttachmentsMapper">
-  <resultMap id="BaseResultMap" type="com.framework.resources.model.CommAttachments">
+<mapper namespace="com.resources.dao.AttachmentsMapper">
+  <resultMap id="BaseResultMap" type="com.resources.model.CommAttachments">
     <id column="attaID" jdbcType="VARCHAR" property="attaid" />
     <result column="dataid" jdbcType="VARCHAR" property="dataid" />
     <result column="bussTYPE" jdbcType="CHAR" property="busstype" />
@@ -17,7 +17,7 @@
     <result column="atta_json" jdbcType="VARCHAR" property="attaJson" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.framework.resources.model.CommAttachments">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.resources.model.CommAttachments">
     <result column="fileBlob" jdbcType="LONGVARBINARY" property="fileblob" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -39,7 +39,7 @@
     delete from comm_attachments
     where attaID = #{attaid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.framework.resources.model.CommAttachments">
+  <insert id="insert" parameterType="com.resources.model.CommAttachments">
     insert into comm_attachments (attaID, dataid, bussTYPE, 
       attaType, attaNo, attaName, 
       attaDesc, filepath, filename, 
@@ -53,7 +53,7 @@
       #{attaJson,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{fileblob,jdbcType=LONGVARBINARY}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.framework.resources.model.CommAttachments">
+  <insert id="insertSelective" parameterType="com.resources.model.CommAttachments">
     insert into comm_attachments
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="attaid != null">
@@ -150,7 +150,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.framework.resources.model.CommAttachments">
+  <update id="updateByPrimaryKeySelective" parameterType="com.resources.model.CommAttachments">
     update comm_attachments
     <set>
       <if test="dataid != null">
@@ -198,7 +198,7 @@
     </set>
     where attaID = #{attaid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.framework.resources.model.CommAttachments">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.resources.model.CommAttachments">
     update comm_attachments
     set dataid = #{dataid,jdbcType=VARCHAR},
       bussTYPE = #{busstype,jdbcType=CHAR},
@@ -216,7 +216,7 @@
       fileBlob = #{fileblob,jdbcType=LONGVARBINARY}
     where attaID = #{attaid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.framework.resources.model.CommAttachments">
+  <update id="updateByPrimaryKey" parameterType="com.resources.model.CommAttachments">
     update comm_attachments
     set dataid = #{dataid,jdbcType=VARCHAR},
       bussTYPE = #{busstype,jdbcType=CHAR},

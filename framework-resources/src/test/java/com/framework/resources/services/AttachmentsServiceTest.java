@@ -7,7 +7,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.framework.resources.BaseMybatisTest;
-import com.framework.resources.model.CommAttachments;
+import com.resources.model.CommAttachments;
+import com.resources.services.AttachmentsService;
 
 public class AttachmentsServiceTest extends BaseMybatisTest {
 

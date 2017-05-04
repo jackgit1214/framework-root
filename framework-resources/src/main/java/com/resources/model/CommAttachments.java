@@ -10,6 +10,9 @@ public class CommAttachments extends BaseModel implements Serializable {
 
 	private String dataid;
 
+	/**
+	 * 
+	 */
 	private String busstype;
 
 	/**

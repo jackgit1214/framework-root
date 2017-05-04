@@ -13,19 +13,26 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.framework.image.IImageConstant;
+import com.framework.mybatis.model.QueryModel;
+import com.framework.mybatis.util.PageResult;
+import com.resources.ResConstant;
+import com.resources.model.CommAttachments;
 import com.resources.services.AttachmentsService;
 
 @Controller
@@ -70,13 +77,71 @@ public class ShareResources {
 		}
 	}
 
+	/**
+	 * 根据数据ID取出所有的附件
+	 * 
+	 * @param dataId
+	 *            数据ID
+	 * @param response
+	 *            跨域访问时使用
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getAttaData/{dataId}")
+	public ModelMap getDataList(@PathVariable String dataId,
+			HttpServletResponse response) {
+		ModelMap modelMap = new ModelMap();
+		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
+
+		QueryModel queryModel = new QueryModel();
+		queryModel.createCriteria().andEqualTo("dataid", dataId);
+		queryModel.setOrderByClause("attaNo");
+
+		List<CommAttachments> attaDatas = this.attachmentsServiceImpl
+				.findObjects(queryModel);
+
+		modelMap.addAttribute("attachments", attaDatas);
+		return modelMap;
+	}
+
+	@ResponseBody
+	@RequestMapping("/getAttaByType/{type}")
+	public ModelMap getDataList(@PathVariable String type, Integer pageNo,
+			Integer pageNum, HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
+		if (pageNum == null || pageNum == 0) {
+			pageNum = ResConstant.SYSDEFAULTROWNUM;
+		}
+		if (pageNo == null || pageNo == 1) {
+			pageNo = 1;
+		}
+		ModelMap modelMap = new ModelMap();
+
+		PageResult<CommAttachments> page = new PageResult<CommAttachments>(
+				pageNo, pageNum);
+
+		QueryModel queryModel = new QueryModel();
+		queryModel.createCriteria().andEqualTo("busstype", type);
+		queryModel.setOrderByClause("attaNo");
+
+		try {
+			this.attachmentsServiceImpl.findObjectsByPage(queryModel, page);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		modelMap.addAttribute("attachments", page.getPageDatas());
+		return modelMap;
+	}
+
 	@RequestMapping("/video")
 	public ModelAndView videoResources(String dataid, String busstype) {
 		ModelAndView mav = new ModelAndView("commattachments/listindex");
 		return mav;
 	}
 
-	@RequestMapping(value = "doc/{attaid}", method = RequestMethod.GET)
+	@RequestMapping(value = "other/{attaid}", method = RequestMethod.GET)
 	public void getDocumentResources(@PathVariable String attaid,
 			HttpServletResponse response) {
 		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问

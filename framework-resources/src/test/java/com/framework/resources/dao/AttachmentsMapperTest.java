@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.framework.mybatis.model.QueryModel;
 import com.framework.resources.BaseMybatisTest;
-import com.framework.resources.model.CommAttachments;
+import com.resources.dao.AttachmentsMapper;
+import com.resources.model.CommAttachments;
 
 public class AttachmentsMapperTest extends BaseMybatisTest {
 

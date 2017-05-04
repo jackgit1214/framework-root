@@ -1,6 +1,8 @@
 package com.resources;
 
-public interface ResConstant {
+import com.system.common.SysConstant;
+
+public interface ResConstant extends SysConstant {
 
 	/**
 	 * 资源类型 附件类型: 0 视频、1图片、2音频、3文档（pdf与word）等

@@ -1,0 +1,413 @@
+<div class="col-md-8 ">
+	<div class="row m-l-10 ">
+		<div class="col-md-7">
+			<h2 class="tile-title">文物</h2>
+			<div class="tile-config dropdown">
+				<a data-toggle="dropdown" href="" class="tile-menu"></a>
+				<ul class="dropdown-menu pull-right text-right">
+					<li><a
+						href="javascript:$.SystemApp.commonOper.loadCarouselImage('${typeResourceUrl}','1','${imageResourceUrl}','#carouselIndi','#carouselImage')">线索</a></li>
+					<li><a
+						href="javascript:$.SystemApp.commonOper.loadCarouselImage('${typeResourceUrl}','2','${imageResourceUrl}','#carouselIndi','#carouselImage')">已征集</a></li>
+				</ul>
+			</div>
+			<div class="p-10">
+				<div id="carousel-collimage" class="carousel slide">
+					<!-- Indicators  -->
+					<ol class="carousel-indicators" id="carouselIndi">
+
+					</ol>
+
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner" id="carouselImage"></div>
+					<!-- Controls -->
+					<a class="left carousel-control" href="#carousel-collimage"
+						data-slide="prev"> <i class="icon">&#61903;</i>
+					</a> <a class="right carousel-control" href="#carousel-collimage"
+						data-slide="next"> <i class="icon">&#61815;</i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-5">
+
+			<div class="tile">
+				<h2 class="tile-title">征集文物类别</h2>
+				<div class="tile-config dropdown">
+					<a data-toggle="dropdown" href="" class="tooltips tile-menu"
+						title="Options"></a>
+					<ul class="dropdown-menu pull-right text-right">
+						<li><a href="">Refresh</a></li>
+						<li><a href="">Settings</a></li>
+					</ul>
+				</div>
+				<div class="p-10">
+					<div id="pie-chart" class="main-chart" style="height: 300px"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Main Chart -->
+	<div class="tile m-t-10 m-l-10">
+		<h2 class="tile-title">征集时间曲线图</h2>
+		<div class="tile-config dropdown">
+			<a data-toggle="dropdown" href="" class="tile-menu"></a>
+			<ul class="dropdown-menu pull-right text-right">
+				<li><a class="tile-info-toggle" href="">Chart Information</a></li>
+				<li><a href="">Refresh</a></li>
+				<li><a href="">Settings</a></li>
+			</ul>
+		</div>
+		<div class="p-10">
+			<div id="line-chart" class="main-chart" style="height: 180px"></div>
+			<div class="chart-info">
+				<ul class="list-unstyled">
+					<li class="m-b-10">征集文物 <span
+						class="pull-right text-muted t-s-0">20</span></li>
+					<li class="m-b-10">征集线索 <span
+						class="pull-right text-muted t-s-0">50</span></li>
+					<li class="m-b-10">线索完成 <span
+						class="pull-right text-muted t-s-0">10</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div class="col-md-4">
+	<div class="row m-l-10 m-r-10 con-main tile">
+		<h2 class="tile-title">征集线索</h2>
+		<div class="tile-config dropdown">
+			<a data-toggle="dropdown" href="" class="tooltips tile-menu"
+				title="Options"></a>
+			<ul class="dropdown-menu pull-right text-left">
+				<li><a href="">添加线索</a></li>
+				<li><a href="">刷新</a></li>
+			</ul>
+		</div>
+		<#if collClues?? > <#list collClues as collClue >
+		<div class="media m-l-10 m-r-10">
+			<div class="pull-left">
+				<a href="#"> <img
+					class="media-object"
+					src="${dataDefaultImageResourceUrl}/${collClue.clueid}?permission=3"
+					alt="">
+				</a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-heading">
+					<p class="pull-right">${collClue.contacts!''}</p>
+					${collClue.name}
+				</h4>
+				${collClue.address!''}
+			</div>
+		</div>
+		</#list> </#if>
+	</div>
+</div>
+<div class="clearfix"></div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.collClueJscript.init_UI();
+		$.SystemApp.commonOper.loadCarouselImage("${typeResourceUrl}", "1",
+				"${imageResourceUrl}", "#carouselIndi", "#carouselImage");
+	
+	});
+
+	$(function() {
+		if ($('#line-chart')[0]) {
+			var d1 = [ [ 1, 14 ], [ 2, 15 ], [ 3, 18 ], [ 4, 16 ], [ 5, 19 ],
+					[ 6, 17 ], [ 7, 15 ], [ 8, 16 ], [ 9, 20 ], [ 10, 16 ],
+					[ 11, 18 ], [ 12, 14 ] ];
+
+			$.plot('#line-chart', [ {
+				data : d1,
+				label : "Data",
+
+			}, ],
+
+			{
+				series : {
+					lines : {
+						show : true,
+						lineWidth : 1,
+						fill : 0.25,
+					},
+
+					color : 'rgba(255,255,255,0.7)',
+					shadowSize : 1,
+					points : {
+						show : true,
+					}
+				},
+
+				yaxis : {
+					min : 10,
+					max : 22,
+					tickColor : 'rgba(255,255,255,0.15)',
+					tickDecimals : 0,
+					font : {
+						lineHeight : 13,
+						style : "normal",
+						color : "rgba(255,255,255,0.8)",
+					},
+					shadowSize : 0,
+				},
+				xaxis : {
+					tickColor : 'rgba(255,255,255,0)',
+					tickDecimals : 0,
+					font : {
+						lineHeight : 13,
+						style : "normal",
+						color : "rgba(255,255,255,0.8)",
+					}
+				},
+				grid : {
+					borderWidth : 1,
+					borderColor : 'rgba(255,255,255,0.25)',
+					labelMargin : 10,
+					hoverable : true,
+					clickable : true,
+					mouseActiveRadius : 6,
+				},
+				legend : {
+					show : false
+				}
+			});
+
+			$("#line-chart")
+					.bind(
+							"plothover",
+							function(event, pos, item) {
+								if (item) {
+									var x = item.datapoint[0].toFixed(2), y = item.datapoint[1]
+											.toFixed(2);
+									$("#linechart-tooltip").html(
+											item.series.label + " of " + x
+													+ " = " + y).css({
+										top : item.pageY + 5,
+										left : item.pageX + 5
+									}).fadeIn(200);
+								} else {
+									$("#linechart-tooltip").hide();
+								}
+							});
+
+			$("<div id='linechart-tooltip' class='chart-tooltip'></div>")
+					.appendTo("body");
+		}
+
+	});
+	/* --------------------------------------------------------
+	 Easy Pie Charts
+	 -----------------------------------------------------------*/
+	$(function() {
+		$('.pie-chart-tiny').easyPieChart({
+			easing : 'easeOutBounce',
+			barColor : 'rgba(255,255,255,0.75)',
+			trackColor : 'rgba(0,0,0,0.3)',
+			scaleColor : 'rgba(255,255,255,0.3)',
+			lineCap : 'square',
+			lineWidth : 4,
+			size : 100,
+			animate : 3000,
+			onStep : function(from, to, percent) {
+				$(this.el).find('.percent').text(Math.round(percent));
+			}
+		});
+
+		var chart = window.chart = $('.pie-chart-tiny').data('easyPieChart');
+		$('.pie-chart-tiny .pie-title > i').on(
+				'click',
+				function() {
+					$(this).closest('.pie-chart-tiny').data('easyPieChart')
+							.update(Math.random() * 200 - 100);
+				});
+	});
+
+	//Bar Chart
+	$(function() {
+		if ($("#bar-chart")[0]) {
+			var data1 = [ [ 1, 60 ], [ 2, 30 ], [ 3, 50 ], [ 4, 100 ],
+					[ 5, 10 ], [ 6, 90 ], [ 7, 85 ], [ 8, 40 ], [ 9, 5 ] ];
+			var data2 = [ [ 1, 20 ], [ 2, 90 ], [ 3, 60 ], [ 4, 40 ],
+					[ 5, 100 ], [ 6, 25 ], [ 7, 65 ], [ 8, 5 ], [ 9, 70 ] ];
+			var data3 = [ [ 1, 100 ], [ 2, 20 ], [ 3, 60 ], [ 4, 90 ],
+					[ 5, 80 ], [ 6, 10 ], [ 7, 5 ], [ 8, 15 ], [ 9, 50 ] ];
+
+			var barData = new Array();
+
+			barData.push({
+				data : data1,
+				label : 'Product 1',
+				bars : {
+					show : true,
+					barWidth : 0.1,
+					order : 1,
+					fill : 1,
+					lineWidth : 0,
+					fillColor : 'rgba(255,255,155,0.6)'
+				}
+			});
+			barData.push({
+				data : data2,
+				label : 'Product 2',
+				bars : {
+					show : true,
+					barWidth : 0.1,
+					order : 2,
+					fill : 1,
+					lineWidth : 0,
+					fillColor : 'rgba(255,155,255,0.8)'
+				}
+			});
+			barData.push({
+				data : data3,
+				label : 'Product 3',
+				bars : {
+					show : true,
+					barWidth : 0.1,
+					order : 3,
+					fill : 1,
+					lineWidth : 0,
+					fillColor : 'rgba(255,155,255,0.3)'
+				},
+			});
+
+			//Display graph
+			$.plot($("#bar-chart"), barData, {
+
+				grid : {
+					borderWidth : 1,
+					borderColor : 'rgba(155,255,255,0.25)',
+					show : true,
+					hoverable : true,
+					clickable : true,
+				},
+
+				yaxis : {
+					tickColor : 'rgba(155,155,255,0.15)',
+					tickDecimals : 0,
+					font : {
+						lineHeight : 13,
+						style : "normal",
+						color : "rgba(255,155,155,0.8)",
+					},
+					shadowSize : 0,
+				},
+
+				xaxis : {
+					tickColor : 'rgba(255,255,255,0)',
+					tickDecimals : 0,
+					font : {
+						lineHeight : 13,
+						style : "normal",
+						color : "rgba(255,255,255,0.8)",
+					},
+					shadowSize : 0,
+				},
+
+				legend : true,
+				tooltip : true,
+				tooltipOpts : {
+					content : "<b>%x</b> = <span>%y</span>",
+					defaultTheme : false
+				}
+
+			});
+
+			$("#bar-chart")
+					.bind(
+							"plothover",
+							function(event, pos, item) {
+								if (item) {
+									var x = item.datapoint[0].toFixed(2), y = item.datapoint[1]
+											.toFixed(2);
+									$("#barchart-tooltip").html(
+											item.series.label + " of " + x
+													+ " = " + y).css({
+										top : item.pageY + 5,
+										left : item.pageX + 5
+									}).fadeIn(200);
+								} else {
+									$("#barchart-tooltip").hide();
+								}
+							});
+
+			$("<div id='barchart-tooltip' class='chart-tooltip'></div>")
+					.appendTo("body");
+
+		}
+
+	});
+
+	//Pie Chart
+	$(function() {
+		var pieData = [ {
+			data : 1,
+			color : 'rgba(155,255,255,0.2)'
+		}, {
+			data : 2,
+			color : 'rgba(255,155,255,0.8)'
+		}, {
+			data : 3,
+			color : 'rgba(255,255,155,0.5)'
+		}, {
+			data : 4,
+			color : 'rgba(205,255,255,0.1)'
+		}, {
+			data : 4,
+			color : 'rgba(255,205,205,0.9)'
+		}, ];
+		if ($('#donut-chart')[0]) {
+			$.plot('#donut-chart', pieData, {
+				series : {
+
+					pie : {
+
+						innerRadius : 0.5,
+						show : true,
+						stroke : {
+							width : 0,
+
+						},
+						fill : 1,
+						fillColor : {
+							colors : [ 'rgba(255, 205, 255, 0.5)',
+									'rgba(0, 215, 176, 0.8)',
+									'rgba(255,205,255,0.8)' ]
+						}
+					}
+				}
+			});
+		}
+
+		if ($('#pie-chart')[0]) {
+			$.plot('#pie-chart', pieData, {
+				series : {
+					pie : {
+						show : true,
+						stroke : {
+							width : 0,
+
+						},
+					/*label: {
+					    show: true,
+					    radius: 3/4,
+					    formatter: function(label, series){
+					        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+					    },
+					    background: { 
+					        opacity: 0.5,
+					        color: '#000'
+					    }
+					}*/
+					}
+				}
+			});
+		}
+	});
+</script>

@@ -1,0 +1,126 @@
+<script type=text/javascript>
+	$.extend($.SystemApp.collClueJscript,{
+		editJscript:{
+			init_UI : function() {
+			
+			}
+		}
+	});
+	$(function() {
+		$.SystemApp.collClueJscript.editJscript.init_UI();
+	});
+</script>
+<div id="editUser" class="div_detail">
+	<form id="collClueform" name="collClueform"
+		class="form-validation-1 form-horizontal">
+			<input type="hidden" name="token" value='${token}'>
+			<input type="hidden" id="clueID" name="clueid" 
+							value="${collClue.clueid!''}"/>	
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">名称：</label>
+					<div class="col-md-10">
+						<input type="text" id="name" name="name" data-label="名称"
+							value="${collClue.name!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">来源：</label>
+					<div class="col-md-10">
+						<input type="text" id="sources" name="sources" data-label="来源"
+							value="${collClue.sources!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">联系方式：</label>
+					<div class="col-md-10">
+						<input type="text" id="phone" name="phone" data-label="联系方式"
+							value="${collClue.phone!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">地址：</label>
+					<div class="col-md-10">
+						<input type="text" id="address" name="address" data-label="地址"
+							value="${collClue.address!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="logincode" class="col-md-2 control-label">email：</label>
+					<div class="col-md-10">
+						<input type="text" id="email" name="email" data-label="email"
+							value="${collClue.email!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">qq：</label>
+					<div class="col-md-10">
+						<input type="text" id="qq" name="qq" data-label="qq"
+							value="${collClue.qq!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">来源类别：</label>
+					<div class="col-md-10">
+						<input type="text" id="sourceType" name="sourcetype" data-label="来源类别"
+							value="${collClue.sourcetype!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">状态：</label>
+					<div class="col-md-10">
+						<input type="text" id="status" name="status" data-label="状态"
+							value="${collClue.status!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">单位信息：</label>
+					<div class="col-md-10">
+						<input type="text" id="unit" name="unit" data-label="单位信息"
+							value="${collClue.unit!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+				<div class="form-group">
+				
+					<label for="logincode" class="col-md-2 control-label">备注：</label>
+					<div class="col-md-10">
+						<input type="text" id="remark" name="remark" data-label="备注"
+							value="${collClue.remark!''}"
+							class="input-sm validate[required] form-control"
+							placeholder="enter content" />
+					</div>
+				</div>
+		
+	</form>
+	<div class="modal-footer">
+		<div class="text-center">
+			<button type="submit" class="btn btn-sm" onclick="$.SystemApp.collClueJscript.save('collClueform');">保存</button>
+			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+</div>

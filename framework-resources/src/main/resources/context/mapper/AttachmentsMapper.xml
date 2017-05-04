@@ -11,6 +11,7 @@
     <result column="attaDesc" jdbcType="VARCHAR" property="attadesc" />
     <result column="filepath" jdbcType="VARCHAR" property="filepath" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
+     <result column="isDefault" jdbcType="VARCHAR" property="isDefault" />
     <result column="filesize" jdbcType="DECIMAL" property="filesize" />
     <result column="width" jdbcType="DECIMAL" property="width" />
     <result column="height" jdbcType="DECIMAL" property="height" />
@@ -21,7 +22,7 @@
     <result column="fileBlob" jdbcType="LONGVARBINARY" property="fileblob" />
   </resultMap>
   <sql id="Base_Column_List">
-    attaID, dataid, bussTYPE, attaType, attaNo, attaName, attaDesc, filepath, filename, 
+    attaID, dataid, bussTYPE, attaType, attaNo, attaName, attaDesc, filepath, filename, isDefault,
     filesize, width, height, atta_json, remark
   </sql>
   <sql id="Blob_Column_List">
@@ -42,13 +43,13 @@
   <insert id="insert" parameterType="com.resources.model.CommAttachments">
     insert into comm_attachments (attaID, dataid, bussTYPE, 
       attaType, attaNo, attaName, 
-      attaDesc, filepath, filename, 
+      attaDesc, filepath, filename, isDefault,
       filesize, width, height, 
       atta_json, remark, fileBlob
       )
     values (#{attaid,jdbcType=VARCHAR}, #{dataid,jdbcType=VARCHAR}, #{busstype,jdbcType=CHAR}, 
       #{attatype,jdbcType=CHAR}, #{attano,jdbcType=INTEGER}, #{attaname,jdbcType=VARCHAR}, 
-      #{attadesc,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, 
+      #{attadesc,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{isDefault,jdbcType=VARCHAR}, 
       #{filesize,jdbcType=DECIMAL}, #{width,jdbcType=DECIMAL}, #{height,jdbcType=DECIMAL}, 
       #{attaJson,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{fileblob,jdbcType=LONGVARBINARY}
       )
@@ -83,6 +84,9 @@
       <if test="filename != null">
         filename,
       </if>
+      <if test="isDefault != null">
+        isDefault,
+      </if>      
       <if test="filesize != null">
         filesize,
       </if>
@@ -130,6 +134,9 @@
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
       </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=VARCHAR},
+      </if>      
       <if test="filesize != null">
         #{filesize,jdbcType=DECIMAL},
       </if>
@@ -177,6 +184,9 @@
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
       </if>
+      <if test="isDefault != null">
+        isDefault = #{isDefault,jdbcType=VARCHAR},
+      </if>      
       <if test="filesize != null">
         filesize = #{filesize,jdbcType=DECIMAL},
       </if>
@@ -208,6 +218,7 @@
       attaDesc = #{attadesc,jdbcType=VARCHAR},
       filepath = #{filepath,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
+      isDefault = #{isDefault,jdbcType=VARCHAR},
       filesize = #{filesize,jdbcType=DECIMAL},
       width = #{width,jdbcType=DECIMAL},
       height = #{height,jdbcType=DECIMAL},
@@ -226,6 +237,7 @@
       attaDesc = #{attadesc,jdbcType=VARCHAR},
       filepath = #{filepath,jdbcType=VARCHAR},
       filename = #{filename,jdbcType=VARCHAR},
+      isDefault = #{isDefault,jdbcType=VARCHAR},
       filesize = #{filesize,jdbcType=DECIMAL},
       width = #{width,jdbcType=DECIMAL},
       height = #{height,jdbcType=DECIMAL},
@@ -289,6 +301,9 @@
       <if test="record.filename != null">
         filename = #{record.filename,jdbcType=VARCHAR},
       </if>
+      <if test="record.isDefault != null">
+        isDefault = #{record.isDefault,jdbcType=VARCHAR},
+      </if>
       <if test="record.filesize != null">
         filesize = #{record.filesize,jdbcType=DECIMAL},
       </if>
@@ -323,6 +338,7 @@
       attaDesc = #{record.attadesc,jdbcType=VARCHAR},
       filepath = #{record.filepath,jdbcType=VARCHAR},
       filename = #{record.filename,jdbcType=VARCHAR},
+      isDefault = #{isDefault,jdbcType=VARCHAR},
       filesize = #{record.filesize,jdbcType=DECIMAL},
       width = #{record.width,jdbcType=DECIMAL},
       height = #{record.height,jdbcType=DECIMAL},

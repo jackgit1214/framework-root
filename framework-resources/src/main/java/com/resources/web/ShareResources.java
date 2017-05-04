@@ -77,6 +77,37 @@ public class ShareResources {
 		}
 	}
 
+	@RequestMapping(value = "dataimage/{dataId}", method = RequestMethod.GET)
+	public void getImageDefaultRes(@PathVariable String dataId,
+			@RequestParam(required = false) String permission,
+			HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
+
+		QueryModel queryModel = new QueryModel();
+		queryModel.createCriteria().andEqualTo("dataid", dataId)
+				.andEqualTo("isDefault", "1");
+		queryModel.setOrderByClause("attaNo");
+
+		List<CommAttachments> attaDatas = this.attachmentsServiceImpl
+				.findObjects(queryModel);
+		if (attaDatas.size() > 0) {
+			if (permission != null
+					&& !IImageConstant.IMAGE_MAXPERMISSION.equals(permission)) {
+				byte[] fileContent = this.attachmentsServiceImpl.getResource(
+						attaDatas.get(0).getAttaid(), permission);
+				ServletOutputStream output;
+				try {
+					output = response.getOutputStream();
+					output.write(fileContent, 0, fileContent.length);
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
 	/**
 	 * 根据数据ID取出所有的附件
 	 * 

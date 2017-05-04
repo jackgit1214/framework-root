@@ -40,6 +40,9 @@ public class CommAttachments extends BaseModel implements Serializable {
 
 	private String remark;
 
+	// 多个图片时的缺省显示图片
+	private String isDefault;
+
 	private byte[] fileblob;
 
 	private static final long serialVersionUID = 1L;
@@ -167,5 +170,13 @@ public class CommAttachments extends BaseModel implements Serializable {
 	@Override
 	public Object getPrimaryKey() {
 		return this.getAttaid();
+	}
+
+	public String getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(String isDefault) {
+		this.isDefault = isDefault;
 	}
 }

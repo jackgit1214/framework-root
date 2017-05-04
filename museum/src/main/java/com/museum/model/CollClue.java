@@ -11,6 +11,8 @@ public class CollClue extends BaseModel implements Serializable {
 
 	private String sources;
 
+	private String contacts;
+
 	private String phone;
 
 	private String address;
@@ -130,5 +132,13 @@ public class CollClue extends BaseModel implements Serializable {
 	@Override
 	public Object getPrimaryKey() {
 		return this.getClueid();
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
 	}
 }

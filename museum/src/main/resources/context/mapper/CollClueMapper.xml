@@ -4,7 +4,9 @@
   <resultMap id="BaseResultMap" type="com.museum.model.CollClue">
     <id column="clueID" jdbcType="VARCHAR" property="clueid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
     <result column="sources" jdbcType="VARCHAR" property="sources" />
+    
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="email" jdbcType="VARCHAR" property="email" />
@@ -16,7 +18,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Base_Column_List">
-    clueID, name, sources, phone, address, email, qq, sourceType, status, coll_collID, 
+    clueID, name,contacts, sources, phone, address, email, qq, sourceType, status, coll_collID, 
     unit, remark
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -30,12 +32,12 @@
     where clueID = #{clueid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.museum.model.CollClue">
-    insert into coll_clue (clueID, name, sources, 
+    insert into coll_clue (clueID, name, contacts,sources, 
       phone, address, email, 
       qq, sourceType, status, 
       coll_collID, unit, remark
       )
-    values (#{clueid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sources,jdbcType=VARCHAR}, 
+    values (#{clueid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},#{contacts,jdbcType=VARCHAR}, #{sources,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{qq,jdbcType=VARCHAR}, #{sourcetype,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{collCollid,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
@@ -49,6 +51,9 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+       <if test="contacts != null">
+        contacts,
       </if>
       <if test="sources != null">
         sources,
@@ -88,6 +93,9 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="contacts != null">
+        #{contacts,jdbcType=VARCHAR},
+      </if>      
       <if test="sources != null">
         #{sources,jdbcType=VARCHAR},
       </if>
@@ -126,6 +134,9 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="contacts != null">
+        #{contacts,jdbcType=VARCHAR},
+      </if>       
       <if test="sources != null">
         sources = #{sources,jdbcType=VARCHAR},
       </if>
@@ -162,6 +173,7 @@
   <update id="updateByPrimaryKey" parameterType="com.museum.model.CollClue">
     update coll_clue
     set name = #{name,jdbcType=VARCHAR},
+    	contacts = #{contacts,jdbcType=VARCHAR},
       sources = #{sources,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
@@ -209,6 +221,9 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.contacts != null">
+        #{record.contacts,jdbcType=VARCHAR},
+      </if>        
       <if test="record.sources != null">
         sources = #{record.sources,jdbcType=VARCHAR},
       </if>
@@ -248,6 +263,7 @@
     update coll_clue
     set clueID = #{record.clueid,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
       sources = #{record.sources,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},

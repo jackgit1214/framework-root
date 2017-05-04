@@ -11,7 +11,6 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-
      <!-- 
        使用<mvc:annotation-driven/>注解，会默认创建此bean，如果在这里
      	配置此属性，必须有order配合 ，提高优先级才起作用 -->
@@ -53,6 +52,7 @@
 			<mvc:exclude-mapping path="/index"/>
 			<mvc:exclude-mapping path="/loginSuccess"/>
 			<mvc:exclude-mapping path="/checkUserPassword"/>
+			<mvc:exclude-mapping path="/coll/**"/>
 			<mvc:exclude-mapping path="/"/>
 			<ref bean="sessionInterceptor" />
 		</mvc:interceptor>

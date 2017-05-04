@@ -4,10 +4,12 @@
 <!DOCTYPE html>
 <!--[if IE 9 ]><html class="ie9"><![endif]-->
 <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width, height=device-height,initial-scale=1.0, maximum-scale=1.0" />
 <meta name="format-detection" content="telephone=no">
-<meta charset="UTF-8">
 
 <meta name="description" content="Violate Responsive Admin Template">
 <meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
@@ -35,7 +37,7 @@
 
 
 <#macro htmlBody>
- <body id="skin-blur-violate" style="overflow:hidden">
+ <body id="skin-blur-violate11" style="overflow:hidden">
     <#nested>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
@@ -131,7 +133,7 @@
 	<script type="text/javascript" src="js/jquery.ztree.all-3.5.js"></script>
 	<!-- All JS functions -->
 	<script src="js/functions.js"></script>
-	<script src="js/system.js"></script>
+	<script src="js/system.js?time=Math.random()"></script>
 	<script type="text/javascript">
 			$.SystemApp.contextPath = "<@projectpath/>";
 			

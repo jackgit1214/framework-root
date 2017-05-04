@@ -14,6 +14,24 @@
 
 	<import resource="application-core.xml" />
 	
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean" >
+        <property name="locations"  >
+            <list >
+                <value >classpath*:config/config.properties</value> <!-- 包含jar包中的文件 -->
+                 <value>classpath:config/appcon.properties</value>  
+            </list>
+        </property>
+    </bean>
+	
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:config/appcon.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<context:component-scan base-package="com.museum" />
 	<beans profile="mybatis">
 
@@ -21,6 +39,7 @@
 			<property name="basePackage" value="com.system;com.museum" />
 			<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 		</bean>
+		
 		
 	</beans>
 </beans>

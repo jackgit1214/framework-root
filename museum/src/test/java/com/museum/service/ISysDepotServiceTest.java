@@ -41,7 +41,7 @@ public class ISysDepotServiceTest extends BaseMybatisTest {
 	public void testFindAllObjects() {
 
 		this.sysDepotServiceImpl.findAllObjects();
-		fail("Not yet implemented");
+		// fail("Not yet implemented");
 	}
 
 	@Test

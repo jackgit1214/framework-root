@@ -96,14 +96,16 @@ $.SystemApp.initContentArea = function() {
     var $docH = $(document).height();
     var $conmainH = $docH - 140;
     var $tableConH = $conmainH - 80;
-    $("body").on("DOMNodeInserted", ".con-main,.table-con,.table-data",
-    function(e) {
-        $(".con-main").height($conmainH);
-        $(".table-con").height($tableConH);
+    $("body").on("DOMNodeInserted", "#main-content", function(e) {
+    	$(".con-main").height($conmainH);
+    });    
+    $("#main-content").on("DOMNodeInserted",".table-con",function(e){
+    	var $tar =$(e.target);
+    	$(".table-con").height($tableConH);
         $(".table-data").height($tableConH - 50);
-        // $.SystemApp.initComponents();
-    });
-
+     });
+   
+    
 };
 $.SystemApp.initComponents = function() {
 
@@ -429,7 +431,9 @@ $.SystemApp.divLoad = function(sourcediv, url, data, callback) {
 
     $(sourcediv).load($.SystemApp.contextPath + url, data,
     function(data) {
-
+    	$.SystemApp.initComponents();
+		
+		$.SystemApp.pagetoolbar.toolbarInit();
         if (callback != undefined && $.isFunction(callback)) callback(data);
     });
 }
@@ -527,6 +531,9 @@ $.SystemApp.controlSidebar = {
     }
 };
 
+/*
+ * 
+ */
 $.SystemApp.pagetoolbar = {
     totalPageNum: 0,
     curPage: 0,
@@ -657,3 +664,138 @@ $.SystemApp.pagetoolbar = {
         		function() {});
     }
 };
+
+
+/****功能部分js*****/
+$.SystemApp.commonOper = {
+		dialogObj : null,
+		showEdit:function(isEdit,urllink,formobject,title){
+			var _params = {};
+			if (isEdit) {
+				var selectValue = $.SystemApp.checkbox("#"+formobject);
+				if (selectValue == null || selectValue == ''
+						|| selectValue.length <= 0) {
+					alert("请选择要编辑的数据");
+					return;
+				}
+				_params = {
+					'id' : selectValue[0]
+				};
+			}
+
+			this.dialogObj =$.SystemApp.openDialog($.SystemApp.contextPath
+					+ urllink, {
+				data : _params,
+				height : 500,
+				width : 700,
+				title : title
+			});
+			
+			//return dialogObj;
+		},
+		del:function(urllink,formobject,title){
+			var selectValue = $.SystemApp.checkbox("#"+formobject);
+
+			if (selectValue == null || selectValue == ''
+					|| selectValue.length <= 0) {
+				alert("请选择要删除的数据");
+				return;
+			}
+			if (!confirm("您确定删除这些数据吗？"))
+				return;
+			var data = {
+				ids : selectValue
+			};
+			$.post($.SystemApp.contextPath + urllink, data,
+					function(data) {
+						if (data.successRows > 0) {
+							$.SystemApp.pagetoolbar.refreshData();
+							alert("数据删除成功！");
+						}
+					});
+		},
+		save:function(urllink,formobject){
+			var $this = this;
+			var $formObject = $("#"+formobject);
+			var validateResult = $formObject.validationEngine('validate');
+			if (!validateResult)
+				return false;
+
+			var data = $formObject.serializeArray();
+			$.post($.SystemApp.contextPath + urllink,data, function(data) {
+				if (data.successRows > 0) {
+					alert("数据保存成功！");
+					$this.dialogObj.modal("hide");
+					$.SystemApp.pagetoolbar.refreshData();
+				} else {
+					alert("数据保存失败！");
+				}
+
+			});
+		},
+		loadCarouselImage:function(dataurl,busitype,imageurl,indiObject,imageObject){
+			$.getJSON(dataurl+'/'+busitype,{},function(data){
+				var attachments = data.attachments;
+				
+				$(imageObject).empty();
+				$(indiObject).empty();
+	    		$.each(attachments,function(i,attachment){
+	    			
+	    			if (attachment.attatype!="1") ///这里只显示图片
+	    				return true;
+	    			var $divitem = $("<div>");
+	    			if (i==0){
+	    				$divitem.addClass("item active");
+	    			}else{
+	    				$divitem.addClass("item");
+	    			}
+	    			var $img = $("<img>");
+	    			$img.attr("src",imageurl+"/"+attachment.attaid+"?permission=2")
+	    				.attr("alt","Slide-"+i)
+	    				.addClass("img-responsive center-block"); //图片距中及响应式图片
+	    			$divitem.append($img);
+	    			//var $divcaption = $("<div>").addClass("carousel-caption hidden-xs")
+	    			//	.append("<h3>"+attachment.filename+"</h3>").append("<p>"+attachment.filesize+"</p>");
+	    			//$divitem.append($divcaption);
+					var $li = $("<li>").data("target","#carousel-collimage").data("slide-to",i)
+										.attr("data-target","#carousel-collimage")
+										.attr("data-slide-to",i);
+	    			$(imageObject).append($divitem);
+					$(indiObject).append($li);
+	    		});
+			});
+		}
+};
+
+/*征集线索部分*/
+$.SystemApp.collClueJscript = {
+		
+		init_UI : function() {
+				$.SystemApp.divLoad("#systemData", "/collclue/list", '',
+					function() {
+
+					});
+		},
+		showEdit : function(isEdit) {
+			//var _this = this;
+			 $.SystemApp.commonOper.showEdit(isEdit,"/collclue/showEdit","tableHover_collClue","中文标题编辑");
+
+		},
+		del : function() {
+			$.SystemApp.commonOper.del("/collclue/delete","tableHover_collClue");
+			
+		},
+		save : function(formObject) {
+			$.SystemApp.commonOper.save("/collclue/update",formObject);
+			
+		},
+		find : function(formobject) {
+			var data = $("#"+formobject).serialize();
+			$.SystemApp.divLoad("#systemData", "/collclue/list", data,
+					function() {
+
+					});
+		}
+	};
+
+

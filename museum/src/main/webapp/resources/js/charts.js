@@ -22,7 +22,7 @@ $(function () {
                     },
 
                     color: 'rgba(255,255,255,0.7)',
-                    shadowSize: 0,
+                    shadowSize: 1,
                     points: {
                         show: true,
                     }

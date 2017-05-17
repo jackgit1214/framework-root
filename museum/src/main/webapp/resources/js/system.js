@@ -15,6 +15,19 @@ $(document).ajaxComplete(function(event, request, settings) {
         return false;
     }
 });
+
+;(function($){
+	$.fn.datetimepicker.dates['zh-CN'] = {
+			days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+			daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+			daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+			months: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
+			monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+			today: "今天",
+			suffix: [],
+			meridiem: ["上午", "下午"]
+	};
+}(jQuery));
 // 公共模态窗口初始化
 $().ready(function() {
 
@@ -235,8 +248,22 @@ $.SystemApp.initComponents = function() {
     // Popover
     if ($('.pover')[0]) {
         $('.pover').popover();
+    };
+    if ($(".form_datetime")[0]) {
+	    $(".form_datetime").datetimepicker({
+	    	language:'zh-CN',
+	    	 weekStart: 1,
+	         todayBtn:  1,
+	         format: "yyyy-MM-dd",
+	 		autoclose: 1,
+	 		startDate: new Date(),
+	 		todayHighlight: 1,
+	 		startView: 2,
+	 		minView: 2,
+	 		forceParse: 0,
+			pickerPosition: "bottom-right"
+	    });
     }
-
 };
 
 $.SystemApp.openDialog = function(url, param) {
@@ -257,23 +284,27 @@ $.SystemApp.openDialog = function(url, param) {
 
     var $mdDialog = $("<div id='" + modalId + "_drag" + "'>").addClass("modal-dialog");
     var $mdCon = $("<div>").addClass("modal-content");
-    var $mdHeader = $("<div>").addClass("modal-header").html("<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>	<h4 class='modal-title'>" + param.title + "</h4>");
+    
 
     var $mdFooter = $("<div>").addClass("modal-footer m-t-0");
     var $mdBody = $("<div>").addClass("modal-body");
-
+    var $mdHeader = $("<div>").addClass("modal-header").html("<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>	<h4 class='modal-title'>" + param.title + "</h4>");
     $.get(url, param.data,
-    function(data) {
-
-        var $data = $(data);
-        if ($data.find(".modal-footer")) {
-            var $footer = $data.find(".modal-footer");
-            $mdFooter.html($footer.html());
-            $footer.remove();
-        }
-        $mdBody.append($data);
-    });
-
+		    function(data) {
+		        var $data = $(data);
+		        var $tmpfooter = $data.find(".modal-footer");
+		        if ($tmpfooter[0]) {
+		            $mdFooter.html($data.find(".modal-footer").html());
+		            $tmpfooter.remove();
+		        }
+		        var  $tmptitle= $data.find("h4").filter(".modal-title");
+		        if ($tmptitle[0]){
+		        	 param.title = $tmptitle.text();
+		        	 $mdHeader.find("h4").text(param.title);
+		        	$tmptitle.remove();
+		        }
+		        $mdBody.append($data);
+	});
     $mdCon.append($mdHeader).append($mdBody).append($mdFooter);
     $mdDialog.append($mdCon);
     $modalDiv.append($mdDialog);
@@ -778,7 +809,7 @@ $.SystemApp.collClueJscript = {
 		},
 		showEdit : function(isEdit) {
 			//var _this = this;
-			 $.SystemApp.commonOper.showEdit(isEdit,"/collclue/showEdit","tableHover_collClue","中文标题编辑");
+			 $.SystemApp.commonOper.showEdit(isEdit,"/collclue/showEdit","tableHover_collClue","文物线索");
 
 		},
 		del : function() {
@@ -797,5 +828,40 @@ $.SystemApp.collClueJscript = {
 					});
 		}
 	};
+
+
+$.SystemApp.collInfoJscript = {
+		dialogObj : null,
+		init_UI : function() {
+				$.SystemApp.divLoad("#systemData", "/collinfo/list", '',
+					function() {
+
+					});
+		},
+		showEdit : function(isEdit) {
+			var _this = this;
+			_this.dialogObj = $.SystemApp.commonOper.showEdit(isEdit,"/collinfo/showEdit","tableHover_collInfo","征集信息");
+
+		},
+		del : function() {
+			$.SystemApp.commonOper.del("/collinfo/delete","tableHover_collInfo");
+			
+		},
+		save : function(formObject) {
+			$.SystemApp.commonOper.save("/collinfo/update",formObject);
+			
+		},
+		find : function(formobject) {
+			var data = $("#"+formobject).serialize();
+
+			$.SystemApp.divLoad("#systemData", "/collinfo/list", data,
+					function() {
+
+					});
+		}
+	};
+
+
+
 
 

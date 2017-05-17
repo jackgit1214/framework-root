@@ -2,21 +2,22 @@
 	<!-- 查询区域 -->
 	<div class="block-area tile p-5 m-b-5" style="height: 45px;">
 		<form id="queryForm" class="form-horizontal" role="form">
-			<div class="row">
 				<!-- 查询条件  -->
-				<div class="col-md-4 m-b-15 form-group">
-					<label class="col-md-2 control-label" for="param['fieldname']">字段中文名：</label>
-					<div class="col-md-10">
-						<input class="form-control m-b-10" name="param['fieldname']"
-							id="param['fieldname']" value="" />
+				<div class="form-group">
+					<div class="col-md-4 m-b-15 ">
+						<label class="col-md-2 control-label" for="param['fieldname']">线索名称：</label>
+						<div class="col-md-10">
+							<input class="form-control m-b-10" name="param['fieldname']"
+								id="param['fieldname']" value="" />
+						</div>
 					</div>
-				</div>
-				<!-- 条件结束  -->
+					<!-- 条件结束  -->
 				<div class="col-md-4 m-b-15">
 					<button type="button" title="查询" class="btn btn-sm m-r-5"
 						onclick="$.SystemApp.collclueJscript.find('queryForm');" value="查询">查询</button>
 				</div>
-			</div>
+				</div>
+
 		</form>
 	</div>
 	<!-- 数据显示区域 -->

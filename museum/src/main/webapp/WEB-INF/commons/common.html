@@ -19,13 +19,14 @@
 <!-- CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-select.css" rel="stylesheet">
+<link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
 <link href="css/animate.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/form.css" rel="stylesheet">
 <link href="css/media-player.css" rel="stylesheet">
-<link href="css/calendar.css" rel="stylesheet">
 <link href="css/icons.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
+
 <link href="css/generics.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"	href="css/zTreeStyle/metro.css" />
 <link href="css/file-manager.css" rel="stylesheet">
@@ -62,7 +63,7 @@
 	<script src="js/defaults-zh_CN.js"></script>
 	<script src="js/chosen.min.js"></script>
 	<!-- Custom Multi Select -->
-	<script src="js/datetimepicker.min.js"></script>
+	<script src="js/bootstrap-datetimepicker.js"></script>
 	<!-- Date & Time Picker -->
 	<script src="js/colorpicker.min.js"></script>
 	<!-- Color Picker -->
@@ -87,25 +88,12 @@
 	<script src="js/markdown.min.js"></script>
 	<!-- Markdown Editor -->
 	<!-- Charts -->
-	<script src="js/charts/jquery.flot.js"></script>
-	<!-- Flot Main -->
-	<script src="js/charts/jquery.flot.time.js"></script>
-	<!-- Flot sub -->
-	<script src="js/charts/jquery.flot.animator.min.js"></script>
-	<!-- Flot sub -->
-	<script src="js/charts/jquery.flot.resize.min.js"></script>
-	<!-- Flot sub - for repaint when resizing the screen -->
-	<script src="js/charts/jquery.flot.orderBar.js"></script>
-	<!-- Flot Bar chart -->
-	<script src="js/charts/jquery.flot.pie.min.js"></script>
+	<script src="js/echarts.min.js"></script>
+	<script src="js/shine.js"></script>
 	<!-- Flot Pie chart -->
 
 	<script src="js/sparkline.min.js"></script>
 	<!-- Sparkline - Tiny charts -->
-	<script src="js/easypiechart.js"></script>
-	<!-- EasyPieChart - Animated Pie Charts -->
-	<script src="js/charts.js"></script>
-	<!-- All the above chart related functions -->
 
 	<!-- Map -->
 	<script src="js/maps/jvectormap.min.js"></script>
@@ -121,9 +109,6 @@
 	<script src="js/scroll.min.js"></script>
 	<!-- Custom Scrollbar -->
 
-	<!-- Other -->
-	<script src="js/calendar.min.js"></script>
-	<!-- Calendar -->
 	<script src="js/feeds.min.js"></script>
 	<!-- News Feeds -->
 	<script src="js/file-manager/elfinder.min.js"></script>
@@ -133,11 +118,10 @@
 	<script type="text/javascript" src="js/jquery.ztree.all-3.5.js"></script>
 	<!-- All JS functions -->
 	<script src="js/functions.js"></script>
-	<script src="js/system.js?time=Math.random()"></script>
+	<script src="js/system.js?time=222)"></script>
 	<script type="text/javascript">
 			$.SystemApp.contextPath = "<@projectpath/>";
-			
-			
+		
 	</script>    
  </body>
  </html>
@@ -181,3 +165,67 @@
 </div>
 </#macro>
 
+<!-- 针对sys_code或comm_code表，每个action要取出代码类型 ，数据量大时使用，避免每次都请求数据-->
+<#macro outputCode codetype value id codes >
+	 	<#if codes??> 
+	 		<#list codes as code>
+	 			<#if code.code == value >
+	            	<div data-value="${code.code}">${code.codename}</div>
+            	<#else>
+    	        	<div data-value="${value}"></div>
+            	</#if> 
+	     	</#list> 
+	    </#if>
+</#macro>
+
+<!-- 针对sys_code表，通过js代码取值 -->
+<#macro selectCode codetype value id >
+	
+	 	<select id="${id}" name="${id}"  class="selectpicker form-control" data-size="5" data-value="${value!''}" >
+	 		
+	 	 </select>
+	
+     <script type="text/javascript">
+     	$(function(){
+     		
+     		$.getJSON("<@projectpath/>/public/widget/getCodes",{codeType:"${codetype}"},function(data){
+				var codes = data.codes;
+				var $obj = $("#${id}");
+				$.each(codes,function(i,obj){
+						if (obj.code=="${value}")
+							$obj.append("<option selected value="+obj.code+">"+obj.codename+"</option> ");
+						else
+							$obj.append("<option value="+obj.code+">"+obj.codename+"</option> ");
+					
+				});
+			});
+     	});
+			
+	</script>
+</#macro>
+
+<!-- 针对comm_code表，通过js代码取值 -->
+<#macro selectCommCode tablename,fieldname value id >
+	
+	 	<select id="${id}" name="${id}"  class="selectpicker form-control" data-size="5" data-value="${value!''}" >
+	 		
+	 	 </select>
+	
+     <script type="text/javascript">
+     	$(function(){
+     		
+     		$.getJSON("<@projectpath/>/public/widget/getCommCodes",{table:"${tablename}",field:"${fieldname}"},function(data){
+				var codes = data.codes;
+				var $obj = $("#${id}");
+				$.each(codes,function(i,obj){
+						if (obj.code=="${value}")
+							$obj.append("<option selected value="+obj.code+">"+obj.codename+"</option> ");
+						else
+							$obj.append("<option value="+obj.code+">"+obj.codename+"</option> ");
+					
+				});
+			});
+     	});
+			
+	</script>
+</#macro>

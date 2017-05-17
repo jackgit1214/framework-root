@@ -55,23 +55,16 @@
 		<div class="tile-config dropdown">
 			<a data-toggle="dropdown" href="" class="tile-menu"></a>
 			<ul class="dropdown-menu pull-right text-right">
-				<li><a class="tile-info-toggle" href="">Chart Information</a></li>
-				<li><a href="">Refresh</a></li>
-				<li><a href="">Settings</a></li>
+				<li><a class="tile-info-toggle" href="#" onclick="cullInte.showNumStatistics(0);">年</a></li>
+				<li><a href="#" onclick="console.log(event);cullInte.showNumStatistics(1);">月</a></li>
 			</ul>
 		</div>
 		<div class="p-10">
 			<div id="line-chart" class="main-chart" style="height: 180px"></div>
+			<!-- 
 			<div class="chart-info">
-				<ul class="list-unstyled">
-					<li class="m-b-10">征集文物 <span
-						class="pull-right text-muted t-s-0">20</span></li>
-					<li class="m-b-10">征集线索 <span
-						class="pull-right text-muted t-s-0">50</span></li>
-					<li class="m-b-10">线索完成 <span
-						class="pull-right text-muted t-s-0">10</span></li>
-				</ul>
-			</div>
+				
+			</div> -->
 		</div>
 	</div>
 	<div class="clearfix"></div>
@@ -90,7 +83,7 @@
 		<#if collClues?? > <#list collClues as collClue >
 		<div class="media m-l-10 m-r-10">
 			<div class="pull-left">
-				<a href="#"> <img
+				<a href="#" data-toggle="modal" data-target="#modal_${collClue_index}" > <img
 					class="media-object"
 					src="${dataDefaultImageResourceUrl}/${collClue.clueid}?permission=3"
 					alt="">
@@ -104,310 +97,156 @@
 				${collClue.address!''}
 			</div>
 		</div>
+		<div class="modal fade" tabindex="-1" id="modal_${collClue_index}" role="dialog" aria-labelledby="gridSystemModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="gridSystemModalLabel">${collClue.name} (
+		        	<#if collClue.collCollid?? >
+		        		已征集
+		        	<#else>
+		        		未征集
+		        	</#if> 
+		        )</h4>
+		      </div>
+		      <div class="modal-body p-b-0">
+		      	<form class="form-horizontal m-r-10" role="form">
+		      		<div class="form-group">
+		      			 <label class="col-md-2 control-label text-right">文物名称：</label>
+                         <div class="col-md-4"><input type="text" class="form-control input-sm" disabled value="${collClue.name!''}" /></div>
+                         <div class="col-md-2 control-label text-right"> <label>来源：</label></div>
+			          	 <div class="col-md-4 text-left"><input type="text" class="form-control input-sm" disabled value="${collClue.sources!''}" /></div>
+                     </div>
+                     <div class="form-group">
+                     	 <label class="col-md-2 control-label text-right">联系人：</label>
+                         <div class="col-md-4"><input type="text" class="form-control input-sm" disabled value="${collClue.contacts}" /></div>
+                         <div class="col-md-2 control-label text-right"> <label>电话：</label></div>
+			          	 <div class="col-md-4 text-left"><input type="text" class="form-control input-sm" disabled value="${collClue.phone!''}" /></div>
+		      			
+                     </div>
+                     <div class="form-group">
+		      			 <label class="col-md-2 control-label text-right">Email：</label>
+                         <div class="col-md-4"><input type="text" class="form-control input-sm" disabled value="${collClue.email!''}" /></div>
+                         <div class="col-md-2 control-label text-right"> <label>QQ：</label></div>
+			          	 <div class="col-md-4 text-left"><input type="text" class="form-control input-sm" disabled value="${collClue.qq!''}" /></div>
+                     </div>
+                     <div class="form-group">
+		      			 <label class="col-md-2 control-label text-right">地址：</label>
+                         <div class="col-md-10"><input type="text" class="form-control input-sm" disabled value="${collClue.address!''}" /></div>
+                     </div> 
+                     <div class="form-group">
+		      			 <label class="col-md-2 control-label text-right">备注：</label>
+                         <div class="col-md-10">
+                          	<textarea class="form-control m-b-10" disabled>${collClue.remark!html}</textarea>
+                         </div>
+                     </div>
+		      	</form>
+		       </div>	
+		    
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default center-block" data-dismiss="modal">关闭</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 		</#list> </#if>
 	</div>
 </div>
 <div class="clearfix"></div>
 
 <script type="text/javascript">
+
+	var cullInte = {
+			showTypeStatistics:function(){
+				$.getJSON("/museum/coll/culStatistics",{curdate:''},function(data){
+					var tmpdata = data.statisticData;
+					var chart = echarts.init(document.getElementById('pie-chart'), 'shine');
+					chart.setOption({
+						    title : {
+						        text: '来源',
+						        x:'center'
+						    },
+						    tooltip : {
+						        trigger: 'item',
+						        formatter: "{a} <br/>{b} : {c} ({d}%)"
+						    },
+						    legend: {
+						        orient: 'vertical',
+						        left: 'left',
+						        data: data.legend
+						    },
+						    series : [
+						        {
+						            name: '访问来源',
+						            type: 'pie',
+						            radius : '55%',
+						            center: ['50%', '60%'],
+						            data:tmpdata,
+						            itemStyle: {
+						                emphasis: {
+						                    shadowBlur: 10,
+						                    shadowOffsetX: 0,
+						                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+						                }
+						            }
+						        }
+						    ]
+					});			
+				});
+			},
+			showNumStatistics:function(type){
+		        var obj = event.target;
+		       
+		        var $this = $(obj);
+				var curdate='';
+				if (type== 'undefined' ){
+					type=0;
+				}
+				$this.parent().siblings().removeClass('tile-info-toggle');
+				$this.addClass("tile-info-toggle");
+				 $.getJSON("/museum/coll/statistics",{curdate:'',type:type},function(data){
+						var tmpdata = data.statisticData;
+						console.log(tmpdata);
+						var chart = echarts.init(document.getElementById('line-chart'), 'shine');
+						var option = {
+							    title: {
+							        text: '征集时间曲线图'
+							    },
+							    tooltip: {
+							        trigger: 'axis'
+							    },
+							    
+							    xAxis:  {
+							        type: 'category',
+							        boundaryGap: false,
+							        data: data.xAxisData
+							    },
+							    yAxis: {
+							        type: 'value',
+							        axisLabel: {
+							            formatter: '{value}'
+							        }
+							    },
+							    series: [
+							        {
+							            name:'已征集',
+							            type:'line',
+							            data:tmpdata
+
+							        }
+							    ]
+							};
+						chart.setOption(option);
+					}); 
+			}
+	}
 	$(function() {
 		$.SystemApp.collClueJscript.init_UI();
 		$.SystemApp.commonOper.loadCarouselImage("${typeResourceUrl}", "1",
 				"${imageResourceUrl}", "#carouselIndi", "#carouselImage");
-	
+		cullInte.showTypeStatistics();
+		cullInte.showNumStatistics(0);
 	});
 
-	$(function() {
-		if ($('#line-chart')[0]) {
-			var d1 = [ [ 1, 14 ], [ 2, 15 ], [ 3, 18 ], [ 4, 16 ], [ 5, 19 ],
-					[ 6, 17 ], [ 7, 15 ], [ 8, 16 ], [ 9, 20 ], [ 10, 16 ],
-					[ 11, 18 ], [ 12, 14 ] ];
-
-			$.plot('#line-chart', [ {
-				data : d1,
-				label : "Data",
-
-			}, ],
-
-			{
-				series : {
-					lines : {
-						show : true,
-						lineWidth : 1,
-						fill : 0.25,
-					},
-
-					color : 'rgba(255,255,255,0.7)',
-					shadowSize : 1,
-					points : {
-						show : true,
-					}
-				},
-
-				yaxis : {
-					min : 10,
-					max : 22,
-					tickColor : 'rgba(255,255,255,0.15)',
-					tickDecimals : 0,
-					font : {
-						lineHeight : 13,
-						style : "normal",
-						color : "rgba(255,255,255,0.8)",
-					},
-					shadowSize : 0,
-				},
-				xaxis : {
-					tickColor : 'rgba(255,255,255,0)',
-					tickDecimals : 0,
-					font : {
-						lineHeight : 13,
-						style : "normal",
-						color : "rgba(255,255,255,0.8)",
-					}
-				},
-				grid : {
-					borderWidth : 1,
-					borderColor : 'rgba(255,255,255,0.25)',
-					labelMargin : 10,
-					hoverable : true,
-					clickable : true,
-					mouseActiveRadius : 6,
-				},
-				legend : {
-					show : false
-				}
-			});
-
-			$("#line-chart")
-					.bind(
-							"plothover",
-							function(event, pos, item) {
-								if (item) {
-									var x = item.datapoint[0].toFixed(2), y = item.datapoint[1]
-											.toFixed(2);
-									$("#linechart-tooltip").html(
-											item.series.label + " of " + x
-													+ " = " + y).css({
-										top : item.pageY + 5,
-										left : item.pageX + 5
-									}).fadeIn(200);
-								} else {
-									$("#linechart-tooltip").hide();
-								}
-							});
-
-			$("<div id='linechart-tooltip' class='chart-tooltip'></div>")
-					.appendTo("body");
-		}
-
-	});
-	/* --------------------------------------------------------
-	 Easy Pie Charts
-	 -----------------------------------------------------------*/
-	$(function() {
-		$('.pie-chart-tiny').easyPieChart({
-			easing : 'easeOutBounce',
-			barColor : 'rgba(255,255,255,0.75)',
-			trackColor : 'rgba(0,0,0,0.3)',
-			scaleColor : 'rgba(255,255,255,0.3)',
-			lineCap : 'square',
-			lineWidth : 4,
-			size : 100,
-			animate : 3000,
-			onStep : function(from, to, percent) {
-				$(this.el).find('.percent').text(Math.round(percent));
-			}
-		});
-
-		var chart = window.chart = $('.pie-chart-tiny').data('easyPieChart');
-		$('.pie-chart-tiny .pie-title > i').on(
-				'click',
-				function() {
-					$(this).closest('.pie-chart-tiny').data('easyPieChart')
-							.update(Math.random() * 200 - 100);
-				});
-	});
-
-	//Bar Chart
-	$(function() {
-		if ($("#bar-chart")[0]) {
-			var data1 = [ [ 1, 60 ], [ 2, 30 ], [ 3, 50 ], [ 4, 100 ],
-					[ 5, 10 ], [ 6, 90 ], [ 7, 85 ], [ 8, 40 ], [ 9, 5 ] ];
-			var data2 = [ [ 1, 20 ], [ 2, 90 ], [ 3, 60 ], [ 4, 40 ],
-					[ 5, 100 ], [ 6, 25 ], [ 7, 65 ], [ 8, 5 ], [ 9, 70 ] ];
-			var data3 = [ [ 1, 100 ], [ 2, 20 ], [ 3, 60 ], [ 4, 90 ],
-					[ 5, 80 ], [ 6, 10 ], [ 7, 5 ], [ 8, 15 ], [ 9, 50 ] ];
-
-			var barData = new Array();
-
-			barData.push({
-				data : data1,
-				label : 'Product 1',
-				bars : {
-					show : true,
-					barWidth : 0.1,
-					order : 1,
-					fill : 1,
-					lineWidth : 0,
-					fillColor : 'rgba(255,255,155,0.6)'
-				}
-			});
-			barData.push({
-				data : data2,
-				label : 'Product 2',
-				bars : {
-					show : true,
-					barWidth : 0.1,
-					order : 2,
-					fill : 1,
-					lineWidth : 0,
-					fillColor : 'rgba(255,155,255,0.8)'
-				}
-			});
-			barData.push({
-				data : data3,
-				label : 'Product 3',
-				bars : {
-					show : true,
-					barWidth : 0.1,
-					order : 3,
-					fill : 1,
-					lineWidth : 0,
-					fillColor : 'rgba(255,155,255,0.3)'
-				},
-			});
-
-			//Display graph
-			$.plot($("#bar-chart"), barData, {
-
-				grid : {
-					borderWidth : 1,
-					borderColor : 'rgba(155,255,255,0.25)',
-					show : true,
-					hoverable : true,
-					clickable : true,
-				},
-
-				yaxis : {
-					tickColor : 'rgba(155,155,255,0.15)',
-					tickDecimals : 0,
-					font : {
-						lineHeight : 13,
-						style : "normal",
-						color : "rgba(255,155,155,0.8)",
-					},
-					shadowSize : 0,
-				},
-
-				xaxis : {
-					tickColor : 'rgba(255,255,255,0)',
-					tickDecimals : 0,
-					font : {
-						lineHeight : 13,
-						style : "normal",
-						color : "rgba(255,255,255,0.8)",
-					},
-					shadowSize : 0,
-				},
-
-				legend : true,
-				tooltip : true,
-				tooltipOpts : {
-					content : "<b>%x</b> = <span>%y</span>",
-					defaultTheme : false
-				}
-
-			});
-
-			$("#bar-chart")
-					.bind(
-							"plothover",
-							function(event, pos, item) {
-								if (item) {
-									var x = item.datapoint[0].toFixed(2), y = item.datapoint[1]
-											.toFixed(2);
-									$("#barchart-tooltip").html(
-											item.series.label + " of " + x
-													+ " = " + y).css({
-										top : item.pageY + 5,
-										left : item.pageX + 5
-									}).fadeIn(200);
-								} else {
-									$("#barchart-tooltip").hide();
-								}
-							});
-
-			$("<div id='barchart-tooltip' class='chart-tooltip'></div>")
-					.appendTo("body");
-
-		}
-
-	});
-
-	//Pie Chart
-	$(function() {
-		var pieData = [ {
-			data : 1,
-			color : 'rgba(155,255,255,0.2)'
-		}, {
-			data : 2,
-			color : 'rgba(255,155,255,0.8)'
-		}, {
-			data : 3,
-			color : 'rgba(255,255,155,0.5)'
-		}, {
-			data : 4,
-			color : 'rgba(205,255,255,0.1)'
-		}, {
-			data : 4,
-			color : 'rgba(255,205,205,0.9)'
-		}, ];
-		if ($('#donut-chart')[0]) {
-			$.plot('#donut-chart', pieData, {
-				series : {
-
-					pie : {
-
-						innerRadius : 0.5,
-						show : true,
-						stroke : {
-							width : 0,
-
-						},
-						fill : 1,
-						fillColor : {
-							colors : [ 'rgba(255, 205, 255, 0.5)',
-									'rgba(0, 215, 176, 0.8)',
-									'rgba(255,205,255,0.8)' ]
-						}
-					}
-				}
-			});
-		}
-
-		if ($('#pie-chart')[0]) {
-			$.plot('#pie-chart', pieData, {
-				series : {
-					pie : {
-						show : true,
-						stroke : {
-							width : 0,
-
-						},
-					/*label: {
-					    show: true,
-					    radius: 3/4,
-					    formatter: function(label, series){
-					        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-					    },
-					    background: { 
-					        opacity: 0.5,
-					        color: '#000'
-					    }
-					}*/
-					}
-				}
-			});
-		}
-	});
 </script>

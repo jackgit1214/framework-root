@@ -17,11 +17,12 @@ import com.system.mybatis.dao.SysCodeMapper;
 import com.system.mybatis.service.ISysCodeService;
 
 @Service
-public class SysCodeService extends AbstractBusinessService<SysCode> implements	ISysCodeService {
+public class SysCodeService extends AbstractBusinessService<SysCode> implements
+		ISysCodeService {
 
 	@Autowired
 	private SysCodeMapper sysCodeMapper;
-	
+
 	@Override
 	public BaseDao getDao() {
 		// TODO Auto-generated method stub
@@ -47,13 +48,13 @@ public class SysCodeService extends AbstractBusinessService<SysCode> implements	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public int delete(String[] ids) {
 		int rows = 0;
-		//QueryModel queryModel = new QueryModel();
+		// QueryModel queryModel = new QueryModel();
 		for (String id : ids) {
-			//QueryModel.Criteria criteria = queryModel.createCriteria();
+			// QueryModel.Criteria criteria = queryModel.createCriteria();
 
-			//criteria.andEqualTo("codeid", id);
+			// criteria.andEqualTo("codeid", id);
 			rows = rows + this.sysCodeMapper.deleteByPrimaryKey(id);
-			//this.sysCodeMapper.deleteByCondition(queryModel);
+			// this.sysCodeMapper.deleteByCondition(queryModel);
 		}
 		return rows;
 	}
@@ -62,24 +63,26 @@ public class SysCodeService extends AbstractBusinessService<SysCode> implements	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public int delete(String id) {
 		// TODO Auto-generated method stub
-		
+
 		int rows = this.sysCodeMapper.deleteByPrimaryKey(id);
 		return rows;
 	}
-	
+
 	@Override
-	public List<SysCodeTree> getCodeDataByCodeid(String codeid,String codetype){
+	public List<SysCodeTree> getCodeDataByCodeid(String codeid, String codetype) {
 		QueryModel queryModel = new QueryModel();
 		QueryModel.Criteria criteria = queryModel.createCriteria();
-		criteria.andEqualTo("superid",codeid);
-		
-		//2代码是指标型管理数据，需要动态添加
-		criteria.andEqualTo("applyto",2);
-		if (codetype!=null && !"".equals(codetype))
-			criteria.andEqualTo("codetype",codetype);
+
+		if (codeid != null && !"".equals(codeid))
+			criteria.andEqualTo("superid", codeid);
+
+		// 2代码是指标型管理数据，需要动态添加
+		criteria.andEqualTo("applyto", 2);
+		if (codetype != null && !"".equals(codetype))
+			criteria.andEqualTo("codetype", codetype);
 		queryModel.setOrderByClause("code");
 		List<SysCodeTree> datas = this.sysCodeMapper.selectCodeTree(queryModel);
-		
+
 		return datas;
 	}
 

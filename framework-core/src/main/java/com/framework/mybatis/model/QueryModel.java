@@ -153,6 +153,31 @@ public class QueryModel {
 			criteria.add(new Criterion(condition, value));
 		}
 
+		/**
+		 * 针对in与not in条件，自定义，in后的sql语句
+		 * 
+		 * @param condition
+		 * @param value
+		 * @param property
+		 * @param isSql
+		 *            是否是sql语句
+		 */
+
+		protected void addCriterion(String condition, String value,
+				String property, boolean isSql) {
+
+			if (!isSql)
+				this.addCriterion(condition, value, property);
+			else {
+				if (value == null) {
+					throw new RuntimeException("Value for " + property
+							+ " cannot be null");
+				}
+				criteria.add(new Criterion(condition, value, property, isSql));
+			}
+
+		}
+
 		protected void addCriterion(String condition, Object value1,
 				Object value2, String property) {
 			if (value1 == null || value2 == null) {
@@ -217,6 +242,16 @@ public class QueryModel {
 			return (Criteria) this;
 		}
 
+		public Criteria andNotIn(String fieldName, String sql) {
+			addCriterion(fieldName + " not in", sql, fieldName, true);
+			return (Criteria) this;
+		}
+
+		public Criteria andIn(String fieldName, String sql) {
+			addCriterion(fieldName + " in", sql, fieldName, true);
+			return (Criteria) this;
+		}
+
 		public Criteria andNotIn(String fieldName, List<Object> values) {
 			addCriterion(fieldName + " not in", values, fieldName);
 			return (Criteria) this;
@@ -252,6 +287,8 @@ public class QueryModel {
 		private boolean noValue;
 
 		private boolean singleValue;
+
+		private boolean sqlValue;
 
 		private boolean betweenValue;
 
@@ -291,6 +328,14 @@ public class QueryModel {
 			return typeHandler;
 		}
 
+		public boolean isSqlValue() {
+			return sqlValue;
+		}
+
+		public void setSqlValue(boolean sqlValue) {
+			this.sqlValue = sqlValue;
+		}
+
 		protected Criterion(String condition) {
 			super();
 			this.condition = condition;
@@ -310,6 +355,16 @@ public class QueryModel {
 			}
 		}
 
+		protected Criterion(String condition, Object value, String typeHandler,
+				boolean isSql) {
+			super();
+			this.condition = condition;
+			this.value = value;
+			this.typeHandler = typeHandler;
+			this.setSqlValue(true);
+
+		}
+
 		protected Criterion(String condition, Object value) {
 			this(condition, value, null);
 		}
@@ -327,6 +382,7 @@ public class QueryModel {
 		protected Criterion(String condition, Object value, Object secondValue) {
 			this(condition, value, secondValue, null);
 		}
+
 	}
 
 	public Map<String, String> getParam() {

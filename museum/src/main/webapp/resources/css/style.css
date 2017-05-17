@@ -993,7 +993,7 @@ hr {
     width: 200px;
 }
 
-/* Tables */
+/* Tables */
 .table > thead > tr > th {
     font-weight: normal;
     padding: 5px 8px 6px;
@@ -1029,9 +1029,9 @@ hr {
 .table-hover > tbody > tr:hover > td,
 .table-hover > tbody > tr:hover > th,
 .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,.1);
 }
-
+.table-striped > tbody >tr:nth-of-type(odd) {    background-color: rgba(0,0,0,.1);}.table-hover > tbody > tr:hover {  background-color:  rgba(0,0,0,.3);}
 /* Breadcrumb */
 .breadcrumb {
     background: none;

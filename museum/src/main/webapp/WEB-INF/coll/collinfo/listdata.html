@@ -1,0 +1,87 @@
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.collInfoJscript.showEdit();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="$.SystemApp.collInfoJscript.showEdit(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.collInfoJscript.del();">删除</button>
+		</header>
+
+<div class=" table-con">
+	<div id="tableHover_collInfo" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+									<td>征集号</td>
+									<td>征集日期</td>
+									<td>征集价格</td>
+									<td>币种</td>
+									<td>征集名称</td>
+									<td>质地</td>
+									<td>来源</td>
+									<td>现状</td>
+									<td>征集经过</td>
+									<td>流转经过及资料记录</td>
+									<td>数量</td>
+									<td>征集人</td>
+									<td>征集状态</td>
+									<td>是否鉴定</td>
+									<td>是否移交</td>
+
+					</tr>
+				</thead>
+				<#if page.pageDatas?? >
+							<#list page.pageDatas as collInfo >
+							<tr>
+								<td><input type="checkbox" name="subcheck" class="list-check"
+										value="${collInfo.collinfoid!''}"></td>
+											<td>${collInfo.collno!''}</td>
+											<td>${collInfo.colldate?date}</td>
+											<td>${collInfo.price!''}</td>
+											<td>${collInfo.currency!''}</td>
+											<td>${collInfo.collname!''}</td>
+											<td>
+											<@pub.outputCode codetype="zdlb" codes=codes id="culmaterial" value="${collInfo.culmaterial!''}" ></@pub.outputCode>
+											</td>
+											<td>
+											<@pub.outputCode codetype="wwly" codes=codes id="culrootin" value="${collInfo.culrootin!''}" ></@pub.outputCode>	
+											</td>
+											<td>${collInfo.culcondition!''}</td>
+											<td>${collInfo.collpath!''}</td>
+											<td>${collInfo.culSpreadPath!''}</td>
+											<td>${collInfo.collnum!''}</td>
+											<td>${collInfo.collectedman!''}</td>
+											<td>${collInfo.status!''}</td>
+											<td>${collInfo.isappraisal!''}</td>
+											<td>${collInfo.isdeliver!''}</td>
+							</tr>
+							</#list>
+						</#if>	
+
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}"   data-totalpage= "${page.lastPage}" 
+				data-param= '${param!}'    data-recordcount= "${page.pageSize}" 
+				data-linktarget="#systemData" data-pagelink="/collinfo/list">
+				<div class="pull-left attrs">
+					第${page.curPage} 页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	});
+</script>

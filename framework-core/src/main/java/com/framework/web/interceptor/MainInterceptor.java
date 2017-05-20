@@ -80,7 +80,7 @@ public class MainInterceptor extends HandlerInterceptorAdapter {
 			modelAndView.addObject("typeResourceUrl", this.typeResourceUrl);
 
 			// 其它资源路径
-			modelAndView.addObject("docResourceUrl", this.otherResourceUrl);
+			modelAndView.addObject("otherResourceUrl", this.otherResourceUrl);
 			modelAndView.addObject("dataDefaultImageResourceUrl",
 					this.dataDefaultImageResourceUrl);
 		}

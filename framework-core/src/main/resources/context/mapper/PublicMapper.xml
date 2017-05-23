@@ -25,7 +25,7 @@
                   </foreach>
                 </when>
 				<when test="criterion.sqlValue" >
-                  and ${criterion.condition} ( #{criterion.value} )
+                  and ${criterion.condition} ( ${criterion.value} )
                   
                 </when>                
               </choose>
@@ -87,7 +87,7 @@
                   </foreach>
                 </when>
                 <when test="criterion.sqlValue" >
-                  and ${criterion.condition} ( #{criterion.value} )
+                  and ${criterion.condition} ( ${criterion.value} )
                   
                 </when> 
               </choose>

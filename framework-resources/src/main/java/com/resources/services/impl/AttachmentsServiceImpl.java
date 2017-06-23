@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +40,7 @@ import com.framework.image.ImageService;
 import com.framework.mybatis.dao.Base.BaseDao;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
+import com.resources.ResConstant;
 import com.resources.dao.AttaThumbnailMapper;
 import com.resources.dao.AttachmentsMapper;
 import com.resources.model.CommAttaThumbnail;
@@ -270,11 +272,8 @@ public class AttachmentsServiceImpl extends
 			int pos = filename.lastIndexOf(".");
 			// 取文件扩展名
 			String fileExtension = filename.substring(pos + 1);
-			if (this.imageExtension.contains(fileExtension)) {
-				record.setAttatype("1");
-			} else {
-				record.setAttatype("3");
-			}
+
+			record.setAttatype(this.ExpandedNameHandle(fileExtension));
 
 			if (file != null) {
 				String path = "";
@@ -298,7 +297,10 @@ public class AttachmentsServiceImpl extends
 
 				File localFile = new File(path);
 				file.transferTo(localFile); // 存储文件
-				this.handleImage(path, attId);
+				if (ResConstant.RES_IMAGE == Integer.parseInt(record
+						.getAttatype()))
+					this.handleImage(path, attId); // 为图片时进行图片压缩处理
+
 				if ("1".equals(filePathType)) // 数据库中存放的路径
 					sourcepath = sourcepath + "/" + filename; // 项目相对路径
 				else
@@ -326,6 +328,32 @@ public class AttachmentsServiceImpl extends
 				}
 			}
 		});
+
+	}
+
+	/**
+	 * 根据文件名，区分类型
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	private String ExpandedNameHandle(String fileExtname) {
+
+		// Pattern pDoc = Pattern.compile(docExt);
+		// Pattern pVideo = Pattern.compile(videoExt);
+		// Pattern pAudio = Pattern.compile(audioExt);
+		// Pattern pImage = Pattern.compile(imageExt);
+		String fileType = "4";
+		if (Pattern.matches(docExt, fileExtname))
+			fileType = String.valueOf(ResConstant.RES_DOC);
+		if (Pattern.matches(videoExt, fileExtname))
+			fileType = String.valueOf(ResConstant.RES_VIDEO);
+		if (Pattern.matches(audioExt, fileExtname))
+			fileType = String.valueOf(ResConstant.RES_AUDIO);
+		if (Pattern.matches(imageExt, fileExtname))
+			fileType = String.valueOf(ResConstant.RES_IMAGE);
+
+		return fileType;
 
 	}
 }

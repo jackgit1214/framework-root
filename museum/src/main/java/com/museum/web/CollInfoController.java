@@ -17,7 +17,9 @@ import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
 import com.framework.web.controller.BaseController;
 import com.museum.model.CollInfo;
+import com.museum.model.CommCode;
 import com.museum.service.CollInfoService;
+import com.museum.service.CommCodeService;
 import com.system.common.SysConstant;
 import com.system.model.SysCodeTree;
 import com.system.mybatis.service.ISysCodeService;
@@ -27,6 +29,9 @@ import com.system.mybatis.service.ISysCodeService;
 public class CollInfoController extends BaseController {
 	@Autowired
 	private CollInfoService collInfoServiceImpl;
+
+	@Autowired
+	private CommCodeService commCodeServiceImpl;
 
 	@Autowired
 	private ISysCodeService sysCodeService;
@@ -54,9 +59,16 @@ public class CollInfoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		List<SysCodeTree> codes = sysCodeService.getCodeDataByCodeid(null,
+		List<SysCodeTree> wwlycodes = sysCodeService.getCodeDataByCodeid(null,
 				"wwly");
-		mav.addObject("codes", codes);
+
+		mav.addObject("wwlycodes", wwlycodes);
+		mav.addObject("zdlbcodes",
+				sysCodeService.getCodeDataByCodeid(null, "zdlb"));
+
+		List<CommCode> commcodes = this.commCodeServiceImpl.getCommCodes(
+				"share", "currency");
+		mav.addObject("commcodes", commcodes);
 
 		mav.addObject("param", JSON.toJSONString(queryModel));
 		mav.addObject("page", page);
@@ -69,6 +81,7 @@ public class CollInfoController extends BaseController {
 		CollInfo collInfo = this.collInfoServiceImpl.findObjectById(id);
 		if (collInfo == null) {
 			collInfo = new CollInfo();
+			collInfo.setCollname("");
 			collInfo.setColldate(Calendar.getInstance().getTime()); // 初始征集日期为当前日期
 		}
 

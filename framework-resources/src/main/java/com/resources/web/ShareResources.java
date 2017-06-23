@@ -135,6 +135,50 @@ public class ShareResources {
 		return modelMap;
 	}
 
+	/**
+	 * 根据数据ID，以及此数据的附件类型，取的所有相关附件
+	 * 
+	 * @param dataId
+	 * @param type
+	 *            附件类型，图片，视频，文本等
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getAttaData/{dataId}/{type}")
+	public ModelMap getDataList(@PathVariable String dataId,
+			@PathVariable String type, HttpServletResponse response) {
+		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
+
+		ModelMap modelMap = new ModelMap();
+
+		QueryModel queryModel = new QueryModel();
+		queryModel.createCriteria().andEqualTo("attaType", type)
+				.andEqualTo("dataid", dataId);
+
+		queryModel.setOrderByClause("attaNo");
+		List<CommAttachments> attachMents = null;
+		try {
+			attachMents = this.attachmentsServiceImpl.findObjects(queryModel);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		modelMap.addAttribute("attachments", attachMents);
+		return modelMap;
+	}
+
+	/**
+	 * 根据业务类型取得所有附件信息
+	 * 
+	 * @param type
+	 *            业务类型
+	 * @param pageNo
+	 * @param pageNum
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/getAttaByType/{type}")
 	public ModelMap getDataList(@PathVariable String type, Integer pageNo,
@@ -178,13 +222,13 @@ public class ShareResources {
 		response.addHeader("Access-Control-Allow-Origin", "*"); // 允许 跨域访问
 
 		String filePath = this.attachmentsServiceImpl.getResource(attaid);
-		this.getFileStream(filePath, response);
+		// this.getFileStream(filePath, response);
 
 	}
 
 	private void getFileStream(String filePath, HttpServletResponse response) {
 
-		// response.setContentType("video/avi");
+		// response.setContentType("audio/mp3");
 		ServletOutputStream output = null;
 		InputStream in = null;
 		try {
@@ -198,6 +242,7 @@ public class ShareResources {
 			while ((byteread = in.read(tempbytes)) != -1) {
 				output.write(tempbytes, 0, byteread);
 			}
+			output.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1133,9 +1133,9 @@ hr {
 .dark {
     padding: 0;
 }
-
+.modal-content {	border-radius: 6px;}
 .modal-content, .dark {
-    background: rgba(0, 0, 0, 0.68);
+    background: rgba(0, 0, 0, 1.68);
     border: 0;
     color: #fff;
 }

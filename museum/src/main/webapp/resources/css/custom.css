@@ -784,3 +784,44 @@
     background: #fff;
   }
 }
+
+/********fileinput custom ***************/
+.file-drop-zone {
+    margin: 2px !important;
+    padding: 1px !important;
+    border: 0px;
+}
+
+.filepreview-action {
+	position:relative;
+	float:right;
+	top:-108px;
+	height:0px;
+}
+
+.filepreview-custom {
+	height:400px;
+	overflow-y:auto;
+}
+
+.krajee-default.file-preview-frame .kv-file-content {
+    height: 80px !important;
+}
+.krajee-default.file-preview-frame .file-thumbnail-footer {
+    height: 20px !important;
+}
+.krajee-default .file-footer-caption {
+    width: 80px !important;
+}
+.krajee-default .file-other-icon {
+    font-size: 6em;
+}
+
+.file-zoom-dialog .file-other-icon {
+    font-size: 8em;
+    font-size: 45vmin;
+}
+.framecustom {
+	border: 0 !important;
+    box-shadow:none !important;
+}

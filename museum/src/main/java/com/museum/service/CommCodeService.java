@@ -13,4 +13,5 @@ public interface CommCodeService extends IBusinessService<CommCode> {
 	int save(CommCode record);
 
 	List<CommCode> getCommCodes(String table, String field);
+
 }

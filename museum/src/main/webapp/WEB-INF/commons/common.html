@@ -25,11 +25,12 @@
 <link href="css/form.css" rel="stylesheet">
 <link href="css/media-player.css" rel="stylesheet">
 <link href="css/icons.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
+<link href="css/style.css?aa=23" rel="stylesheet">
 
 <link href="css/generics.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"	href="css/zTreeStyle/metro.css" />
 <link href="css/file-manager.css" rel="stylesheet">
+<link href="css/fileinput.css" rel="stylesheet">
 <link href="css/custom.css" rel="stylesheet">
 
 </head>
@@ -38,7 +39,7 @@
 
 
 <#macro htmlBody>
- <body id="skin-blur-violate11" style="overflow:hidden">
+ <body id="skin-blur-violate" style="overflow:hidden">
     <#nested>
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
@@ -116,9 +117,17 @@
 
 	<!-- ztree -->
 	<script type="text/javascript" src="js/jquery.ztree.all-3.5.js"></script>
+	
+	<!-- 附件上传部分.......... -->
+	<script src="js/fileinput.js"></script>
+	<script src="js/purify.min.js"></script>
+	<script src="js/sortable.min.js"></script>
+	<script src="js/fileinput.zh.js"></script>
+	
 	<!-- All JS functions -->
 	<script src="js/functions.js"></script>
-	<script src="js/system.js?time=222)"></script>
+	<script src="js/system.js?time=11)"></script>
+	<script src="js/fileinput-help.js"></script>
 	<script type="text/javascript">
 			$.SystemApp.contextPath = "<@projectpath/>";
 		
@@ -165,8 +174,21 @@
 </div>
 </#macro>
 
-<!-- 针对sys_code或comm_code表，每个action要取出代码类型 ，数据量大时使用，避免每次都请求数据-->
+<!-- 针对sys_code表，每个action要取出代码类型 ，数据量大时使用，避免每次都请求数据-->
 <#macro outputCode codetype value id codes >
+	 	<#if codes??> 
+	 		<#list codes as code>
+	 			<#if  code.code == value >
+	            	<div data-value="${code.code}">${code.codename}</div>
+            	<#else>
+    	        	<div data-value="${value}"></div>
+            	</#if> 
+	     	</#list> 
+	    </#if>
+</#macro>
+
+<!-- 针对comm_code表，每个action要取出代码类型 ，数据量大时使用，避免每次都请求数据-->
+<#macro outputCommCode value id codes >
 	 	<#if codes??> 
 	 		<#list codes as code>
 	 			<#if code.code == value >

@@ -1,0 +1,52 @@
+<div class="pop-uploadfile"> 
+   <div class="col-md-2"> 
+    <div class="accordion tile"> 
+     <div class="panel-group block" id="accordion"> 
+      <div class="panel panel-default"> 
+       <div class="panel-heading">
+        <h3 class="panel-title"> <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> 附件类型 </a> </h3> 
+       </div> 
+       <div id="acctype" class="panel-collapse collapse" > 
+        <div class="panel-body text-center p-2 " style="height: 400px;overflow-y:auto;"> 
+                    <a class="shortcut tile m-2 p-5" href="javascript:$('#uploadFile').fileInputCustom('refreshData',{type:'3'});" data-type='3'>
+                        <i class="fa fa-file-word-o "></i>
+                        <small class="t-overflow" >WORD</small>
+                    </a>
+                    <a class="shortcut tile m-2 p-5" href="javascript:$('#uploadFile').fileInputCustom('refreshData',{type:'1'});" data-type='1'>
+                        <i class="fa fa-file-photo-o text-danger"></i>
+                        <small class="t-overflow">图片</small>
+                    </a>
+                    <a class="shortcut tile m-2 p-5" href="javascript:$('#uploadFile').fileInputCustom('refreshData',{type:'2'});" data-type='2'>
+                        <i class="fa fa-file-audio-o text-warning"></i>
+                        <small class="t-overflow">音频</small>
+                    </a>
+                    <a class="shortcut tile m-2 p-5" href="javascript:$('#uploadFile').fileInputCustom('refreshData',{type:'0'});" data-type='0'>
+                        <i class="fa fa-file-movie-o text-warning"></i>
+                        <small class="t-overflow">视频</small>
+                    </a>
+                    <a class="shortcut tile m-2 p-5" href="javascript:$('#uploadFile').fileInputCustom('refreshData',{type:'4'});" data-type='4'>
+                       <i class="glyphicon glyphicon-file"></i>
+                        <small class="t-overflow">其它</small>
+                    </a>
+                    
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="col-md-10" id="eeee"> 
+	  <div id="testpreview" style="height:400px;">
+		  <input id="attachments" name="attachments[]"  id="files" type="file" multiple class="file-loading">
+	  </div>
+   </div> 
+   <div class="clearfix"></div> 
+    
+</div> 
+<div class="modal-footer"> 
+   <div class="text-center"> 
+    <button type="submit" class="btn btn-sm" onclick="$('#uploadFile').fileInputCustom('upload');">保存</button> 
+    
+    <button type="button" class="btn btn-sm" onclick="$('#uploadFile').fileInputCustom('closeDialog');">关闭</button> 
+   </div> 
+</div> 	

@@ -1,23 +1,12 @@
-<script type=text/javascript>
-	$.extend($.SystemApp.collInfoJscript,{
-		editJscript:{
-			init_UI : function() {
-			
-			}
-		}
-	});
-	$(function() {
-		$.SystemApp.collInfoJscript.editJscript.init_UI();
-		
-	});
-</script>
-<div id="editCollinfo" class="div_detail">
-	
+
+<div id="mypluginCon"></div>
+
 	<form id="collInfoform" name="collInfoform"
 		class="form-validation-1 form-horizontal">
 			<input type="hidden" name="token" value='${token}'>
 			<input type="hidden" id="collinfoID" name="collinfoid" data-label="征集ID"
 							value="${collInfo.collinfoid!''}"/>	
+			<div class="col-md-9" >
 				<div class="form-group">
 				
 					<label for="logincode" class="col-md-2 control-label text-right p-r-0">征集编号：</label>
@@ -30,7 +19,7 @@
 					<label for="logincode" class="col-md-2 control-label text-right p-r-0">征集名称：</label>
 					<div class="col-md-4 p-l-0">
 						<input type="text" id="collName" name="collname" data-label="征集名称"
-							value="${collInfo.collname!''}"
+							value="${collInfo.collname?html}"
 							class="input-sm validate[required] form-control"
 							placeholder="请输入" />
 					</div>
@@ -38,7 +27,7 @@
 				<div class="form-group">
 					<label for="logincode" class="col-md-2 control-label text-right p-r-0">征集日期：</label>
 					<div class="col-md-4 p-l-0">
-						<div class="input-group date form_datetime" data-date="1949-10-01" data-date-format="yyyy-MM-dd"  data-link-format="yyyy-mm-dd">
+						<div class="input-group date form_datetime" data-date="1949-10-01"  data-date-format="yyyy-MM-dd"  data-link-format="yyyy-mm-dd">
 						  	<input type="text" id="colldate" name="colldate" data-label="征集日期"
 							value="${collInfo.colldate?date}" readonly
 							class="input-sm validate[required] form-control"/>
@@ -78,7 +67,7 @@
 				
 					<label for="logincode" class="col-md-2 control-label text-right p-r-0">质地：</label>
 					<div class="col-md-4 p-l-0">
-						<@pub.selectCode codetype="zdlb" id="culMaterial" value="${collInfo.culMaterial!''}" >
+						<@pub.selectCode codetype="zdlb" id="culmaterial" value="${collInfo.culmaterial!''}" >
 						</@pub.selectCode>
 						
 					</div>
@@ -158,12 +147,70 @@
 						
 					</div>
 				</div>
+			</div>	
+			<div class="col-md-3" id="acc-info" style="overflow-y:auto;height:400px;">
+				<div id="attachments11" >  
+				</div>              
+                	
 
+            </div>
+			<div class="clearfix"></div>
+		
 	</form>
-	<div class="modal-footer">
-		<div class="text-center">
-			<button type="submit" class="btn btn-sm" onclick="$.SystemApp.collInfoJscript.save('collInfoform');">保存</button>
-			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
-		</div>
+
+<div class="modal-footer">
+	<div class="text-center">
+		<button type="submit" class="btn btn-sm" onclick="$.SystemApp.collInfoJscript.save('collInfoform');">保存</button>
+		<div class="btn btn-default btn-file" id="uploadFile">
+                    <i class="fa fa-paperclip"></i> 上传附件
+         </div>
+         
+         <div class="btn btn-default btn-file" id="testBtn" onclick="customModals.confirm('是否，测试信息提示,错误',{cancel_call:test111,ok_call:test111});" >
+                    <i class="fa fa-paperclip"></i> test</div>
+                    
+        <div class="btn btn-default btn-file" id="testBtn" onclick="customModals.popupDialog({},'www.sohu.com');" >
+                    <i class="fa fa-paperclip"></i> tet111</div>            
+		<button type="button" class="btn btn-sm" data-dismiss="modal" onclick="$('#uploadFile').fileInputCustom('destroyDialog')";>关闭</button>
+		 
 	</div>
-</div>
+</div>			
+<script type=text/javascript>
+	$.extend($.SystemApp.collInfoJscript,{
+		editJscript:{
+			init_UI : function() {
+			
+			}
+		}
+	});
+	function test111(){
+		console.log("jkkkkkkkkkkkkkkkkkk");
+		alert('vvvv');
+	}
+	$(function() {
+		$.SystemApp.collInfoJscript.editJscript.init_UI();
+		$("#uploadFile").fileInputCustom({
+            title: "请上传附件",
+            data:{
+            	busiType:1,//当前文件类型，是指那类型的开附件，如征集等
+            	dataIds:'${collInfo.collinfoid!''}'  //附件的数据ID
+            },
+            fileinput: {
+               // maxFileSize: 10240,
+               // maxFileCount:3
+            },
+            fileListContainer:"#attachments11",
+            showContainer:'#attachments',
+            //显示文件类型 edit=可编辑  detail=明细 默认为明细
+            showType:'edit',
+            //弹出窗口 执行上传附件后的回调函数(window:false不调用此方法)
+            window:true,
+            callback:function(fileIds,oldfileIds){
+            	
+                //更新fileIds
+                this.showFiles({
+                    fileIds:fileIds
+                });
+            }
+        });
+	});
+</script>

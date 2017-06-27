@@ -85,7 +85,7 @@ public class ShareResources {
 
 		QueryModel queryModel = new QueryModel();
 		queryModel.createCriteria().andEqualTo("dataid", dataId)
-				.andEqualTo("isDefault", "1");
+				.andEqualTo("isDefault", "1").andEqualTo("attaType", "1");
 		queryModel.setOrderByClause("attaNo");
 
 		List<CommAttachments> attaDatas = this.attachmentsServiceImpl
@@ -104,6 +104,9 @@ public class ShareResources {
 					e.printStackTrace();
 				}
 			}
+		} else {
+
+			this.getFileStream("", response);
 		}
 
 	}
@@ -233,6 +236,12 @@ public class ShareResources {
 		InputStream in = null;
 		try {
 			File file = new File(filePath);
+			if (!file.exists()) { // 文件不存在时
+				String path = this.getClass().getResource("/").getPath();
+				String zwtp = path + "/config/zwtp.gif";
+				file = new File(zwtp);
+			}
+
 			in = new FileInputStream(file);
 			byte[] tempbytes = new byte[1024];
 			int byteread = 0;

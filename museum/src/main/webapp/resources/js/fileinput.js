@@ -505,7 +505,7 @@
                 },
                 fileTypeSettings: {
                     image: function (vType, vName) {
-                        return $h.compare(vType, 'image.*') || $h.compare(vName, /\.(gif|png|jpe?g)$/i);
+                        return $h.compare(vType, 'image.*') || $h.compare(vName, /\.(gif|png|jpe?g|JPG)$/i);
                     },
                     html: function (vType, vName) {
                         return $h.compare(vType, 'text/html') || $h.compare(vName, /\.(htm|html)$/i);

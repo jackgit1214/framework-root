@@ -1,0 +1,144 @@
+
+<header class="listview-header media p-5">
+
+	<input type="checkbox" data-on-text="全选" data-off-text="反选"
+		class="list-parent-check" id="chk_select" data-subcheck="subcheck">
+	<input type="button" value="新增" class="btn btn-sm m-r-5"
+		onclick="$.SystemApp.collInfoJscript.showEdit();" /> <input id=""
+		type="button" class="btn btn-sm m-r-5" value="修改"
+		onclick="$.SystemApp.collInfoJscript.showEdit(true);" />
+	<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+		onclick="$.SystemApp.collInfoJscript.del();">删除</button>
+</header>
+
+<div class=" table-con">
+	<div id="tableHover_collInfo" class=" tile table-data m-b-5">
+
+		<#if page.pageDatas?? > <#list page.pageDatas as collInfo >
+
+
+		<div class="col-md-11">
+			<div class="panel panel-default tile">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<input type="checkbox" name="subcheck" class="list-check"
+							value="${collInfo.collinfoid!''}">${collInfo.collname!''}
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-1 text-right">
+							<label>征集号：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.collno!''}</label>
+						</div>
+
+						<div class="col-md-1 text-right">
+							<label>征集日期：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.colldate?date}</label>
+						</div>
+						<div class="col-md-1 text-right">
+							<label>价格：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.price!''}</label>
+						</div>
+						<div class="col-md-1 text-right">
+							<label>币种：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label><@pub.outputCommCode codes=commcodes id="currency"
+								value="${collInfo.currency!''}" ></@pub.outputCommCode></label>
+						</div>
+
+						<div class="col-md-1 text-right">
+							<label>质地：</label>
+						</div>
+						<div class="col-md-1 text-left">${collInfo.collname!''}</div>
+						<div class="col-md-1 text-right">
+							<label for="logincode" class=" control-label text-right p-r-0">来源：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label><@pub.outputCode codetype="wwly" codes=wwlycodes
+								id="culrootin" value="${collInfo.culrootin!''}"
+								></@pub.outputCode> </label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-1 text-right">
+							<label>征集人：</label>
+						</div>
+						<div class="col-md-1">
+							<label>${collInfo.collectedman!''}</label>
+						</div>
+
+						<div class="col-md-1 text-right">
+							<label>数量：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.collnum!''}</label>
+						</div>
+						<div class="col-md-1 text-right">
+							<label>状态：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.status!''}</label>
+						</div>
+						<div class="col-md-1 text-right">
+							<label>是否移交：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.isdeliver!''}</label>
+						</div>
+						<div class="col-md-1 text-right">
+							<label>是否鉴定：</label>
+						</div>
+						<div class="col-md-1 text-left">
+							<label>${collInfo.isappraisal!''}</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1 p-l-0">
+			<div class="media p-l-5 p-r-5">
+				<div class="media-body">
+					<a href="${dataDefaultImageResourceUrl}/${collInfo.collinfoid!''}?permission=0" data-rel="gallery"
+						class="pirobox_gall img-popup"
+						title="" > <img
+						class="media-object" src="${dataDefaultImageResourceUrl}/${collInfo.collinfoid!''}?permission=1" alt="">
+					</a>
+
+				</div>
+
+			</div>
+		</div>
+
+
+		</#list> </#if>
+
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+		data-curpage="${page.curPage}" data-totalpage="${page.lastPage}"
+		data-param='${param!}' data-recordcount="${page.pageSize}"
+		data-linktarget="#systemData" data-pagelink="/collinfo/list">
+		<div class="pull-left attrs">第${page.curPage}
+			页，共${page.lastPage}页</div>
+		<div class="pull-right">
+			<ul class="pagination">
+
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+
+	});
+</script>

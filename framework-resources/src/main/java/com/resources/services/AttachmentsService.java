@@ -13,7 +13,7 @@ public interface AttachmentsService extends IBusinessService<CommAttachments> {
 	public String docExt = "txt|md|csv|nfo|ini|json|php|js|css|doc|docx";
 	public String videoExt = "ogg|mp4|mp?g|mov|webm|3gp";
 	public String audioExt = "ogg|mp3|mp?g|wav";
-	public String imageExt = "gif|png|jp?g|";
+	public String imageExt = "gif|png|jp?g|JP?G";
 
 	int delete(String recordId);
 

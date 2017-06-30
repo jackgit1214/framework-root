@@ -61,14 +61,20 @@ public class ShareResources {
 				&& !IImageConstant.IMAGE_MAXPERMISSION.equals(permission)) {
 			byte[] fileContent = this.attachmentsServiceImpl.getResource(
 					attaid, permission);
-
-			ServletOutputStream output;
-			try {
-				output = response.getOutputStream();
-				output.write(fileContent, 0, fileContent.length);
-				output.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (fileContent == null) {
+				// 为空时取源图片文件，图片压缩有一定时差
+				String filePath = this.attachmentsServiceImpl
+						.getResource(attaid);
+				this.getFileStream(filePath, response);
+			} else {
+				ServletOutputStream output;
+				try {
+					output = response.getOutputStream();
+					output.write(fileContent, 0, fileContent.length);
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 		} else {

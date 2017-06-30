@@ -113,6 +113,8 @@ public class AttachmentsServiceImpl extends
 				.andEqualTo("rank", permission);
 		List<CommAttaThumbnail> attaThumbnails = this.attaThumbnailMapper
 				.selectByConditionWithBLOBs(queryModel);
+		if (attaThumbnails.size() == 0)
+			return null;
 		byte[] filedata = attaThumbnails.get(0).getFiledata();
 
 		return filedata;
@@ -227,6 +229,8 @@ public class AttachmentsServiceImpl extends
 
 		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 
+		String isDefault = multiRequest.getParameter("isDefault");
+		String[] defaults = isDefault.split(",");
 		List<MultipartFile> files = new ArrayList<MultipartFile>();
 
 		MultiValueMap<String, MultipartFile> fileMaps = multiRequest
@@ -244,11 +248,12 @@ public class AttachmentsServiceImpl extends
 				.getRealPath("/");// 存储路径
 
 		storePath = storePath + uploadFilePath;
-
+		int i = 0;
 		while (iter.hasNext()) {
 			CommAttachments record = new CommAttachments();
 
 			MultipartFile file = iter.next();
+
 			// 如果文件名为空，不进行下面的保存操作
 			if (file.getOriginalFilename().isEmpty()) {
 				continue;
@@ -268,6 +273,7 @@ public class AttachmentsServiceImpl extends
 			record.setFilesize(BigDecimal.valueOf(file.getSize()));
 			String filename = attId + "_" + file.getOriginalFilename();
 			record.setAttaname(filename);
+			record.setIsDefault(defaults[i]);
 			// record.setAttatype(attatype);
 			int pos = filename.lastIndexOf(".");
 			// 取文件扩展名
@@ -311,6 +317,7 @@ public class AttachmentsServiceImpl extends
 				// this.save(record);
 			}
 			attIds.add(attId);
+			i++;
 		}
 
 		return attIds;

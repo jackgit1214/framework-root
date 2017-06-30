@@ -45,7 +45,7 @@ public class CollInfoController extends BaseController {
 	@RequestMapping("/list")
 	public ModelAndView dataList(QueryModel queryModel, Integer pageNo,
 			Integer pageNum) {
-		ModelAndView mav = new ModelAndView("coll/collinfo/listdata");
+		ModelAndView mav = new ModelAndView("coll/collinfo/listview");
 		if (pageNum == null || pageNum == 0) {
 			pageNum = SysConstant.SYSDEFAULTROWNUM;
 		}

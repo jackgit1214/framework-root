@@ -30,7 +30,7 @@
 					<td><input type="checkbox" name="subcheck" class="list-check"
 						value="${(user.userid)!}"></td>
 					<td>${user_index+1}</td>
-					<td>${user.username?html}</td>
+					<td><a href="javascript:void(0);" data-url="/system/user/view/${(user.userid)!}" data-title="用户预览" class="viewDetail">${user.username?html}</a></td>
 					<td>${user.logincode?html}</td>
 					<td><#if '${(user.gender)!}' == "1">男<#else>女</#if></td>
 					<td>${(user.phone)!}</td>

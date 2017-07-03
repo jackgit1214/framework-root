@@ -667,6 +667,10 @@
 .navbar-nav > .user-menu > .dropdown-menu > .user-body a {
   color: #444 !important;
 }
+
+.navbar-nav > .user-menu > .dropdown-menu > .user-body p {
+  color: white !important;
+}
 @media (max-width: 991px) {
   .navbar-nav > .user-menu > .dropdown-menu > .user-body a {
    

@@ -2281,10 +2281,17 @@
                     if (c === 'text') {
                         d = $h.htmlEncode(d);
                     }
-                    return tmplt.replace(/\{previewId}/g, id).replace(/\{caption}/g, caption)
-                        .replace(/\{frameClass}/g, css).replace(/\{type}/g, ftype).replace(/\{fileindex}/g, ind)
-                        .replace(/\{width}/g, w).replace(/\{height}/g, h)
-                        .replace(/\{footer}/g, footer).replace(/\{data}/g, d).replace(/\{template}/g, templ || cat);
+                    
+                   // footer = footer.replace(/\{previewId}/g, id);
+//                    return tmplt.replace(/\{previewId}/g, id).replace(/\{caption}/g, caption)
+//                        .replace(/\{frameClass}/g, css).replace(/\{type}/g, ftype).replace(/\{fileindex}/g, ind)
+//                        .replace(/\{width}/g, w).replace(/\{height}/g, h)
+//                        .replace(/\{footer}/g, footer).replace(/\{data}/g, d).replace(/\{template}/g, templ || cat);
+                    //修正下，最后替代previewID,以备增加项目其它对象的ID
+                    return tmplt.replace(/\{caption}/g, caption)
+                    .replace(/\{frameClass}/g, css).replace(/\{type}/g, ftype).replace(/\{fileindex}/g, ind)
+                    .replace(/\{width}/g, w).replace(/\{height}/g, h)
+                    .replace(/\{footer}/g, footer).replace(/\{data}/g, d).replace(/\{template}/g, templ || cat).replace(/\{previewId}/g, id);
                 };
             ind = ind || previewId.slice(previewId.lastIndexOf('-') + 1);
             if (self.fileActionSettings.showZoom) {

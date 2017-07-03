@@ -1,11 +1,11 @@
 package com.system.web.user;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +29,7 @@ public class UserController extends BaseController {
 
 	/**
 	 * 显示用户列表数据
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -43,25 +44,27 @@ public class UserController extends BaseController {
 			e.printStackTrace();
 		}
 		ModelAndView mav = new ModelAndView("system/user/listindex");
-		
-		mav.addObject("page",page);
+
+		mav.addObject("page", page);
 		return mav;
 	}
-	
+
 	/**
 	 * 显示用户列表数据
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public ModelAndView dataList(QueryModel queryModel,Integer pageNo, Integer pageNum) {
-		
-		if (pageNum==null || pageNum==0){
+	public ModelAndView dataList(QueryModel queryModel, Integer pageNo,
+			Integer pageNum) {
+
+		if (pageNum == null || pageNum == 0) {
 			pageNum = SysConstant.SYSDEFAULTROWNUM;
 		}
 
-		if (pageNo==null || pageNo==1){
-			pageNo=1;
+		if (pageNo == null || pageNo == 1) {
+			pageNo = 1;
 		}
 		queryModel.reInitCriteria();
 		PageResult<SysUser> page = new PageResult<SysUser>(pageNo, pageNum);
@@ -71,29 +74,49 @@ public class UserController extends BaseController {
 			e.printStackTrace();
 		}
 		ModelAndView mav = new ModelAndView("system/user/listdata");
-		
-		mav.addObject("param",JSON.toJSONString(queryModel));
-		mav.addObject("page",page);
+
+		mav.addObject("param", JSON.toJSONString(queryModel));
+		mav.addObject("page", page);
 		return mav;
 	}
-	
+
 	/**
 	 * 显示新增或编辑界面
-	 * @param userid 
-	 * 			userid为空时显示的是新增界面，否则显示的是编辑界面。
+	 * 
+	 * @param userid
+	 *            userid为空时显示的是新增界面，否则显示的是编辑界面。
 	 * @return
 	 */
 	@RequestMapping("/showEditUser")
-	public ModelAndView showEditUserWin(String userid){
+	public ModelAndView showEditUserWin(String userid) {
 		ModelAndView mav = new ModelAndView("system/user/editUser");
-		SysUser user =  this.systemUserServiceImpl.findObjectById(userid);
-		
-		if (user==null)
+		SysUser user = this.systemUserServiceImpl.findObjectById(userid);
+
+		if (user == null)
 			user = new SysUser();
 		List<SysRole> sysRoles = this.systemUserServiceImpl.getUserRole(user);
-		
-		mav.addObject("user",user);
-		mav.addObject("roles",sysRoles);
+
+		mav.addObject("user", user);
+		mav.addObject("roles", sysRoles);
+		return mav;
+	}
+
+	/**
+	 * 显示新增或编辑界面
+	 * 
+	 * @param userid
+	 *            userid为空时显示的是新增界面，否则显示的是编辑界面。
+	 * @return
+	 */
+	@RequestMapping("/view/{userid}")
+	public ModelAndView viewUser(@PathVariable String userid) {
+
+		ModelAndView mav = new ModelAndView("system/user/viewUser");
+		SysUser user = this.systemUserServiceImpl.findObjectById(userid);
+		List<SysRole> sysRoles = this.systemUserServiceImpl.getUserRole(user);
+		mav.addObject("roles", sysRoles);
+		mav.addObject("user", user);
+
 		return mav;
 	}
 
@@ -102,31 +125,32 @@ public class UserController extends BaseController {
 	 * 
 	 * @return
 	 */
-	
+
 	@ResponseBody
 	@RequestMapping("/updateUser")
-	public ModelMap addOrUpdateUser(SysUser user,String[] roleids){
+	public ModelMap addOrUpdateUser(SysUser user, String[] roleids) {
 		ModelMap mm = new ModelMap();
-		int rows = this.systemUserServiceImpl.saveUser(user,roleids);
-		mm.addAttribute("successRows",rows);
+		int rows = this.systemUserServiceImpl.saveUser(user, roleids);
+		mm.addAttribute("successRows", rows);
 		return mm;
-		
+
 	}
-	
+
 	/**
 	 * 新增或保存编辑数据
 	 * 
 	 * @return
 	 */
-	
+
 	@ResponseBody
 	@RequestMapping("/deleteUser")
-	public ModelMap deleteUser(@RequestParam(value="ids[]",required=false)String[] ids){
+	public ModelMap deleteUser(
+			@RequestParam(value = "ids[]", required = false) String[] ids) {
 		ModelMap mm = new ModelMap();
-		
+
 		int rows = this.systemUserServiceImpl.delete(ids);
-		mm.addAttribute("successRows",rows);
+		mm.addAttribute("successRows", rows);
 		return mm;
-		
+
 	}
 }

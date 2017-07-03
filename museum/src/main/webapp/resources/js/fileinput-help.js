@@ -55,6 +55,7 @@
         //初始化文件图标信息
         this.settings = $.extend(true, {}, this.init, options);
         //初始化图标信息
+       
         this._setFileInputParam();
         this.winDialog = this._initAttachmentWin();
         
@@ -121,7 +122,7 @@
                     
                     actionDrag:'',
                 	footer: '<div class="file-thumbnail-footer">\n' +
-                    '    <div class="file-footer-caption" title="{caption}">{caption}</div>\n</div>{actions}'//只显示文件名信息
+                    '  <div class="file-footer-caption" title="{caption}"><div class="radio m-t-0 m-b-0 chk-preview"> <label class="p-0"> <input type="radio" value="0" name="radio">{caption} </label></div></div>\n</div>{actions}'//只显示文件名信息
                 }
             }
     	},
@@ -172,6 +173,7 @@
     			},
     			pageCallback:function(){
     				$that.fileComponet = $that._initFileInputCom();
+    				
     				$that.showFiles();
     			}
     		},$that.settings.url);
@@ -243,6 +245,7 @@
          */
         typeFilter:function(dataId,type,isRefresh){
         	
+        	        	
         	var dataurl = pluginParam.busiDataUrl+"/"+dataId;
 
 			if (type)
@@ -268,13 +271,32 @@
 	    			initDataCon.push(dataCon);
 	    		});
 	    		$this.fileinputShow(initData,initDataCon,isRefresh);
+	    		$('.chk-preview').iCheck({
+		            checkboxClass: 'icheckbox_minimal',
+		            radioClass: 'iradio_minimal',
+		            increaseArea: '20%' // optional
+		        });
+	    		$this._bindRadioEvent();
+				
 	    	});
+		},
+		_bindRadioEvent:function(){
+
+			var $thumb = this.parentContainer.find(".file-preview-thumbnails").children().not(".kv-zoom-cache");
+			var $chk = $thumb.find(".radio");
+			
+			$chk.on("click",function(){
+				
+				var $that = $(this);
+				//$chk.find("input").val(0);
+				//$that.val(1);
+			});
 		},
 		_initFileInputCom:function(){
 			var $this = this;
 			var $fileComponet=$(this.settings.showContainer);
 			 var $comP = $fileComponet.parent();
-			 
+			 $this.parentContainer = $comP;
 			var config = this._initFileInputConfig();
 			$fileComponet.fileinput('destroy');
 			
@@ -285,17 +307,33 @@
 					 $this.updateFileContainer();
 				},1000);
 			  
+			}).on('filebatchselected', function(event, files) {
+		        $('.chk-preview').iCheck({
+		            checkboxClass: 'icheckbox_minimal',
+		            radioClass: 'iradio_minimal',
+		            increaseArea: '20%' // optional
+		        });
 			}).on('filebatchuploadcomplete', function(event, files, extra) {
 				$this.showFiles(); //重新刷新下，否则不能新增加的附件不能删除。
-				setTimeout(function(){
-					$fileComponet.fileinput("reset"); //重新刷新下，否则不能新增加的附件不能删除。
-				},600);
-				//$fileComponet.fileinput("reset");
-				//$this.updateFileContainer();
-//				console.log(files);
-//				console.log(extra);
-//				var filecount = $fileComponet.fileinput("getFilesCount");
-//				console.log(filecount);
+//				setTimeout(function(){
+//					$fileComponet.fileinput("reset"); //重新刷新下，否则不能新增加的附件不能删除。
+//				},600);
+			}).on('filebatchpreupload', function(event, data, previewId, index) {
+				//这里可上传每个文件的数据，例如是否缺省
+				var form = data.form, files = data.files, extra = data.extra;
+				
+				var $thumb = $comP.find(".file-preview-thumbnails").children().not(".kv-zoom-cache");
+				
+				var $chk = $thumb.find("input[type=radio]");
+				var chkvalue = [$chk.length];
+				$.each($chk,function(i,obj){
+					var isCheck = $(obj).is(':checked');
+					if (isCheck)
+						chkvalue[i]=1;
+					else
+						chkvalue[i]=0;
+				});
+				form.append("isDefault",chkvalue);
 			});
 //			$fileComponet.fileinput(config).on("filedeleted",function (event,key) {
 //            	$this.updateFileContainer();
@@ -307,13 +345,14 @@
 //            .on("filebatchuploadsuccess",function (event,data,previewId,index) {
 //           	 	$this.updateFileContainer();
 //            });
-			
+
 			$comP.on('dblclick','.kv-preview-thumb > .kv-file-content',function(){
     			var $that = $(this);
     			var previewid = $that.parent().attr("id");
     			$fileComponet.fileinput('zoom', previewid);
-    		});			
+    		});		
 			
+
 			return $fileComponet;
 			
 		},
@@ -332,6 +371,7 @@
 			var fileCon = $(this.settings.fileListContainer); 
 			var $filepreview = $(".file-preview").clone();
 			$filepreview.find(".kv-file-remove").remove();
+			$filepreview.find(".chk-preview").remove();
 			var filecount = this.fileComponet.fileinput("getFilesCount");
 			if (filecount <=0){
 				$filepreview.find(".file-drop-zone-title").html("<br/>无附件<br/>");

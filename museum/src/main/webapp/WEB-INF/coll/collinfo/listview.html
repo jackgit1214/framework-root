@@ -1,14 +1,18 @@
 
 <header class="listview-header media p-5">
 
-	<input type="checkbox" data-on-text="全选" data-off-text="反选"
-		class="list-parent-check" id="chk_select" data-subcheck="subcheck">
-	<input type="button" value="新增" class="btn btn-sm m-r-5"
-		onclick="$.SystemApp.collInfoJscript.showEdit();" /> <input id=""
-		type="button" class="btn btn-sm m-r-5" value="修改"
-		onclick="$.SystemApp.collInfoJscript.showEdit(true);" />
-	<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
-		onclick="$.SystemApp.collInfoJscript.del();">删除</button>
+	 <div class="pull-right make-switch switch-small p-l-2" id="select_btn" name="select_btn" 
+	 	data-on-label="全选" data-off-label="清空">
+	       <input type="checkbox"  class="list-parent-check" />
+	</div>
+	<div class="pull-left">
+		<input type="button" value="新增" class="btn btn-sm m-r-5"
+			onclick="$.SystemApp.collInfoJscript.showEdit();" /> <input id=""
+			type="button" class="btn btn-sm m-r-5" value="修改"
+			onclick="$.SystemApp.collInfoJscript.showEdit(true);" />
+		<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+			onclick="$.SystemApp.collInfoJscript.del();">删除</button>
+	</div>	
 </header>
 
 <div class=" table-con">
@@ -137,8 +141,14 @@
 
 <script type="text/javascript">
 	$(function() {
-		$.SystemApp.initComponents();
+		//$.SystemApp.initComponents();
 		$.SystemApp.pagetoolbar.toolbarInit();
-
+		$('#select_btn').on('switch-change', function (e, data) {
+			var value = data.value;
+			if (value)
+			 	$(this).closest('.list-container').find('.list-check').iCheck('check');
+			else
+				$(this).closest('.list-container').find('.list-check').iCheck('uncheck');
+		});
 	});
 </script>

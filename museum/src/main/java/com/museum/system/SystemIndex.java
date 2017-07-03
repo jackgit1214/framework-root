@@ -1,7 +1,11 @@
 package com.museum.system;
 
+import java.util.Calendar;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,16 +27,16 @@ public class SystemIndex extends BaseController {
 
 	@Autowired
 	private ISystemUserService systemUserServiceImpl;
-	
+
 	@RequestMapping("/loginSuccess")
 	public ModelAndView login(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		ModelAndView mav = new ModelAndView("index");
-		SysUser user = (SysUser)this.getSessionUser();
+		SysUser user = (SysUser) this.getSessionUser();
 		if (user != null) {
 			this.sessionManager.setUser(user);
-			//this.systemUserServiceImpl.getUserModule(user, null);
+			// this.systemUserServiceImpl.getUserModule(user, null);
 			mav.addObject("user", user);
 		} else {
 			request.getSession().invalidate();
@@ -49,22 +53,36 @@ public class SystemIndex extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/checkUserPassword")
-	public ModelMap checkUserPasword(String loginid, String password,HttpServletRequest request) {
+	public ModelMap checkUserPasword(String loginid, String password,
+			HttpServletRequest request) {
 		boolean isSuccess = false;
 		ModelMap modelMap = new ModelMap();
-		SysUser user = this.systemUserServiceImpl.checkUserLogin(loginid,password);
+		HttpSession session = request.getSession(true);
+
+		if (session != null) {
+			// session清空，登录成功后重新启动session ，避免会话标识未更新的安全错误(appscan扫描结果）
+			session.invalidate();
+			Cookie cookie = request.getCookies()[0];// 获取cookie
+			cookie.setMaxAge(0);// 让cookie过期
+		}
+
+		SysUser user = this.systemUserServiceImpl.checkUserLogin(loginid,
+				password);
+
 		if (user != null) {
 			SessionManager sessionManager = new SessionManager();
 			sessionManager.setUser(user);
+			sessionManager.setLoginDate(Calendar.getInstance().getTime());
 			isSuccess = true;
-			request.getSession().setAttribute("sessionManager",sessionManager);
+			request.getSession().setAttribute("sessionManager", sessionManager);
 		}
 		modelMap.addAttribute("isSuccess", isSuccess);
 		return modelMap;
-	}	
-	
+	}
+
 	/**
 	 * 检测用户密码是否合法
+	 * 
 	 * @param loginid
 	 * @param password
 	 * @param request
@@ -72,13 +90,30 @@ public class SystemIndex extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("/passwordValid")
-	public boolean passwordValid(String userid, String password,HttpServletRequest request) {
+	public boolean passwordValid(String userid, String password,
+			HttpServletRequest request) {
 		boolean isSuccess = true;
-		SysUser user = this.systemUserServiceImpl.checkUserLogin(userid,password);
+		SysUser user = this.systemUserServiceImpl.checkUserLogin(userid,
+				password);
 		if (user != null) {
 			isSuccess = true;
 		}
 		return isSuccess;
-	}	
-	
+	}
+
+	/**
+	 * 退出系统
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	public ModelAndView logout(HttpServletRequest request) {
+
+		ModelAndView mav = new ModelAndView("index");
+		request.getSession().invalidate();
+		mav.setViewName("redirect:/index");
+
+		return mav;
+	}
 }

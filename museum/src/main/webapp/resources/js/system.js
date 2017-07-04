@@ -379,58 +379,49 @@ $.SystemApp.options = {
 		showMaxPageNum : 5
 	}
 };
-$(document)
-		.ready(
-				function() {
-					(function() {
+$(document).ready(function() { (function() {
 
-						$('body')
-								.on(
-										'click',
-										'.side-menu > li > a, .side-menu > li > ul > li > a',
-										function(e) {
-											e.preventDefault();
-											var $this = $(this);
-											var href = $.SystemApp.contextPath
-													+ $this.attr('href');
-											if (href == '')
-												return;
+	    $('body').on('click', '.side-menu > li > a, .side-menu > li > ul > li > a',
+	    function(e) {
+	        e.preventDefault();
+	        var $this = $(this);
+	        var href = $.SystemApp.contextPath + $this.attr('href');
+	        if (href == '') return;
+	        
+	        $('#main-content').load(href, {},
+	        function() {
+	        	var dataParm = {name:$this.html(),link:$this.attr('href')};
+	        	
+	        	$.post($.SystemApp.contextPath+"/putHistory", dataParm, function(data){
+	        		var $bodyNav = $("#bodyNav");
+	        		$bodyNav.html("");
+	        		$.each(data.history,function(i,obj){
+	        			//<li><a href='${sessionManager.history["${key}"][1]}' >${sessionManager.history["${key}"][0]}</a></li>
+	        			var $lia = $("<a>");
+	        			$lia.attr("href",obj[1]).html(obj[0]);
+	        			var $li = $("<li>");
+	        			$li.append($lia);
+	        			$bodyNav.append($li);
+	        		});
+	        	});
 
-											$('#main-content')
-													.load(
-															href,
-															{},
-															function() {
+	        	
+	            if ($('[class*=\'form-validation\']')[0]) {
+	                $('[class*=\'form-validation\']').validationEngine();
+	                $('body').on('click', '.validation-clear',
+	                function(e) {
+	                    e.preventDefault();
+	                    $(this).closest('form').validationEngine('hide');
+	                });
+	            };
+	        });
+	    });
 
-																if ($('[class*=\'form-validation\']')[0]) {
-																	$(
-																			'[class*=\'form-validation\']')
-																			.validationEngine();
-																	$('body')
-																			.on(
-																					'click',
-																					'.validation-clear',
-																					function(
-																							e) {
-																						e
-																								.preventDefault();
-																						$(
-																								this)
-																								.closest(
-																										'form')
-																								.validationEngine(
-																										'hide');
-																					});
-																}
-																;
-															});
-										});
+	})();
+	$.SystemApp.controlSidebar.activate();
+	$.SystemApp.initContentArea();
 
-					})();
-					$.SystemApp.controlSidebar.activate();
-					$.SystemApp.initContentArea();
-
-				});
+});
 
 $.SystemApp.initContentArea = function() {
 

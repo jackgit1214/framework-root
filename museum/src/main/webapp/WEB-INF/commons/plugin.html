@@ -112,6 +112,17 @@
 	</header>
 </#macro>
 
+<#macro bodyNav>
+
+	<ol class=" breadcrumb hidden-xs" id="bodyNav">
+		<#list sessionManager.history?keys as key>  
+			<li><a href='${sessionManager.history["${key}"][1]}' >${sessionManager.history["${key}"][0]}</a></li>
+          	
+    	</#list>  
+				
+	</ol>
+	
+</#macro>
 
 <#macro skinSider >
 	<aside  class="control-sidebar control-sidebar-dark">

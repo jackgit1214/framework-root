@@ -2,6 +2,10 @@ package com.system.common;
 
 public interface SysConstant {
 
+	public static String INDEX_SIGN = "index"; // 首页存储标志
+	public static String FIRST_LINK_SIGN = "FIRST"; // 一级连接存储标志
+	public static String SECOUND_LINK_SIGN = "SECOUND"; // 二级连接存储标志
+
 	/** 系统缺省管理员 */
 	public static final String SYSDEFAULTMANAGER = "admin";
 

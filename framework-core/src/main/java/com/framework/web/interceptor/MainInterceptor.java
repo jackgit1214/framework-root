@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,6 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import com.framework.common.anaotation.LinkHistoryAnaotation;
+import com.framework.web.util.SessionManager;
 
 public class MainInterceptor extends HandlerInterceptorAdapter {
 
@@ -66,10 +70,28 @@ public class MainInterceptor extends HandlerInterceptorAdapter {
 			ModelAndView modelAndView) throws Exception {
 		// TODO Auto-generated method stub
 		// _modelAndView.setViewName("/responseMessage");
+
+		HttpSession session = _request.getSession();
+
+		SessionManager sessionManager = (SessionManager) session
+				.getAttribute("sessionManager");
+		if (sessionManager != null) {
+			HandlerMethod handlerMethod = (HandlerMethod) _handler;
+			Method method = handlerMethod.getMethod();
+
+			LinkHistoryAnaotation annotation = method
+					.getAnnotation(LinkHistoryAnaotation.class);
+			if (annotation != null) {
+				String level = annotation.linkLevel();
+				String key = annotation.linkName();
+				String value = annotation.linkValue();
+				sessionManager.setHistory(level, key, value);
+			}
+		}
+
+		// 存放资源路径
 		if (modelAndView != null) {
-
 			// 上传图片路径及地址
-
 			// 资源路径
 			modelAndView.addObject("resourceUrl", this.resourceUrl);
 			// 根据数据ID取得的资源路径

@@ -169,6 +169,9 @@
 .content-header > .breadcrumb > li + li:before {
   content: '>\00a0';
 }
+.breadcrumb>li+li:before  {
+  content: '>\00a0' !important;
+}
 @media (max-width: 991px) {
   .content-header > .breadcrumb {
     position: relative;

@@ -11,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.framework.common.anaotation.LinkHistoryAnaotation;
 import com.framework.web.controller.BaseController;
 import com.framework.web.util.SessionManager;
+import com.system.common.SysConstant;
 import com.system.model.SysUser;
 import com.system.mybatis.service.ISystemUserService;
 
@@ -29,12 +32,14 @@ public class SystemIndex extends BaseController {
 	private ISystemUserService systemUserServiceImpl;
 
 	@RequestMapping("/loginSuccess")
+	@LinkHistoryAnaotation(linkLevel = SysConstant.INDEX_SIGN, linkName = "首页", linkValue = "/index")
 	public ModelAndView login(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		ModelAndView mav = new ModelAndView("index");
 		SysUser user = (SysUser) this.getSessionUser();
 		if (user != null) {
+			this.sessionManager.clearHistory();
 			this.sessionManager.setUser(user);
 			// this.systemUserServiceImpl.getUserModule(user, null);
 			mav.addObject("user", user);
@@ -115,5 +120,22 @@ public class SystemIndex extends BaseController {
 		mav.setViewName("redirect:/index");
 
 		return mav;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "putHistory", method = { RequestMethod.POST })
+	public ModelMap putHistory(String name, String link,
+			HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		ModelMap mm = new ModelMap();
+		SessionManager sessionManager = (SessionManager) session
+				.getAttribute("sessionManager");
+		if (sessionManager != null) {
+			this.sessionManager.setHistory(SysConstant.SECOUND_LINK_SIGN, name,
+					link);
+		}
+		mm.addAttribute("history", this.sessionManager.getHistory());
+
+		return mm;
 	}
 }

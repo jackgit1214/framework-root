@@ -13,13 +13,7 @@
 
 		<!-- Content -->
 		<section id="content" class="container" >
-	
-			<!-- Breadcrumb -->
-			<ol class="breadcrumb hidden-xs">
-				<li><a href="#" onclick="$('#code_add').modal('show');">首页</a></li>
-				<li><a href="javascript:void('0');">菜单</a></li>
-				<li class="active">Data</li>
-			</ol>
+			<@bodyNav/>
 
 			<div id="time" class="pull-right breadcrumb hidden-xs">
                  <span id="hours"></span> :<span id="min"></span>:<span id="sec"></span>
@@ -43,6 +37,7 @@ $(function() {
 	$.SystemApp.initMenu("/func/getFunction");
 	
 	$.SystemApp.initComponents();
+	
 });	
 </script>
 

@@ -398,7 +398,8 @@ $(document).ready(function() { (function() {
 	        		$.each(data.history,function(i,obj){
 	        			//<li><a href='${sessionManager.history["${key}"][1]}' >${sessionManager.history["${key}"][0]}</a></li>
 	        			var $lia = $("<a>");
-	        			$lia.attr("href",obj[1]).html(obj[0]);
+	        			$lia.attr("href","javascript:void(0);").html(obj[0]);
+	        			//$lia.attr("href",obj[1]).html(obj[0]);
 	        			var $li = $("<li>");
 	        			$li.append($lia);
 	        			$bodyNav.append($li);

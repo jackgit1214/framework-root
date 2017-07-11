@@ -17,11 +17,28 @@
 		<result column="userorder" property="userorder" jdbcType="TINYINT" />
 		<result column="USERSTATUS" property="userstatus" jdbcType="TINYINT" />
 	</resultMap>
+	
+	  <resultMap id="ResultMapWithBLOBs" type="com.system.model.SysUser">
+	 	 <id column="USERID" property="userid" jdbcType="VARCHAR" />
+	    <result column="avatar" jdbcType="BLOB" property="avatar"   typeHandler="org.apache.ibatis.type.BlobTypeHandler" />
+	  </resultMap>	
+	  
 	<sql id="Base_Column_List">
 		USERID, LOGINCODE, VALID, username, PASSWORD, gender, age, birthday, qq,
 		email, address,
 		phone, userorder, USERSTATUS
 	</sql>
+	<sql id="Blob_Column_List">
+    	userid,avatar
+  	</sql>
+  	
+  	<select id="getAvatarByUserid" resultMap = "ResultMapWithBLOBs" parameterType="java.lang.String">
+  		select 
+  		<include refid="Blob_Column_List"/>
+  		from sys_user
+  		where userid=#{userid,jdbcType=VARCHAR}
+  	</select>
+  	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
 		select
@@ -199,6 +216,12 @@
 		phone = #{phone,jdbcType=VARCHAR},
 		userorder = #{userorder,jdbcType=TINYINT},
 		USERSTATUS = #{userstatus,jdbcType=TINYINT}
+		where USERID = #{userid,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateUserAvatar" parameterType="com.system.model.SysUser">
+		update sys_user
+		set  avatar = #{avatar,jdbcType=LONGVARBINARY}
 		where USERID = #{userid,jdbcType=VARCHAR}
 	</update>
 	

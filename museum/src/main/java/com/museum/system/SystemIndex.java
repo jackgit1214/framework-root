@@ -1,6 +1,7 @@
 package com.museum.system;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.framework.common.anaotation.LinkHistoryAnaotation;
 import com.framework.web.controller.BaseController;
 import com.framework.web.util.SessionManager;
+import com.museum.model.MessageInbox;
+import com.museum.service.MessageInboxService;
 import com.system.common.SysConstant;
 import com.system.model.SysUser;
 import com.system.mybatis.service.ISystemUserService;
@@ -31,6 +34,9 @@ public class SystemIndex extends BaseController {
 	@Autowired
 	private ISystemUserService systemUserServiceImpl;
 
+	@Autowired
+	private MessageInboxService messageInboxServiceImpl;
+
 	@RequestMapping("/loginSuccess")
 	@LinkHistoryAnaotation(linkLevel = SysConstant.INDEX_SIGN, linkName = "首页", linkValue = "/index")
 	public ModelAndView login(HttpServletRequest request,
@@ -41,8 +47,11 @@ public class SystemIndex extends BaseController {
 		if (user != null) {
 			this.sessionManager.clearHistory();
 			this.sessionManager.setUser(user);
+			List<MessageInbox> messages = this.messageInboxServiceImpl
+					.getUserMessage(user.getUserid());
 			// this.systemUserServiceImpl.getUserModule(user, null);
 			mav.addObject("user", user);
+			mav.addObject("messages", messages);
 		} else {
 			request.getSession().invalidate();
 			mav.setViewName("redirect:/index");

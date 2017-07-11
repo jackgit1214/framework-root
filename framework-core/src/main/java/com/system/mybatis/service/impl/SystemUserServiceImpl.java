@@ -1,12 +1,18 @@
 package com.system.mybatis.service.impl;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.framework.common.util.UUIDUtil;
 import com.framework.mybatis.dao.Base.BaseDao;
@@ -24,23 +30,22 @@ import com.system.mybatis.service.ISysModuleService;
 import com.system.mybatis.service.ISystemUserService;
 
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 public class SystemUserServiceImpl extends AbstractBusinessService<SysUser>
 		implements ISystemUserService {
 
 	@Autowired
 	private SysUserMapper sysUserMapper;
-	
+
 	@Autowired
 	private SysRoleMapper sysRoleMapper;
-	
+
 	@Autowired
 	private ISysModuleService sysModuleServiceImpl;
 
-	
 	@Autowired
 	private SysRoleUserMapper sysRoleUserMapper;
-	
+
 	@Override
 	public BaseDao getDao() {
 		// TODO Auto-generated method stub
@@ -105,53 +110,83 @@ public class SystemUserServiceImpl extends AbstractBusinessService<SysUser>
 	 */
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-	public int saveUser(SysUser user,String[] roleids) {
+	public int updateUser(SysUser user, HttpServletRequest request) {
+
+		int rows = this.sysUserMapper.updateByPrimaryKeySelective(user);
+
+		MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+
+		MultiValueMap<String, MultipartFile> fileMaps = multiRequest
+				.getMultiFileMap();
+		if (fileMaps.size() > 0) {
+			MultipartFile avatarFile = fileMaps.getFirst(this.USERAVATAR);
+			try {
+				byte[] avatar = avatarFile.getBytes();
+				if (avatar.length > 0) { // 不为空时存储数据
+					user.setAvatar(avatar);
+					this.sysUserMapper.updateUserAvatar(user);
+				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return rows;
+	}
+
+	/**
+	 * 保存用户 当用户ID为空时，增加用户数据。
+	 */
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public int saveUser(SysUser user, String[] roleids) {
 
 		int rows = 0;
 		String userid = null;
 		if (user.getUserid() == null || "".equals(user.getUserid())) {
-			
+
 			Md5PasswordEncoder md5 = new Md5PasswordEncoder();
 			user.setPassword(md5.encodePassword(user.getLogincode(),
 					SysConstant.SYSDEFAULTPASSWORD));
 			userid = UUIDUtil.getUUID();
 			user.setUserid(userid);
 			rows = this.sysUserMapper.insertSelective(user);
-		} else{
+		} else {
 			rows = this.sysUserMapper.updateByPrimaryKeySelective(user);
-			userid =  user.getUserid();
+			userid = user.getUserid();
 		}
-		if (roleids!=null)
+		if (roleids != null)
 			this.saveRoleUser(userid, roleids);
 		return rows;
 	}
-	
+
 	/**
-	 * 存储角色与人员关联表数据，
-	 * 先删除后插入
+	 * 存储角色与人员关联表数据， 先删除后插入
+	 * 
 	 * @param userid
 	 * @param roleids
 	 */
-	private void saveRoleUser(String userid,String[] roleids){
-		
+	private void saveRoleUser(String userid, String[] roleids) {
+
 		QueryModel queryModel = new QueryModel();
 		QueryModel.Criteria criteria = queryModel.createCriteria();
-		
+
 		criteria.andEqualTo("userid", userid);
-	
-		//先删除后增加
+
+		// 先删除后增加
 		this.sysRoleUserMapper.deleteByCondition(queryModel);
 		for (String roleid : roleids) {
-			if (roleid==null||"".equals(roleid.trim()))
+			if (roleid == null || "".equals(roleid.trim()))
 				continue;
 			SysRoleUser sysRoleUser = new SysRoleUser();
-			
+
 			sysRoleUser.setRoleid(roleid);
 			sysRoleUser.setUserid(userid);
 			this.sysRoleUserMapper.insert(sysRoleUser);
 		}
 	}
-	
+
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public int delete(String[] ids) {
@@ -161,7 +196,7 @@ public class SystemUserServiceImpl extends AbstractBusinessService<SysUser>
 			rows = rows + this.sysUserMapper.deleteByPrimaryKey(id);
 			QueryModel queryModel = new QueryModel();
 			QueryModel.Criteria criteria = queryModel.createCriteria();
-			
+
 			criteria.andEqualTo("userid", id);
 			this.sysRoleUserMapper.deleteByCondition(queryModel);
 		}
@@ -202,9 +237,19 @@ public class SystemUserServiceImpl extends AbstractBusinessService<SysUser>
 		// TODO Auto-generated method stub
 		QueryModel queryModel = new QueryModel();
 		queryModel.setOrderByClause("a.rolename");
-		
-		List<SysRole> sysRoles = this.sysRoleMapper.getSysRoleByUser(user.getUserid(), queryModel);
+
+		List<SysRole> sysRoles = this.sysRoleMapper.getSysRoleByUser(
+				user.getUserid(), queryModel);
 		return sysRoles;
+	}
+
+	@Override
+	public byte[] getUserAvatar(String userId) {
+		// TODO Auto-generated method stub
+
+		SysUser user = this.sysUserMapper.getAvatarByUserid(userId);
+		byte[] avatar = user.getAvatar();
+		return avatar;
 	}
 
 }

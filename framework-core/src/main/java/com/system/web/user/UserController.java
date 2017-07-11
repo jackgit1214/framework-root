@@ -1,12 +1,21 @@
 package com.system.web.user;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -133,7 +142,54 @@ public class UserController extends BaseController {
 		int rows = this.systemUserServiceImpl.saveUser(user, roleids);
 		mm.addAttribute("successRows", rows);
 		return mm;
+	}
 
+	@ResponseBody
+	@RequestMapping("/updateAvatar")
+	public ModelMap updateUserWithAvatar(SysUser user,
+			HttpServletRequest request) {
+		ModelMap mm = new ModelMap();
+		int rows = this.systemUserServiceImpl.updateUser(user, request);
+
+		mm.addAttribute("successRows", rows);
+		return mm;
+	}
+
+	@RequestMapping(value = "image/{userId}", method = RequestMethod.GET)
+	public void getImageResource(@PathVariable String userId,
+			HttpServletResponse response) {
+
+		ServletOutputStream output = null;
+		InputStream in = null;
+		byte[] avatar = this.systemUserServiceImpl.getUserAvatar(userId);
+		if (avatar != null) {
+
+			try {
+				output = response.getOutputStream();
+				output.write(avatar, 0, avatar.length);
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			String path = this.getClass().getResource("/").getPath();
+			String zwtp = path + "/config/zwtp.gif";
+			File file = new File(zwtp);
+			byte[] tempbytes = new byte[1024];
+			int byteread = 0;
+			try {
+				in = new FileInputStream(file);
+				output = response.getOutputStream();
+
+				while ((byteread = in.read(tempbytes)) != -1) {
+					output.write(tempbytes, 0, byteread);
+				}
+				output.flush();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

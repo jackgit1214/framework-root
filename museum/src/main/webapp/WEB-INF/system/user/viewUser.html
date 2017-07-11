@@ -1,3 +1,26 @@
+<style>
+.kv-avatar .krajee-default.file-preview-frame,.kv-avatar .krajee-default.file-preview-frame:hover {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+}
+.krajee-default.file-preview-frame .kv-file-content {
+    height: 120px !important;
+}
+
+.kv-avatar .file-input {
+    display: table-cell;
+    max-width: 200px;
+    max-height:280px;
+}
+.kv-reqd {
+    color: red;
+    font-family: monospace;
+    font-weight: normal;
+}
+</style>
 <script type=text/javascript>
 	var userEditJscript = {
 		init_UI : function() {
@@ -7,97 +30,178 @@
 			}else
 				$("#man").iCheck('check');
 			
-			$(".viewDetail").find("input").attr("disabled",true);
+			var sessionUser = $("#sessionUserId").val();
+			var curUser = $("#userid").val();
+
+			if (sessionUser != curUser){
+				$(".viewDetail").find("input").attr("disabled",true);
+				$("#btnUserSave").hide();
+			}else{
+				$("#userRoleView").hide();
+			}
+		},
+		userSave : function(formObject) {
+			var $this = this;
+			var $formObject = $(formObject);
+			var validateResult = $formObject.validationEngine('validate');
+			if (!validateResult)
+				return false;
+
+			//利用h5实现附件上传
+		    var data = new FormData($formObject[0]);  
+		    $.ajax({  
+		          url: $.SystemApp.contextPath + "/system/user/updateAvatar",  
+		          type: 'POST',  
+		          data: data,  
+		          async: false,  
+		          cache: false,  
+		          contentType: false,  
+		          processData: false,  
+		          success: function(data) {
+						if (data.successRows > 0) {
+							alert("数据保存成功！");
+							$this.dialogObj.modal("hide");
+							$.SystemApp.pagetoolbar.refreshData();
+						} else {
+							alert("数据保存失败！");
+						}
+
+					}
+		     }); 
+			
+		},
+		init_avatar:function(){
+			var btnCust = '<button type="button" class="btn btn-default" title="Add picture tags" ' + 
+		    'onclick="alert(\'Call your custom code here.\')">' +
+		    '<i class="glyphicon glyphicon-tag"></i>' +
+		    '</button>'; 
+
+		    var imgUrl =  $.SystemApp.contextPath+"/system/user/image/"+$("#userid").val();
+			$("#userAvatar").fileinput({
+			    overwriteInitial: true,
+			    initialPreview: ['<img src="'+imgUrl+'" style="width:160px"  alt="照片" title="照片">'],
+			    maxFileSize: 1500,
+			    showClose: false,
+			    showCaption: false,
+			    showBrowse: false,
+			    showZoom:false,
+			    browseOnZoneClick: true,
+			    removeLabel: '',
+			    removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
+			    removeTitle: 'Cancel or reset changes',
+			    elErrorContainer: '#kv-avatar-errors-2',
+			    msgErrorClass: 'alert alert-block alert-danger',
+			    defaultPreviewContent: '<img src="img/avatar_male.jpg" alt="照片" style="width:160px"><h6 class="text-muted">点击选择照片</h6>',
+			    layoutTemplates: {main2: '{preview} '  + ' {remove} {browse}'},
+			    allowedFileExtensions: ["jpg", "png", "gif"]
+			});
 		}
-		
 	};
 
 	$(function() {
 		userEditJscript.init_UI();
-		
+		userEditJscript.init_avatar();
 	});
 
 </script>
 <div id="viewUser" class="div_detail viewDetail">
-	<form id="userform" name="userform"
-		class="form-validation-1 form-horizontal">
+	<input type="hidden" id="sessionUserId" name="sessionUserId" value="${sessionManager.user.userid!''}"/>
+	<form id="userform" name="userform" enctype ="multipart/form-data" 
+		class="form-validation-1 form-horizontal row form-columned" role="form">
 		<input type="hidden" id="gender_v" name="gender_v" value="${user.gender!0}"/>
 		
 		<input type="hidden" id="userid" name='userid'
 						value="${user.userid!''}" />
-	<div class="form-group">
-			<label for="logincode" class="col-md-2 control-label">登录名：</label>
-			<div class="col-md-10">
-				<input  type="text" id="logincode" name="logincode" data-label="登录名"
-					value="${user.logincode!''}"
-					class="input-sm validate[required] form-control"
-					placeholder="enter content" />
+		<div class="col-md-8 ">
+			<div class="form-group m-l-2 m-r-2">
+				<label for="logincode" class="col-md-2  control-label">登录名：</label>
+				<div class="col-md-10 ">
+					<input  type="text" id="logincode" name="logincode" data-label="登录名"
+						value="${user.logincode!''}"
+						class="input-sm validate[required] form-control"
+						placeholder="enter content" />
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="form-group m-l-2 m-r-2">
+				<label for="username" class="col-md-2 control-label">姓名：</label>
+				<div class="col-md-10">
+					<input type="text" id="username" name="username" data-label="登录名"
+						value="${user.username!''}"
+						class="input-sm validate[required] form-control"
+						placeholder="enter content" />
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="form-group m-l-2 m-r-2">
+				<label for="username" class="col-md-2 control-label">性别：</label>
+				<div class="col-md-10">
+					<label class="radio-inline"> <span
+						class="checkableBox checkableBox-radio"> <input type="radio"
+							id="woman" class="validate[required] form-control" name="gender"
+							value="1">
+					</span> 女
+					</label> 
+					<label class="radio-inline"> <span
+						class="checkableBox checkableBox-radio"> <input type="radio"
+							id="man" class="validate[required] form-control" name="gender"
+							value="0">
+					</span> 男
+					</label>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="form-group m-l-2 m-r-2">
+				<label for="age"  class="col-md-2 control-label">年龄：</label>
+				<div class="col-md-10">
+					<input type="text" id="age" name="age" data-label="年龄"
+						value="${user.age!''}"
+						class="input-sm validate[custom[integer],min[5],max[99]] form-control"
+						placeholder="enter content" />
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="form-group m-l-2 m-r-2">
+				<label for="phone" class="col-md-2 control-label">电话：</label>
+				<div class="col-md-10">
+					<input type="text" id="phone" name="phone" data-label="电话"
+						value="${user.phone!''}"
+						class="input-sm validate[custom[phone]] form-control"
+						placeholder="enter content" />
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="form-group m-l-2 m-r-2">
+				<label for="email" class="col-md-2 control-label">email：</label>
+				<div class="col-md-10">
+					<input type="text" id="email" name="email" data-label="email"
+						value="${user.email!''}"
+						class="input-sm validate[custom[email]] form-control"
+						placeholder="enter content" />
+				</div>
+				<div class="clearfix"></div>
+			</div>	
+			<div class="form-group  m-l-2 m-r-2">
+				<label for="address" class="col-md-2 control-label">地址：</label>
+				<div class="col-md-10">
+					<input type="text" id="address" name="address" data-label="address"
+						value="${user.address!''}"
+						class="input-sm validate[maxSize[100]] form-control"
+						placeholder="enter content" />
+				</div>
+				<div class="clearfix"></div>
+			</div>				
+		</div>
+		<div class="col-md-4">
+			<div class="kv-avatar center-block text-center" style="width:200px">
+			<input id="userAvatar" name="userAvatar" type="file" class="file-loading" >
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="username" class="col-md-2 control-label">姓名：</label>
-			<div class="col-md-10">
-				<input type="text" id="username" name="username" data-label="登录名"
-					value="${user.username!''}"
-					class="input-sm validate[required] form-control"
-					placeholder="enter content" />
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="username" class="col-md-2 control-label">性别：</label>
-			<div class="col-md-10">
-				<label class="radio-inline"> <span
-					class="checkableBox checkableBox-radio"> <input type="radio"
-						id="woman" class="validate[required] form-control" name="gender"
-						value="1">
-				</span> 女
-				</label> 
-				<label class="radio-inline"> <span
-					class="checkableBox checkableBox-radio"> <input type="radio"
-						id="man" class="validate[required] form-control" name="gender"
-						value="0">
-				</span> 男
-				</label>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="username" class="col-md-2 control-label">年龄：</label>
-			<div class="col-md-10">
-				<input type="text" id="age" name="age" data-label="年龄"
-					value="${user.age!''}"
-					class="input-sm validate[custom[integer],min[5],max[99]] form-control"
-					placeholder="enter content" />
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="phone" class="col-md-2 control-label">电话：</label>
-			<div class="col-md-10">
-				<input type="text" id="phone" name="phone" data-label="电话"
-					value="${user.phone!''}"
-					class="input-sm validate[custom[phone]] form-control"
-					placeholder="enter content" />
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="email" class="col-md-2 control-label">email：</label>
-			<div class="col-md-10">
-				<input type="text" id="email" name="email" data-label="email"
-					value="${user.email!''}"
-					class="input-sm validate[custom[email]] form-control"
-					placeholder="enter content" />
-			</div>
-		</div>	
-		<div class="form-group">
-			<label for="address" class="col-md-2 control-label">地址：</label>
-			<div class="col-md-10">
-				<input type="text" id="address" name="address" data-label="address"
-					value="${user.address!''}"
-					class="input-sm validate[maxSize[100]] form-control"
-					placeholder="enter content" />
-			</div>
-		</div>			
+		<div class="clearfix"></div>
+
+
 		
-		<div class="form-group">
+		<div class="form-group" id ="userRoleView" >
 			<div class="panel panel-default tile m-15 m-b-0 list-container">
 				<div class="panel-heading">
 					<div class="panel-title">所属角色 
@@ -151,10 +255,11 @@
 						</#list>
 				</div>
 			</div>		
-		</div>
+		</div>		
 	</form>
 	<div class="modal-footer">
 		<div class="text-center">
+			<button type="submit" class="btn btn-sm" id="btnUserSave" onclick="userEditJscript.userSave('#userform');">保存</button>
 			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
 		</div>
 	</div>

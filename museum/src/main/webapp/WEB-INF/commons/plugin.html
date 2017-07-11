@@ -23,32 +23,25 @@
 	            <div  class="dropdown-menu dropdown-menu-alt">
                     <div class="listview narrow">
                         <div class="media">
-                            <a href="">Send a New Message</a>
+                            <a href="">发送新的消息</a>
                             <span class="drawer-close">&times;</span>
                         </div>
                         <div class="overflow" style="height: 224px">
+                        	<#list messages as message> 
                             <div class="media">
                                 <div class="pull-left">
                                     <img width="40" src="img/profile-pics/1.jpg" alt="">
                                 </div>
                                 <div class="media-body">
-                                    <small class="text-muted">Nadin Jackson - 2 Hours ago</small><br>
-                                    <a class="t-overflow" href="">Mauris consectetur urna nec tempor adipiscing. Proin sit amet nisi ligula. Sed eu adipiscing lectus</a>
+                                    <small class="text-muted">${message.fromName!'系统消息'} - ${DateUtil.fromToday(message.createDate)}</small><br>
+                                    <a class="t-overflow" href="">${message.content?html}</a>
                                 </div>
                             </div>
+                            </#list>
                             
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img width="40" src="img/profile-pics/5.jpg" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <small class="text-muted">Wendy Mitchell - On 19/12/2013</small><br>
-                                    <a class="t-overflow" href="">Integer a eros dapibus, vehicula quam accumsan, tincidunt purus</a>
-                                </div>
-                            </div>
                         </div>
                         <div class="media text-center whiter l-100">
-                            <a href=""><small>VIEW ALL</small></a>
+                            <a href=""><small>更多</small></a>
                         </div>
                     </div>
                 </div>
@@ -59,14 +52,14 @@
 	          <!-- User Account: style can be found in dropdown.less -->
 	          <li class="dropdown user user-menu">
 	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-	              <img src="img/profile-pic.jpg" class="user-image" alt="User Image">
+	              <img src="${request.contextPath}/system/user/image/${sessionManager.user.userid}" class="user-image" alt="User Image">
 	              
 	              <span class="hidden-xs">${sessionManager.user.username}</span>
 	            </a>
 	            <ul class="dropdown-menu dropdown-menu-alt">
 	             <!-- User image -->
               <li class="user-header">
-                <img src="img/profile-pic.jpg" class="img-circle" alt="User Image">
+                <img src="${request.contextPath}/system/user/image/${sessionManager.user.userid}" class="img-circle" alt="User Image">
 
                 <p>
                   		${sessionManager.user.username}(${sessionManager.user.logincode})
@@ -115,8 +108,9 @@
 <#macro bodyNav>
 
 	<ol class=" breadcrumb hidden-xs" id="bodyNav">
-		<#list sessionManager.history?keys as key>  
-			<li><a href='${sessionManager.history["${key}"][1]}' >${sessionManager.history["${key}"][0]}</a></li>
+		<#list sessionManager.history?keys as key> 
+			<!-- ${sessionManager.history["${key}"][1]} --> 
+			<li><a href='javascript:void(0);' >${sessionManager.history["${key}"][0]}</a></li>
           	
     	</#list>  
 				

@@ -8,17 +8,21 @@ import com.framework.mybatis.dao.Base.IDataMapper;
 import com.framework.mybatis.dao.Base.IDataMapperByPage;
 import com.system.model.SysUser;
 
-public interface SysUserMapper extends IDataMapper<SysUser>,IDataMapperByPage<SysUser> {
-    int deleteByPrimaryKey(String userid);
+public interface SysUserMapper extends IDataMapper<SysUser>,
+		IDataMapperByPage<SysUser> {
+	int deleteByPrimaryKey(String userid);
 
-    int insert(SysUser record);
+	int insert(SysUser record);
 
-    int insertSelective(SysUser record);
+	int insertSelective(SysUser record);
 
-    int updateByPrimaryKeySelective(SysUser record);
+	int updateByPrimaryKeySelective(SysUser record);
 
-    int updateByPrimaryKey(SysUser record);
-    
-    List<SysUser> selectUserByDeptId(@Param("deptid") String deptid);
-    
+	int updateByPrimaryKey(SysUser record);
+
+	List<SysUser> selectUserByDeptId(@Param("deptid") String deptid);
+
+	SysUser getAvatarByUserid(@Param("userid") String userid);
+
+	int updateUserAvatar(SysUser record);
 }

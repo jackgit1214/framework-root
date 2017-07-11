@@ -14,7 +14,7 @@
 			<list>
 				<ref bean="viewFreemarker" />
 				<ref bean="viewResolverCommon" />
-				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" /> 
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
 			</list>
 		</property>
 	</bean>
@@ -28,8 +28,7 @@
 				<value>/</value>
 			</list>
 		</property>
-		<!-- 
-		<property name="templateLoaderPath" value="/WEB-INF/" /> -->
+		<!-- <property name="templateLoaderPath" value="/WEB-INF/" /> -->
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerVariables">
 			<map>
@@ -39,7 +38,7 @@
 		<property name="freemarkerSettings">
 			<props>
 				<prop key="tag_syntax">auto_detect</prop>
-				<!--  -->
+				<!-- -->
 				<prop key="auto_import">/commons/common.html as pub</prop>
 				<prop key="template_update_delay">5</prop>
 				<prop key="defaultEncoding">UTF-8</prop>
@@ -55,7 +54,15 @@
 			</props>
 		</property>
 	</bean>
-	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />	
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+	<bean id="freemarkerStatic"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:config/staticClass.properties" />
+	</bean>
+	<bean id="freemarkerStaticModels" class="com.framework.common.util.FreemarkerStaticModels"
+		factory-method="getInstance">
+		<property name="staticModels" ref="freemarkerStatic" />
+	</bean>	
 	<bean id="viewFreemarker"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="suffix" value=".html" />
@@ -70,7 +77,9 @@
 		<property name="exposeSpringMacroHelpers" value="true" />
 		<property name="requestContextAttribute" value="request" />
 		<property name="order" value="0"></property>
+		<property name="attributesMap" ref="freemarkerStaticModels" />
 	</bean>
+
 
 	<bean id="viewResolverCommon"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -80,7 +89,7 @@
 		<property name="prefix" value="/WEB-INF/" />
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-	
+
 	<bean id="cnManager"
 		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 		<property name="favorPathExtension" value="true" />
@@ -106,12 +115,9 @@
 	<bean id="customWebBindingInitializer"
 		class="com.framework.common.binding.CustomWebBindingInitializer" />
 
-	<!-- 注册全局转换器 实现 WebBindingInitializer接口，并在其实现方法initBinder注册相应的转换器 
-	      注意： 会对返回json有影响................. 
-		配置这个东西会影响@valid,必须配置<property name="webBindingInitializer">,
-		才可以， 可能也会影响其它参数，目前不知
-		使用<mvc:annotation-driven/>注解，会默认创建此bean，使配置起使用
-   -->
+	<!-- 注册全局转换器 实现 WebBindingInitializer接口，并在其实现方法initBinder注册相应的转换器 注意： 会对返回json有影响................. 
+		配置这个东西会影响@valid,必须配置<property name="webBindingInitializer">, 才可以， 可能也会影响其它参数，目前不知 
+		使用<mvc:annotation-driven/>注解，会默认创建此bean，使配置起使用 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="synchronizeOnSession" value="true" />
@@ -138,8 +144,8 @@
 				<property name="validator" ref="validator" />
 			</bean>
 		</property>
-		
-		<property name="order" value="-1"/>
+
+		<property name="order" value="-1" />
 		<!-- <property name="webBindingInitializer" ref="customWebBindingInitializer" 
 			/> -->
 	</bean>

@@ -1,5 +1,3 @@
-<#macro projectpath>${request.contextPath}</#macro> 
-
 <#macro htmlHead title charset="utf-8">
 <!DOCTYPE html>
 <!--[if IE 9 ]><html class="ie9"><![endif]-->
@@ -131,7 +129,7 @@
 	<script src="js/system.js?time=11)"></script>
 	<script src="js/fileinput-help.js"></script>
 	<script type="text/javascript">
-			$.SystemApp.contextPath = "<@projectpath/>";
+			$.SystemApp.contextPath = "${request.contextPath}";
 		
 	</script>    
  </body>

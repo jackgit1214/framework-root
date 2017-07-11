@@ -1,7 +1,5 @@
 package com.system.web.user;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -172,23 +170,7 @@ public class UserController extends BaseController {
 				e.printStackTrace();
 			}
 		} else {
-			String path = this.getClass().getResource("/").getPath();
-			String zwtp = path + "/config/zwtp.gif";
-			File file = new File(zwtp);
-			byte[] tempbytes = new byte[1024];
-			int byteread = 0;
-			try {
-				in = new FileInputStream(file);
-				output = response.getOutputStream();
 
-				while ((byteread = in.read(tempbytes)) != -1) {
-					output.write(tempbytes, 0, byteread);
-				}
-				output.flush();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 

@@ -55,7 +55,7 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 								+ request.getServletPath() + "]");
 						return false;
 					}
-					request.getSession(false).removeAttribute("token");
+					// request.getSession(false).removeAttribute("token");
 				}
 			}
 		}
@@ -79,6 +79,20 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		// TODO Auto-generated method stub
+		HandlerMethod handlerMethod = (HandlerMethod) handler;
+		Method method = handlerMethod.getMethod();
+
+		DuplicateSubmission annotation = method
+				.getAnnotation(DuplicateSubmission.class);
+		if (annotation != null) {
+			boolean needRemoveSession = annotation.needRemoveToken();
+			if (needRemoveSession) {
+				boolean isSuccess = (boolean) request.getAttribute("isSuccess");
+
+				if (isSuccess)
+					request.getSession(false).removeAttribute("token");
+			}
+		}
 		super.postHandle(request, response, handler, modelAndView);
 	}
 
@@ -90,8 +104,8 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 		}
 		this.curToken = serverToken;
 		String clinetToken = request.getParameter("token");
-		if (clinetToken == null) {
-			return true;
+		if (clinetToken == null) { // 如果前段没有token值，则可以提交
+			return false;
 		}
 		if (!serverToken.equals(clinetToken)) {
 			return true;

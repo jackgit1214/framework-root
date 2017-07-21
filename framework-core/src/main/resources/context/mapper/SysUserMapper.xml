@@ -229,7 +229,7 @@
 		select 
 		<include refid="Base_Column_List" />
 		from sys_user 
-		where user_id  in 
+		where userid  in 
 		(select userid from sys_dept_user where DeptID=#{deptid,jdbcType=VARCHAR})
 	</select>
 	

@@ -37,7 +37,7 @@ public class SysDepartmentTree extends SysDept implements TreeData {
 	@Override
 	public boolean getIsParent() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

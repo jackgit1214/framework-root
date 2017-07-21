@@ -417,6 +417,14 @@ $(document).ready(function() { (function() {
 	            };
 	        });
 	    });
+	    
+	    $('body').on('click', '.template-skins > a', function(e){
+	    	e.preventDefault();
+	    	var skin = $(this).data('skin');
+	    	
+	    			$('body').attr('id', skin);
+	    			$('#changeSkin').modal('hide');
+	        });
 
 	})();
 	$.SystemApp.controlSidebar.activate();
@@ -908,17 +916,20 @@ $.SystemApp.pagetoolbar = {
 						"<i class='fa fa-angle-left'></i>"));
 		_this.pagination.append(_prePage);
 
-		var _endpage = showPageNum + _this.curPage;
 
-		_endpage = Math.floor(_endpage / showPageNum) * showPageNum;
-
-		if (_endpage > _this.totalPageNum)
-			_endpage = _this.totalPageNum;
 
 		var _startpage = _this.curPage;
 		if (_startpage == showPageNum)
 			_startpage = _startpage - 1; // 修正当总页数与工具条显示页数正好一样的问题
 		_startpage = Math.floor(_startpage / showPageNum) * showPageNum + 1; // 取倍数处理
+
+		var _endpage = showPageNum + _startpage;
+
+		_endpage = Math.floor(_endpage / showPageNum) * showPageNum;
+
+		if (_endpage > _this.totalPageNum)
+			_endpage = _this.totalPageNum;
+		
 		for ( var i = _startpage; i <= _endpage; i++) {
 			var _pagenum = $("<li>").append(
 					$("<a class='btn btn-default' href='#'>").html(i));
@@ -1054,9 +1065,8 @@ $.SystemApp.commonOper = {
 
 		// return dialogObj;
 	},
-	del : function(urllink, formobject, title) {
+	del : function(urllink, formobject, paramData) {
 		var selectValue = $.SystemApp.checkbox("#" + formobject);
-
 		if (selectValue == null || selectValue == '' || selectValue.length <= 0) {
 			alert("请选择要删除的数据");
 			return;
@@ -1066,6 +1076,9 @@ $.SystemApp.commonOper = {
 		var data = {
 			ids : selectValue
 		};
+		if (paramData!=undefined)
+			$.extend(data,paramData);
+		console.log(data);
 		$.post($.SystemApp.contextPath + urllink, data, function(data) {
 			if (data.successRows > 0) {
 				$.SystemApp.pagetoolbar.refreshData();
@@ -1073,7 +1086,7 @@ $.SystemApp.commonOper = {
 			}
 		});
 	},
-	save : function(urllink, formobject) {
+	save : function(urllink, formobject,paramData,successCall) {
 		var $this = this;
 		var $formObject = $("#" + formobject);
 		var validateResult = $formObject.validationEngine('validate');
@@ -1081,15 +1094,19 @@ $.SystemApp.commonOper = {
 			return false;
 
 		var data = $formObject.serializeArray();
+		if (paramData!=undefined)
+			$.merge(data,paramData);
 		$.post($.SystemApp.contextPath + urllink, data, function(data) {
 			if (data.successRows > 0) {
 				alert("数据保存成功！");
 				$this.dialogObj.modal("hide");
 				$.SystemApp.pagetoolbar.refreshData();
+
+				if (successCall!=undefined && $.isFunction(successCall))
+					successCall.apply(this,data);
 			} else {
 				alert("数据保存失败！");
 			}
-
 		});
 	},
 	loadCarouselImage : function(dataurl, busitype, imageurl, indiObject,
@@ -1127,6 +1144,85 @@ $.SystemApp.commonOper = {
 			});
 		});
 	}
+};
+
+$.SystemApp.deptJscript = {
+		departmentTree:null,
+		showPerson:false,
+		checkFlag:false,
+		reloadFlag:false,
+		setting:function(){
+			var tmpsetting = $.SystemApp.treesetting;
+			 $.extend(tmpsetting,{
+				 check:{
+						enable: true
+					},
+			 	async: {
+					enable: true,
+					url:$.SystemApp.deptJscript.getAsyncUrl,
+					autoParam:["id","pId"]
+				},
+				callback: {
+					onCheck: function(event, treeId, treeNode){
+						
+						$.SystemApp.deptJscript.checkChanged();
+					},
+					beforeCheck:function(treeId, treeNode){
+						var zTree = $.fn.zTree.getZTreeObj(treeId);
+						if (!treeNode.children) {
+							$.SystemApp.deptJscript.reloadFlag = true;
+							$.SystemApp.deptJscript.checkFlag = true;
+							zTree.reAsyncChildNodes(treeNode, "refresh");
+						}
+					},
+					beforeExpand:function(treeId, treeNode){
+						$.SystemApp.deptJscript.reloadFlag=false;
+					},
+					onNodeCreated:function(event, treeId, treeNode){
+						var zTree = $.fn.zTree.getZTreeObj(treeId);
+						if ($.SystemApp.deptJscript.reloadFlag) {
+							if ($.SystemApp.deptJscript.checkFlag) {
+								zTree.checkNode(treeNode, true, true);
+							}
+							if (!treeNode.children) {
+								zTree.reAsyncChildNodes(treeNode, "refresh");
+							}
+						}
+					}
+				}
+			 });
+			return tmpsetting;
+		},
+		checkChanged:function(){
+			var nodes = this.departmentTree.getCheckedNodes(true);
+			var userids = "";
+			var usernames  ="";
+			for (var i=0, l=nodes.length; i < l; i++) {
+				if (nodes[i].username==undefined)
+					continue;
+				userids = userids+nodes[i].id+",";
+				usernames = usernames+nodes[i].name+",";
+			}
+			$("#toUserId").val(userids);
+			$("#toUserName").val(usernames);
+		},
+		getAsyncUrl:function(treeId, treeNode){
+			if ($.SystemApp.deptJscript.showPerson && treeNode.endflag==1){
+				return $.SystemApp.contextPath + "/system/user/getUserByDepartment?deptId="+treeNode.id;
+			}
+			
+			return $.SystemApp.contextPath + "/system/department/getDepotdata";
+		},
+		init_tree : function(treeData,isShowPerson) {
+			if (isShowPerson!=undefined)
+				this.showPerson = isShowPerson;
+			this.departmentTree = $.fn.zTree.init($("#departmenttree"), this.setting(), treeData);
+			var nodes = this.departmentTree.getNodes();
+				
+			if (nodes.length >0)
+				this.departmentTree.expandNode(nodes[0]);
+			return this.departmentTree;
+		}
 };
 
 /* 征集线索部分 */
@@ -1188,3 +1284,105 @@ $.SystemApp.collInfoJscript = {
 		});
 	}
 };
+$.SystemApp.messageJscript = {
+		dialogObj : null,
+		curType:'accept',
+		messageIndex:function(){
+			$.SystemApp.divLoad("#main-content","/message/index",undefined,function(){
+				
+			});
+		},
+		init_UI : function() {
+				$.SystemApp.divLoad("#systemData", "/message/list", {userId:'',searchContent:'',type:"accept"},
+					function() {
+
+					});
+		},
+		folderFilter:function(obj){
+			var $this = $(obj);
+			$("a.list-group-item").removeClass("active");
+			$this.addClass("active");
+			var type =$this.data("type");
+			this.curType = type;
+			var paramData = {
+					userId:'',
+					searchContent:'',
+					type:type
+			};
+			
+			this._handleHeader($this.data('text'),false);
+			$.SystemApp.divLoad("#systemData", "/message/list", paramData,
+					function() {
+
+					});
+		},
+		tagFilter:function(obj){
+			var $this = $(obj);
+			var type =$this.data("type");
+			this.curType = type;
+			var paramData = {
+					userId:'',
+					searchContent:'',
+					type:type
+			};
+			this._handleHeader($this.data('text'),false);
+			$.SystemApp.divLoad("#systemData", "/message/list", paramData,
+					function() {
+
+					});
+		},
+		showEdit : function(isEdit) {
+			this._handleHeader("创建新消息",true);
+			var _this = this;
+			//_this.dialogObj = $.SystemApp.commonOper.showEdit(isEdit,"/message/showEdit","tableHover_messagebox","中文标题编辑");
+			$.SystemApp.divLoad("#systemData", "/message/showMessage", {},
+					function() {
+
+					});
+		},
+		_handleHeader:function(title,isNew){
+			$(".box-header","#mainDataArea").find(".box-title").text(title);
+			if (isNew)
+				$(".box-header").find(".box-tools").hide();
+			
+		},
+		del : function() {
+
+			var paramData = {
+					curType:this.curType
+			};
+			$.SystemApp.commonOper.del("/message/delete","tableHover_messagebox",paramData);
+			
+		},
+		save : function(formObject,isDraft) {
+			var content =  $('.wysiwye-editor').code();
+			var paramData = [{name:'content',value:content},{name:'userids',value:$("#toUserId").val()},{name:'isSend',value:isDraft}];
+			var $formObject = $("#" + formObject);
+			var validateResult = $formObject.validationEngine('validate');
+			if (!validateResult)
+				return false;
+
+			var data = $formObject.serializeArray();
+			$.merge(data,paramData);
+			$.post($.SystemApp.contextPath + "/message/update", data, function(data) {
+				if (data.successRows > 0) {
+					alert("数据保存成功！");
+					$("#msgBoxId").val(data.msgboxid);
+					
+				} else {
+					alert("数据保存失败！");
+				}
+			});
+		},
+		find : function(formobject) {
+			var searchValue = $("#searchContent").val();
+			var data = {
+				searchContent :searchValue,
+				type:this.curType
+			};
+			$.SystemApp.divLoad("#systemData", "/message/list", data,
+					function() {
+
+			});
+		}
+	};

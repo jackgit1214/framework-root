@@ -1,3 +1,7 @@
+	<style type="text/css">
+		.ztree li span.button.switch.level0 {visibility:hidden; width:1px;}
+		.ztree li ul.level0 {padding:0; background:none;}
+	</style>
 <script type=text/javascript>
 	var indexJscript = {
 		dialogObj : null,
@@ -50,7 +54,6 @@
 			
 			this.indextree = $.fn.zTree.init($("#indextree"), this.setting(), treeData);
 			var nodes = this.indextree.getNodes();
-			
 			if (nodes.length >0)
 				this.indextree.expandNode(nodes[0]);
 		},

@@ -1,0 +1,82 @@
+<div class="mailbox-controls">
+	<div class="btn-group">
+		</button>
+		
+		<button type="button" alt="删除" onclick="$.SystemApp.messageJscript.del();" class="btn btn-default btn-sm">
+			<i class="fa fa-trash-o"></i>
+		</button>
+		<#if !outbox ??>	
+		<button type="button" alt="回复" class="btn btn-default btn-sm">
+			<i class="fa fa-reply"></i>
+		</button>
+		</#if>
+	</div>
+	<!-- /.btn-group -->
+	<button type="button" class="btn btn-default btn-sm">
+		<i class="fa fa-refresh" alt="刷新"></i>
+	</button>
+</div>
+<div class=" table-con">
+	<div id="tableHover_messagebox" class=" tile table-data m-b-5">
+		<div class="table-responsive mailbox-messages overflow"
+			data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+						<#if !outbox??>	
+						<td style="width: 80px;">发送人</td>
+						<#else>
+						<td style="width: 80px;">收件人</td>
+						</#if>
+						<td style="width: 80px;">发送日期</td>
+						<#if !outbox??> 
+						<td style="width: 60px;">状态</td>
+						</#if>
+						<td>内容</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas?? > <#list page.pageDatas as messagebox >
+				<tr>
+					<td><input type="checkbox" name="subcheck" class="list-check"
+						value="${messagebox.id!''}"></td>
+						<#if !outbox??> 
+							<td>${messagebox.fromName!''}</td>
+						<#else>
+							<td>${messagebox.toName!''}</td>
+						</#if>	
+					<td>${messagebox.createDate?date}</td>
+					<#if !outbox??> 
+						<td ><#if messagebox.isRead==1> 已读 <#else> 未读 </#if></td>
+						</#if>
+					<td>${messagebox.content?html}</td>
+				</tr>
+				</#list> </#if>
+
+			</table>
+			<!-- /.table -->
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+		data-curpage="${page.curPage}" data-totalpage="${page.lastPage}"
+		data-param='${param!}' data-recordcount="${page.pageSize}"
+		data-linktarget="#systemData" data-pagelink="/message/list">
+		<div class="pull-left attrs">第${page.curPage}
+			页，共${page.lastPage}页</div>
+		<div class="pull-right">
+			<ul class="pagination">
+
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	$(function() {
+
+	});
+</script>
+<!-- /.mail-box-messages -->

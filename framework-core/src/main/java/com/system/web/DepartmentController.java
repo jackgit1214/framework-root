@@ -37,12 +37,14 @@ public class DepartmentController extends BaseController {
 	 */
 	@RequestMapping("/index")
 	public ModelAndView index() {
-		
-		List<SysDepartmentTree> depotTree = this.sysDeptService.getDeptBySupperId("xxx");
+
+		List<SysDepartmentTree> depotTree = this.sysDeptService
+				.getDeptBySupperId("xxx");
 		ModelAndView mav = new ModelAndView("system/department/listindex");
-		mav.addObject("departmentTree",JSON.toJSON(depotTree).toString());
+		mav.addObject("departmentTree", JSON.toJSON(depotTree).toString());
 
 		return mav;
+
 	}
 
 	/**
@@ -69,7 +71,6 @@ public class DepartmentController extends BaseController {
 			e.printStackTrace();
 		}
 		ModelAndView mav = new ModelAndView("system/department/listdata");
-		log.debug(JSON.toJSONString(queryModel));
 		mav.addObject("param", JSON.toJSONString(queryModel));
 		mav.addObject("page", page);
 		return mav;
@@ -92,6 +93,7 @@ public class DepartmentController extends BaseController {
 
 		mav.addObject("depots", sysDepot);
 		return mav;
+
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class DepartmentController extends BaseController {
 	@RequestMapping("/update")
 	public ModelMap addOrUpdate(SysDept record) {
 		ModelMap mm = new ModelMap();
-		
+
 		int rows = this.sysDeptService.updateDept(record);
 		mm.addAttribute("successRows", rows);
 		return mm;
@@ -127,10 +129,13 @@ public class DepartmentController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/getDepotdata",method=RequestMethod.POST)
-	public List<SysDepartmentTree> getDepotData(@RequestParam(value = "id", required = false)String id,@RequestParam(value = "pId", required = false)String pId){
-		List<SysDepartmentTree> dataindexs = this.sysDeptService.getDeptBySupperId(id);
+	@RequestMapping(value = "/getDepotdata", method = RequestMethod.POST)
+	public List<SysDepartmentTree> getDepotData(
+			@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "pId", required = false) String pId) {
+		List<SysDepartmentTree> dataindexs = this.sysDeptService
+				.getDeptBySupperId(id);
 		return dataindexs;
 	}
-	
+
 }

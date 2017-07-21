@@ -48,6 +48,8 @@ public class SysUser implements SessionUser, Serializable {
 
 	public void setUserid(String userid) {
 		this.userid = userid;
+		this.setId(userid);
+		this.setpId(userid);
 	}
 
 	public String getLogincode() {
@@ -72,6 +74,7 @@ public class SysUser implements SessionUser, Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+		this.setName(username);
 	}
 
 	public String getPassword() {
@@ -160,6 +163,42 @@ public class SysUser implements SessionUser, Serializable {
 
 	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
+	}
+
+	// 以下属性为树中展示使用
+	private String id;
+
+	private String pId;
+
+	private String name;
+
+	public String getId() {
+		return this.userid;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getPId() {
+		return this.userid;
+	}
+
+	public void setpId(String pId) {
+		this.pId = pId;
+	}
+
+	public String getName() {
+		return this.username;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean getIsParent() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

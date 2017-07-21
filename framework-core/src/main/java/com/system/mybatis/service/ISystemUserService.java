@@ -37,4 +37,5 @@ public interface ISystemUserService extends IBusinessService<SysUser> {
 	public byte[] getUserAvatar(String userId);
 
 	public int updateUser(SysUser user, HttpServletRequest request);
+
 }

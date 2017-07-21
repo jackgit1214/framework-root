@@ -21,7 +21,7 @@ import com.framework.common.anaotation.LinkHistoryAnaotation;
 import com.framework.web.controller.BaseController;
 import com.framework.web.util.SessionManager;
 import com.museum.model.MessageInbox;
-import com.museum.service.MessageInboxService;
+import com.museum.service.MessageService;
 import com.system.common.SysConstant;
 import com.system.model.SysUser;
 import com.system.mybatis.service.ISystemUserService;
@@ -35,7 +35,7 @@ public class SystemIndex extends BaseController {
 	private ISystemUserService systemUserServiceImpl;
 
 	@Autowired
-	private MessageInboxService messageInboxServiceImpl;
+	private MessageService messageServiceImpl;
 
 	@RequestMapping("/loginSuccess")
 	@LinkHistoryAnaotation(linkLevel = SysConstant.INDEX_SIGN, linkName = "首页", linkValue = "/index")
@@ -47,7 +47,7 @@ public class SystemIndex extends BaseController {
 		if (user != null) {
 			this.sessionManager.clearHistory();
 			this.sessionManager.setUser(user);
-			List<MessageInbox> messages = this.messageInboxServiceImpl
+			List<MessageInbox> messages = this.messageServiceImpl
 					.getUserMessage(user.getUserid());
 			// this.systemUserServiceImpl.getUserModule(user, null);
 			mav.addObject("user", user);

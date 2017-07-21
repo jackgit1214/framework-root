@@ -1,42 +1,41 @@
+
 <script type=text/javascript>
-	var depotJscript = {
+	var deptJscript = {
 		dialogObj : null,
-		depottree:null,
+		depttree:null,
 		setting:function(){
-			var tmpsetting = $.SystemApp.treesetting;
+			 var tmpsetting = $.SystemApp.treesetting;
 			 $.extend(tmpsetting,{
-				 check:{
+				check:{
 						enable: false
 					},
 			 	async: {
 					enable: true,
-					//contentType:"application/json",
-					url:$.SystemApp.contextPath + "/system/department/getDepotdata",
+					url:deptJscript.getAsyncUrl,
 					autoParam:["id","pId"]
 				},
 				callback: {
 					onClick: function(event, treeId, treeNode){
-						depotJscript.refreshDataList(treeNode);
+						deptJscript.refreshDataList(treeNode);
 					},
 					beforeClick:function(treeId, treeNode){
-						if (!treeNode.parent){ //末级指标直接修改
-							depotJscript.depottree.selectNode(treeNode.getParentNode(),false);
-							depotJscript.refreshDataList(treeNode.getParentNode());
-							depotJscript.showEditIndex(true,treeNode.data);
-							return false;
-						}else {
-					        return true;
-					    }
+						return true;
 					}
 				}
 			 });
 			return tmpsetting;
 		},
+		getAsyncUrl:function(treeId, treeNode){
+			
+			if (treeNode.endflag==1)
+				return $.SystemApp.contextPath + "/system/user/getUserByDepartment?deptId="+treeNode.id; 
+			
+			return $.SystemApp.contextPath + "/system/department/getDepotdata";
+		},
 		refreshDataList:function(treeNode){
 			var pid = treeNode.id ;
 			var cond= {};
 			cond['superid'] = pid;
-			
 			var param1 ={
 					pageNo:1,
 					param:cond
@@ -47,19 +46,18 @@
 			});
 		},
 		init_tree : function(treeData) {
-			
-			this.depottree = $.fn.zTree.init($("#departmenttree"), this.setting(), treeData);
-			var nodes = this.depottree.getNodes();
-			
-			if (nodes.length >0)
-				this.depottree.expandNode(nodes[0]);
+			this.depttree = $.fn.zTree.init($("#departmenttree"), this.setting(), treeData);
+			var nodes = this.depttree.getNodes();
+			if (nodes.length >0){
+				this.depttree.expandNode(nodes[0]);
+			}
 		},
 		init_UI : function() {
-			var nodes = this.depottree.getNodes();
+			var nodes = this.depttree.getNodes();
 			if (nodes.length>0) {
-				this.depottree.selectNode(nodes[0]);
+				this.depttree.selectNode(nodes[0]);
 				this.refreshDataList(nodes[0]);
-			}			
+			}
 		},
 		dataSave: function(formObject){
 		
@@ -69,7 +67,7 @@
 			if (!validateResult)
 				return false;
 			var data = $formObject.serializeArray();
-			var nodes = $this.depottree.getSelectedNodes();
+			var nodes = $this.depttree.getSelectedNodes();
 			var isEdit = $formObject.find("#id").val()===""?false:true;
 			console.log(nodes[0]);
 			$.post($.SystemApp.contextPath + "/system/department/update",data, function(data) {
@@ -86,7 +84,7 @@
 		showEditIndex : function(isEdit,indexid) {
 			var $this = this;
 			var _params = {};
-			var nodes = this.depottree.getSelectedNodes();
+			var nodes = this.depttree.getSelectedNodes();
 			if (isEdit) {
 				if (indexid ==null || indexid == ''){
 					var selectValue = $.SystemApp.checkbox("#tableHover_department");
@@ -131,15 +129,15 @@
 				var newNode = {name:data.indexname,id:data.indexid,data:data.id};
 				if (isEdit){
 					//console.log(data);
-					newNode=$this.depottree.getNodeByParam("data",data.id, node);
+					newNode=$this.depttree.getNodeByParam("data",data.id, node);
 					//console.log(newNode);
 					newNode.name = data.indexname;
-					$this.depottree.updateNode(newNode);
+					$this.depttree.updateNode(newNode);
 				}else
-					$this.depottree.addNodes(node, newNode);
+					$this.depttree.addNodes(node, newNode);
 			}
 			else
-				$this.depottree.expandNode(node,true,false,false,false);
+				$this.depttree.expandNode(node,true,false,false,false);
 			
 		},
 		delIndex : function() {
@@ -162,8 +160,8 @@
 						if (data.successRows > 0) {
 							$.SystemApp.pagetoolbar.refreshData();
 							$.each(selectValue,function(i,obj){
-								var node = $this.depottree.getNodeByParam("data",obj, null);
-								$this.depottree.removeNode(node,false);
+								var node = $this.depttree.getNodeByParam("data",obj, null);
+								$this.depttree.removeNode(node,false);
 							});
 							alert("数据删除成功！");
 					}
@@ -177,14 +175,14 @@
 		},
 		findtreeIndex:function(){
 			var $this = this;
-			var node = $this.depottree.getNodeByParam("data","93da9f1dec834f53b75edd29575e930a", null);
+			var node = $this.depttree.getNodeByParam("data","93da9f1dec834f53b75edd29575e930a", null);
 			//console.log(node);
 		}
 	};
 
 	$(function() {
-		depotJscript.init_tree(${departmentTree});
-		depotJscript.init_UI();
+		deptJscript.init_tree(${departmentTree});
+		deptJscript.init_UI();
 	});
 </script>
 
@@ -210,7 +208,7 @@
 				</div>
 				<div class="col-md-4 m-b-15">
 					<button type="button" title="查询" class="btn btn-sm m-r-5"
-						onclick="depotJscript.finddata();" value="查询">查询</button>
+						onclick="deptJscript.finddata();" value="查询">查询</button>
 				</div>
 			</div>
 			

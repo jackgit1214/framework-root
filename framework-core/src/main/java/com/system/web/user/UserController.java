@@ -191,4 +191,14 @@ public class UserController extends BaseController {
 		return mm;
 
 	}
+
+	@ResponseBody
+	@RequestMapping("/getUserByDepartment")
+	public List<SysUser> getUserByDepartment(
+			@RequestParam(value = "deptId", required = true) String deptId) {
+		List<SysUser> users = this.systemUserServiceImpl
+				.getUsersByDeptid(deptId);
+		return users;
+
+	}
 }

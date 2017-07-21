@@ -1,0 +1,95 @@
+
+	<div class="row">
+		<div class="col-md-3">
+			<!-- -->
+			<a href="#" onclick="$.SystemApp.messageJscript.showEdit();"
+				class="btn btn-primary btn-block margin-bottom"><i class="fa fa-pencil p-r-5"></i>创建消息</a> 
+
+			<div class="box box-solid">
+				<div class="box-header with-border ">
+					<label class="box-title ">文件夹</label>
+
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-minus"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body no-padding">
+				
+					<div class="list-group block">
+                         <a href="#" data-text="收件箱" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="accept" class="list-group-item active"><i class="fa fa-inbox"></i>
+								收件箱 <span class="label label-primary pull-right">${messages?size}</span></a>
+                         <a href="#" data-text="发件箱" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="send" class="list-group-item"><i class="fa fa-envelope-o"></i> 发件箱</a>
+                         <a href="#" data-text="草稿" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="draft" class="list-group-item"><i class="fa fa-file-text-o"></i> 草稿</a>
+                         <a href="#" data-text="已删除" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="del" class="list-group-item"><i class="fa fa-trash-o"></i> 已删除</a>
+                    </div>
+					
+				</div>
+				<!-- /.box-body -->
+			</div>
+			<!-- /. box -->
+			<div class="box box-solid">
+				<div class="box-header with-border">
+					<h3 class="box-title">标签</h3>
+
+					<div class="box-tools">
+						<button type="button" class="btn btn-box-tool"
+							data-widget="collapse">
+							<i class="fa fa-minus"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body no-padding">
+					<ul class="nav nav-pills nav-stacked">
+						<li><a href="#" onclick="$.SystemApp.messageJscript.tagFilter(this)" data-text="系统消息" data-type="1"><i class="fa fa-circle-o text-red"></i>
+								系统消息</a></li>
+						<li><a href="#" onclick="$.SystemApp.messageJscript.tagFilter(this)" data-text="用户消息" data-type="0"><i class="fa fa-circle-o text-yellow"></i>
+								用户消息</a></li>
+						
+					</ul>
+				</div>
+				
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+		<div class="col-md-9">
+			<div class="box" id="mainDataArea">
+				<div class="box-header with-border">
+					<h3 class="box-title">收件箱</h3>
+
+					<div class="box-tools pull-right">
+						<div class="has-feedback" style="width:200px;">
+							
+							<div class="input-group">
+					          <input name="searchContent" id="searchContent" class="form-control input-sm" placeholder="查找消息" type="text">
+					              <span class="input-group-btn " >
+					                <button type="submit" name="search" id="search-btn" onclick="$.SystemApp.messageJscript.find();" class="btn btn-sm btn-flat"><i class="fa fa-search"></i>
+					                </button>
+					              </span>
+					        </div>
+						</div>   
+					</div>
+					<!-- /.box-tools -->
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body no-padding listview list-container" id="systemData">
+					
+				</div>
+				<!-- /.box-body -->
+				
+			</div>
+			<!-- /. box -->
+		</div>
+		<!-- /.col -->
+	</div>
+
+
+<script type="text/javascript">
+	$(function(){
+		$.SystemApp.boxWidget.activate();
+		$.SystemApp.messageJscript.init_UI();
+	});
+</script>

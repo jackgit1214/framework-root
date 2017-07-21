@@ -20,7 +20,7 @@
 	          <li class="dropdown messages-menu">
 	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 	              <i class="fa fa-envelope-o"></i>
-	              <span class="label label-success">4</span>
+	              <span class="label label-success">${messages?size}</span>
 	            </a>
 	            <div  class="dropdown-menu dropdown-menu-alt">
                     <div class="listview narrow">
@@ -30,20 +30,22 @@
                         </div>
                         <div class="overflow" style="height: 224px">
                         	<#list messages as message> 
-                            <div class="media">
-                                <div class="pull-left">
-                                    <img width="40" src="img/profile-pics/1.jpg" alt="">
-                                </div>
-                                <div class="media-body">
-                                    <small class="text-muted">${message.fromName!'系统消息'} - ${DateUtil.fromToday(message.createDate)}</small><br>
-                                    <a class="t-overflow" href="">${message.content?html}</a>
-                                </div>
-                            </div>
+                        		<#if message_index<5>
+		                            <div class="media">
+		                                <div class="pull-left">
+		                                    <img width="40" src="img/profile-pics/1.jpg" alt="">
+		                                </div>
+		                                <div class="media-body">
+		                                    <small class="text-muted">${message.fromName!'系统消息'} - ${DateUtil.fromToday(message.createDate)}</small><br>
+		                                    <a class="t-overflow" href="">${message.content?html}</a>
+		                                </div>
+		                            </div>
+		                        </#if>    
                             </#list>
                             
                         </div>
                         <div class="media text-center whiter l-100">
-                            <a href=""><small>更多</small></a>
+                            <a onclick="$.SystemApp.messageJscript.messageIndex();" href="javascript:void(0);"><small>更多</small></a>
                         </div>
                     </div>
                 </div>

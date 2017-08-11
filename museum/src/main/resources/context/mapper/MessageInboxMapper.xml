@@ -165,8 +165,8 @@
       <if test="sessionId != null">
         session_id = #{sessionId,jdbcType=VARCHAR},
       </if>
-      <if test="isdel != null">
-        isdel = #{isdel,jdbcType=VARCHAR},
+      <if test="isDel != null">
+        isdel = #{isDel,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -277,8 +277,8 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.isdel != null">
-        isdel = #{record.isdel,jdbcType=VARCHAR},
+      <if test="record.isDel != null">
+        isdel = #{record.isDel,jdbcType=INTEGER},
       </if>      
       <if test="record.sessionId != null">
         session_id = #{record.sessionId,jdbcType=VARCHAR},
@@ -302,10 +302,12 @@
       is_read = #{record.isRead,jdbcType=INTEGER},
       create_date = #{record.createDate,jdbcType=TIMESTAMP},
       type = #{record.type,jdbcType=INTEGER},
-      isDel = #{record.isdel,jdbcType=INTEGER}
+      isDel = #{record.isDel,jdbcType=INTEGER}
       session_id = #{record.sessionId,jdbcType=VARCHAR}
     <if test="queryModel != null">
       <include refid="public.Update_By_Where_Clause" />
     </if>
   </update>
+  
+ 
 </mapper>

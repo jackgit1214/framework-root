@@ -18,4 +18,28 @@ public interface MuseumConstant extends SysConstant {
 
 	public static int BUSINESSTYPE_EXHIBIT = 6; // 陈列
 
+	//
+
+	public static String CURRENT_WEBSOCKET_USER = "CURRENT_WEBSOCKET_USER";
+
+	public static String CURRENT_SESSIONMANAGER = "sessionManager";
+
+	// 消息定阅及发送相关常量
+
+	public final static String WEBSOCKREGISTRYPATH = "/message";
+	public final static String WEBSOCK_STOMP_REGISTRYPATH = "/submsg";
+
+	public final static String WEBSOCK_STOMP_CLIENT_ACCEPT_PATH_PREFIXES = "/msg";
+
+	public final static String WEBSOCK_STOPM_CLIEN_SEND_PREFIXES = "/app";
+
+	// 根据用户不同，其后添加用户id,为指定用户消息 ，表示消息数量变化
+	public final static String WEBSOCK_STOMP_CLIENT_ACCEPT_MSGNUM_PATH = "/msgnum";
+
+	// 变化类型，增加还是减少
+	public enum CHANGETYPE {
+		ADD, DEL
+	}
+
+	// actual time
 }

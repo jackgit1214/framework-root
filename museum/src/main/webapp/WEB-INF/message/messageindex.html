@@ -20,7 +20,7 @@
 				
 					<div class="list-group block">
                          <a href="#" data-text="收件箱" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="accept" class="list-group-item active"><i class="fa fa-inbox"></i>
-								收件箱 <span class="label label-primary pull-right">${messages?size}</span></a>
+								收件箱 <span class="label label-primary pull-right NumOfMsg">${messages?size}</span></a>
                          <a href="#" data-text="发件箱" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="send" class="list-group-item"><i class="fa fa-envelope-o"></i> 发件箱</a>
                          <a href="#" data-text="草稿" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="draft" class="list-group-item"><i class="fa fa-file-text-o"></i> 草稿</a>
                          <a href="#" data-text="已删除" onclick="$.SystemApp.messageJscript.folderFilter(this)" data-type="del" class="list-group-item"><i class="fa fa-trash-o"></i> 已删除</a>

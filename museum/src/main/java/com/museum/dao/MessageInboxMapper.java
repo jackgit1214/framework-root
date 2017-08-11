@@ -19,4 +19,11 @@ public interface MessageInboxMapper extends IDataMapperByPage<MessageInbox>,
 
 	public List<MessageInbox> selectByConditionJoinUser(
 			@Param("queryModel") QueryModel queryModel);
+	//
+	// public List<MessageInbox> selectMsgByFromUserAndToUser(
+	// @Param("queryModel") QueryModel queryModel,
+	// @Param("page") PageResult<MessageInbox> page);
+	//
+	// public List<MessageInbox> selectMsgByFromUserAndToUser(
+	// @Param("queryModel") QueryModel queryModel);
 }

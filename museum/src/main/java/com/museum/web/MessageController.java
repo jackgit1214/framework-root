@@ -23,6 +23,7 @@ import com.system.common.SysConstant;
 import com.system.model.SysDepartmentTree;
 import com.system.model.SysUser;
 import com.system.mybatis.service.ISysDeptService;
+import com.system.mybatis.service.ISystemUserService;
 
 @Controller
 @RequestMapping("/message")
@@ -34,6 +35,9 @@ public class MessageController extends BaseController {
 	@Autowired
 	@Qualifier("sysDeptServiceImpl")
 	private ISysDeptService sysDeptService;
+
+	@Autowired
+	private ISystemUserService systemUserServiceImpl;
 
 	@RequestMapping("/index")
 	public ModelAndView index() {
@@ -54,18 +58,12 @@ public class MessageController extends BaseController {
 	public ModelAndView dataList(String userId, String searchContent,
 			String type, Integer pageNo, Integer pageNum) {
 		ModelAndView mav = new ModelAndView("message/listdata");
-		if (pageNum == null || pageNum == 0) {
-			pageNum = SysConstant.SYSDEFAULTROWNUM;
-		}
-		if (pageNo == null || pageNo == 1) {
-			pageNo = 1;
-		}
+		PageResult page = genPageResult(pageNo, pageNum);
 		if (userId == null || "".equals(userId)) {
 			SysUser user = (SysUser) this.getSessionUser();
 			userId = user.getUserid();
 		}
 
-		PageResult page = new PageResult(pageNo, pageNum);
 		if (type == null)
 			type = "accept";
 
@@ -80,6 +78,25 @@ public class MessageController extends BaseController {
 		return mav;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private PageResult genPageResult(Integer pageNo, Integer pageNum) {
+		if (pageNum == null || pageNum == 0) {
+			pageNum = SysConstant.SYSDEFAULTROWNUM;
+		}
+		if (pageNo == null || pageNo == 1) {
+			pageNo = 1;
+		}
+
+		PageResult page = new PageResult(pageNo, pageNum);
+		return page;
+	}
+
+	/**
+	 * 创建新消息
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/showMessage")
 	@DuplicateSubmission(needSaveToken = true)
 	public ModelAndView showEdit(String id) {
@@ -97,14 +114,47 @@ public class MessageController extends BaseController {
 		return mav;
 	}
 
+	/**
+	 * 回复消息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/showReply")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@DuplicateSubmission(needSaveToken = true)
+	public ModelAndView showReply(
+			@RequestParam(value = "ids[]", required = false) String[] ids,
+			Integer pageNo, Integer pageNum) {
+
+		ModelAndView mav = new ModelAndView("message/replymsg");
+
+		// 取要回复的人员信息，只显示第一个选择的消息
+		MessageInbox msgInbox = this.messageServiceImpl.findObjectById(ids[0]);
+		SysUser fromUser = this.systemUserServiceImpl.findObjectById(msgInbox
+				.getFromUserId());
+		PageResult page = genPageResult(pageNo, pageNum);
+		SysUser user = (SysUser) this.getSessionUser();
+
+		this.messageServiceImpl.getMsgByFromUserAndToUser(fromUser.getId(),
+				user.getUserid(), page, "");
+
+		mav.addObject("page", page);
+		mav.addObject("user", fromUser);
+		return mav;
+	}
+
 	@ResponseBody
 	@RequestMapping("/update")
 	@DuplicateSubmission(needRemoveToken = true)
 	public ModelMap addOrUpdate(String userids, String content, boolean isSend,
 			String msgBoxId, HttpServletRequest request) {
 		ModelMap modelMap = new ModelMap();
-		StringBuffer id = new StringBuffer(msgBoxId);
-		int rows = this.messageServiceImpl.save(userids, content, isSend, id);
+		if (msgBoxId == null)
+			msgBoxId = "";
+		StringBuffer id = new StringBuffer(msgBoxId); // 这里利用，stringbuffer对象取回新增消息，保存草稿时的id，并返回到页面
+		int rows = this.messageServiceImpl.save(userids, content, isSend, id,
+				null);
 		// int rows = this.messageServiceImpl.save(record);
 		modelMap.addAttribute("successRows", rows);
 		modelMap.addAttribute("msgboxid", id.toString());
@@ -112,6 +162,13 @@ public class MessageController extends BaseController {
 		return modelMap;
 	}
 
+	/**
+	 * 删除一行或多行数据
+	 * 
+	 * @param ids
+	 * @param curType
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/delete")
 	public ModelMap delete(

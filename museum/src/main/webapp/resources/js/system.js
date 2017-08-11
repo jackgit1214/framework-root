@@ -593,8 +593,13 @@ $.SystemApp.initComponents = function() {
 			forceParse : 0,
 			pickerPosition : "bottom-right"
 		});
-	}
-	;
+	};
+
+	if($('.overflow')[0]) {
+		var overflowRegular, overflowInvisible = false;
+		overflowRegular = $('.overflow').niceScroll();
+	};
+		   
 	if ($('.pirobox_gall')[0]) {
 		// Fix IE
 		jQuery.browser = {};
@@ -1078,7 +1083,6 @@ $.SystemApp.commonOper = {
 		};
 		if (paramData!=undefined)
 			$.extend(data,paramData);
-		console.log(data);
 		$.post($.SystemApp.contextPath + urllink, data, function(data) {
 			if (data.successRows > 0) {
 				$.SystemApp.pagetoolbar.refreshData();
@@ -1354,9 +1358,37 @@ $.SystemApp.messageJscript = {
 			$.SystemApp.commonOper.del("/message/delete","tableHover_messagebox",paramData);
 			
 		},
-		save : function(formObject,isDraft) {
-			var content =  $('.wysiwye-editor').code();
-			var paramData = [{name:'content',value:content},{name:'userids',value:$("#toUserId").val()},{name:'isSend',value:isDraft}];
+		reply:function(dataId){
+			//dataId,参数，查看消息单条信息ID时
+			var selectValue ; 
+			if (!dataId){
+				selectValue = $.SystemApp.checkbox("#tableHover_messagebox" );
+				if (selectValue == null || selectValue == '' || selectValue.length <= 0) {
+					return;
+				}
+			}else{
+				selectValue= [dataId];
+			}
+			var data = {
+				ids : selectValue
+			};
+			
+			this.dialogObj = $.SystemApp.openDialog($.SystemApp.contextPath
+					+ "/message/showReply", {
+				data : data,
+				title : "消息"
+			});			
+			
+		},
+		save : function(formObject,isSend,isReply) {
+			var $this = this;
+			var content = "";
+			if (!isReply)
+				content =  $('.wysiwye-editor').code();
+			else
+				content = $("#content1").val();
+			
+			var paramData = [{name:'content',value:content},{name:'userids',value:$("#toUserId").val()},{name:'isSend',value:isSend}];
 			var $formObject = $("#" + formObject);
 			var validateResult = $formObject.validationEngine('validate');
 			if (!validateResult)
@@ -1366,9 +1398,14 @@ $.SystemApp.messageJscript = {
 			$.merge(data,paramData);
 			$.post($.SystemApp.contextPath + "/message/update", data, function(data) {
 				if (data.successRows > 0) {
-					alert("数据保存成功！");
-					$("#msgBoxId").val(data.msgboxid);
-					
+					if (isSend && !isReply){
+						alert("消息发送成功！");
+						$this._handleHeader("收件箱",false);
+						$this.init_UI();
+					}else{
+						alert("数据保存成功！");
+						$("#msgBoxId").val(data.msgboxid);
+					}
 				} else {
 					alert("数据保存失败！");
 				}

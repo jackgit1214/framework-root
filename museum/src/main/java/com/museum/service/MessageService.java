@@ -5,7 +5,6 @@ import java.util.List;
 import com.framework.mybatis.service.IBusinessService;
 import com.framework.mybatis.util.PageResult;
 import com.museum.model.MessageInbox;
-import com.museum.model.MessageOutbox;
 
 public interface MessageService extends IBusinessService<MessageInbox> {
 
@@ -23,7 +22,7 @@ public interface MessageService extends IBusinessService<MessageInbox> {
 	 * @return
 	 */
 	int save(String userids, String content, boolean isSend,
-			StringBuffer msgBoxId);
+			StringBuffer msgBoxId, String fromUserId);
 
 	/**
 	 * 根据用户ID，取得用户的未读消息
@@ -34,56 +33,20 @@ public interface MessageService extends IBusinessService<MessageInbox> {
 	public List<MessageInbox> getUserMessage(String userId);
 
 	/**
-	 * 返回指定用户的所有消息，包含已读及未读， 并按照已读状态、时间进行排序
+	 * 取得两个用户的对话消息记录
 	 * 
-	 * @param queryModel
+	 * @param fromUserId
+	 * @param toUserid
 	 * @param page
+	 * @param searchContent
 	 * @return
 	 */
-	public PageResult<MessageInbox> getUserMessage(String userid,
-			String searchContent, PageResult<MessageInbox> page);
+	public PageResult<MessageInbox> getMsgByFromUserAndToUser(
+			String fromUserId, String toUserid, PageResult<MessageInbox> page,
+			String searchContent);
 
-	/**
-	 * 返回指定用户的草稿消息
-	 * 
-	 * @param queryModel
-	 * @param page
-	 * @return
-	 */
-	public PageResult<MessageOutbox> getUserDraftMessage(String userid,
-			String searchContent, PageResult<MessageOutbox> page);
-
-	/**
-	 * 返回指定用户的已发送消息
-	 * 
-	 * @param queryModel
-	 * @param page
-	 * @return
-	 */
-	public PageResult<MessageOutbox> getUserSendMessage(String userid,
-			String searchContent, PageResult<MessageOutbox> page);
-
-	/**
-	 * 返回指定用户的已删除
-	 * 
-	 * @param queryModel
-	 * @param page
-	 * @return
-	 */
-	public PageResult<MessageInbox> getUserDelMessage(String userid,
-			String searchContent, PageResult<MessageInbox> page);
-
-	/**
-	 * 根据消息类型，返回指定用户的收到的消息
-	 * 
-	 * @param queryModel
-	 * @param page
-	 * @return
-	 */
-	public PageResult<MessageInbox> getUserMessage(String userid, String type,
-			String searchContent, PageResult<MessageInbox> page);
-
-	void getMessage(String userId, String searchContent, PageResult page,
-			String type);
+	@SuppressWarnings("rawtypes")
+	public void getMessage(String userId, String searchContent,
+			PageResult page, String type);
 
 }

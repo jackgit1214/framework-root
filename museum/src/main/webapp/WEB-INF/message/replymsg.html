@@ -1,0 +1,265 @@
+<#include "/commons/plugin.html"/>
+<style type="text/css">
+/*chat*/
+.chats {
+	
+}
+
+.chats li {
+	font-size: 12px;
+	list-style: outside none none;
+	margin: 7px auto;
+	padding: 8px 0 5px;
+}
+
+.chats li img.avatar {
+	width: 50px;
+	height: 50px;
+	margin-top: 0;
+	border-radius: 3px;
+}
+
+.chats li.in img.avatar {
+	float: left;
+	margin-right: 10px;
+}
+
+.chats li.out img.avatar {
+	float: right;
+	margin-left: 10px;
+}
+
+.chats li .message {
+	display: block;
+	padding: 8px 10px 8px 20px;
+	position: relative;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+.chats li.in .message {
+	margin-left: 75px;
+	text-align: left;
+	margin-right: 35%;
+}
+
+.chats li.out .message {
+	border-right: 2px solid #eff0f4;
+	margin-right: 65px;
+	text-align: right;
+	margin-left: 35%;
+}
+
+.cool-chat li.in .message {
+	/*background: #ebe8e7;*/
+	border: 1px solid white;
+	border-radius: 0 5px 5px 5px;
+}
+
+.cool-chat li.out .message {
+	/*background: #ebe8e7;*/
+	border: 1px solid white;
+	border-radius: 5px 0 5px 5px;
+}
+
+.chats li.in .message .arrow {
+	border-bottom: 8px solid transparent;
+	/*border-top: 8px solid transparent;*/
+	display: block;
+	height: 0;
+	left: -8px;
+	position: absolute;
+	top: 0;
+	width: 0;
+}
+
+.cool-chat li.in .message .arrow {
+	border-right: 8px solid #ebe8e7;
+}
+
+.chats li .name {
+	font-size: 12px;
+}
+
+.cool-chat li.in .message a.name {
+	
+}
+
+.cool-chat li.in .message a.name,.cool-chat li.in .message .datetime {
+	
+}
+
+.chats li .datetime {
+	font-size: 10px;
+}
+
+.cool-chat li.in .message a.name,.cool-chat li.in .message .datetime {
+	
+}
+
+.chats li.in .message {
+	text-align: left;
+}
+
+.cool-chat li.in .message {
+	
+}
+
+.chats li .message .body {
+	display: block;
+}
+
+.chats li.out .message .arrow {
+	border-bottom: 8px solid transparent;
+	border-left: 8px solid #eff0f4;
+	display: block;
+	position: absolute;
+	right: -8px;
+	top: 0;
+}
+
+.chats li.out .message .datetime,.chats li.out .message .body {
+	
+}
+
+.cool-chat li.out .message .arrow {
+	border-left: 8px solid #ebe8e7;
+}
+
+.chats li.out .name {
+	
+}
+</style>
+<div class="container">
+	<div style="position: relative; z-index: 101;">
+		<!-- 
+		<div class="col-sm-3 col-md-2 hidden-xs" id="msg-lf">
+			<div class="row">
+				<div id="affixJ" class="contentInfo">
+					<div class="sideLfModelList">
+						<div class="sidebar-s">
+							<div style="margin-bottom: 0;" class="panel panel-default">
+								<div class="panel-heading hot-tit">
+									<i class="ico-i ico-men-ff"></i>用户
+								</div>
+							</div>
+							<div class="tag-ps">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+		<div class="col-sm-12 col-md-12">
+			<div class="panel panel-default m-b-0">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<span id="curusername">TO:${user.username} </span>
+					</h3>
+
+				</div>
+				<div class="panel-body p-2" id="msgContainer" style="height: 350px; overflow: auto;">
+					<ul class="chats cool-chat p-l-10 p-r-10" id="msglist">
+						<#if page.pageDatas?? > 
+							<#list page.pageDatas as msgbox > 
+							<#if msgbox.fromUserId = sessionManager.user.userid > 
+								<#assign classname="out"/> 
+								<#assign userid= sessionManager.user.userid/>
+						<#else> 
+							<#assign classname="in"/> 
+							<#assign userid= msgbox.fromUserId/> 
+						</#if>
+						<li class="${classname}"><img class="avatar" alt="" src="${request.contextPath}/system/user/image/${userid}">
+							<div class="message">
+								<span class="arrow"></span> <a href="#" class="name"></a> <span
+									class="datetime">时间:${DateUtil.fromToday(msgbox.createDate)}</span>
+								<span class="body"> ${msgbox.content}</span>
+							</div></li> </#list> </#if>
+					</ul>
+
+				</div>
+				<div class="panel-footer">
+					<form class="form-inline" role="form" id="msgForm"
+						onSubmit="return false;">
+						<input type="hidden" id="toUserId" name="toUserId"
+							value="${user.userid}" /> <input type="text" title=""
+							class="input-sm validate[required] form-control" id="content1"
+							name="content1" placeholder="" maxlength="500"
+							style="width: 80%;" />
+
+						<button type="button" class="btn btn-default"
+							onclick="messageSock.sendMessage();">发送</button>
+						<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var socket = null;
+
+	var messageSock = {
+		setMessage : function(data,msgType) {
+			
+			var $msglist = $("#msglist");
+			var $li = $("<li>");
+			var $img = $("<img>").addClass('avatar');
+			
+			$li.addClass(msgType).append($img);
+			var $date  = $("<span>").html("时间：");
+			var $msgContent = $("<span>").addClass("body").html(data);
+			var $div = $("<div>").addClass("message")
+				.append("<span class='arrow'></span>")
+				.append("<a href='#' class='name'></a>")
+				.append($date)
+				.append($msgContent);
+			$li.append($div);
+							
+			$msglist.append($li);
+			//$msglist.attr("scrollTop",$msglist.attr("scrollHeight"));
+		},
+		sendMessage : function() {
+			var value = $('#content1').val();
+			var msg = {
+				fromUser : "${sessionManager.user.userid}",
+				toUser : "${user.userid}",
+				content : value
+			}
+			socket.send(JSON.stringify(msg));
+			this.setMessage(value,"out");
+			//发送完成后，清空内容
+			$('#content1').val("");
+		},
+		scrollToLocation:function () {
+			  var mainContainer = $('#msgContainer');
+			  var scrollToContainer = mainContainer.find('li:last');
+			  //动画效果
+			  mainContainer.animate({
+			    scrollTop: scrollToContainer.offset().top - mainContainer.offset().top + mainContainer.scrollTop()
+			  }, 2000);//2秒滑动到指定位置
+		},
+		connect : function() {
+			var $this = this;
+			socket = new SockJS('<@projectpath/>/message');
+			socket.onopen = function(event) {
+				//暂时，表明连接状态
+				$("#curusername").html("（已连接）"+$("#curusername").html());
+			};
+			socket.onmessage = function(event) {
+				$this.setMessage(event.data,"in");
+			};
+			socket.onerror = function(event) {
+			};
+			socket.onclose = function(event) {
+			}
+		}
+	};
+	$(function() {
+		messageSock.connect();
+		messageSock.scrollToLocation();
+	});
+</script>

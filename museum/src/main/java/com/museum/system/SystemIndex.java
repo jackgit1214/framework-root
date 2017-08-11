@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.framework.common.anaotation.LinkHistoryAnaotation;
 import com.framework.web.controller.BaseController;
 import com.framework.web.util.SessionManager;
+import com.museum.MuseumConstant;
 import com.museum.model.MessageInbox;
 import com.museum.service.MessageService;
 import com.system.common.SysConstant;
@@ -88,7 +89,8 @@ public class SystemIndex extends BaseController {
 			sessionManager.setUser(user);
 			sessionManager.setLoginDate(Calendar.getInstance().getTime());
 			isSuccess = true;
-			request.getSession().setAttribute("sessionManager", sessionManager);
+			request.getSession().setAttribute(
+					MuseumConstant.CURRENT_SESSIONMANAGER, sessionManager);
 		}
 		modelMap.addAttribute("isSuccess", isSuccess);
 		return modelMap;

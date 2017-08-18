@@ -348,7 +348,7 @@ blockquote small {
     margin-left: 48px;
     position: relative;
 }
-/**根据不同屏幕高度自适应*/@media (max-height:1080px){			.con-main {		min-height: 575px;		overflow-y:auto;	}		.table-con{		min-height:485px;			}		.table-data{		overflow-y:auto;	}	}
+/**根据不同屏幕高度自适应*/@media (max-height:1080px){			.con-main {		min-height: 575px;			}		.table-con{		min-height:485px;			}		}
 /* Sidebar */
 #sidebar {
     width: 46px;

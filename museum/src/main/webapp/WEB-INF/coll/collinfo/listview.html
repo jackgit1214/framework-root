@@ -16,7 +16,7 @@
 </header>
 
 <div class=" table-con">
-	<div id="tableHover_collInfo" class=" tile table-data m-b-5">
+	<div id="tableHover_collInfo" class=" tile table-data overflow m-b-5">
 
 		<#if page.pageDatas?? > <#list page.pageDatas as collInfo >
 
@@ -142,7 +142,7 @@
 <script type="text/javascript">
 	$(function() {
 		//$.SystemApp.initComponents();
-		$.SystemApp.pagetoolbar.toolbarInit();
+		//$.SystemApp.pagetoolbar.toolbarInit();
 		$('#select_btn').on('switch-change', function (e, data) {
 			var value = data.value;
 			if (value)

@@ -60,8 +60,12 @@ var subscribeInfo = {
 			var oriNumOfMsg =  $numofmsg.text();
 			if (data =="ADD")
 				$(".NumOfMsg").text(eval(oriNumOfMsg)+1);
-			else if (data=="DEL")
-				$(".NumOfMsg").text(eval(oriNumOfMsg)-1);
+			else if (data=="DEL"){
+				var nummsg = eval(oriNumOfMsg)-1;
+				if (nummsg <0 )
+					nummsg = 0;
+				$(".NumOfMsg").text(nummsg);
+			}
 		},
 		disconnect:function(){
 			var $this = this;

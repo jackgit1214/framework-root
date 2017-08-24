@@ -394,7 +394,7 @@ public class MessageServiceImpl extends AbstractBusinessService<MessageInbox>
 			criteria.andLike("content", "%" + searchContent + "%");
 		}
 
-		queryModel.setOrderByClause("create_date Asc ");
+		queryModel.setOrderByClause("create_date Desc ");
 
 		List<MessageInbox> messages = this.messageInboxMapper
 				.selectByConditionJoinUser(queryModel, page);

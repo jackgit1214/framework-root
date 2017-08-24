@@ -162,7 +162,7 @@
 				<div class="panel-body p-2" id="msgContainer" style="height: 350px; overflow: auto;">
 					<ul class="chats cool-chat p-l-10 p-r-10" id="msglist">
 						<#if page.pageDatas?? > 
-							<#list page.pageDatas as msgbox > 
+							<#list page.pageDatas?reverse as msgbox > 
 							<#if msgbox.fromUserId = sessionManager.user.userid > 
 								<#assign classname="out"/> 
 								<#assign userid= sessionManager.user.userid/>

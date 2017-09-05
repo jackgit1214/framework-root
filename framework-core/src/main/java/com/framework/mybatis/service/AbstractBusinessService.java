@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -11,10 +12,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 
 import com.framework.mybatis.dao.Base.BaseDao;
+import com.framework.mybatis.dao.Base.CommSeqMapper;
 import com.framework.mybatis.dao.Base.IDataMapper;
 import com.framework.mybatis.dao.Base.IDataMapperByPage;
 import com.framework.mybatis.dao.Base.IDataMapperCRUD;
@@ -25,6 +28,9 @@ import com.framework.mybatis.util.PageResult;
 public abstract class AbstractBusinessService<T> implements IBusinessService<T> {
 
 	protected int DEFAULTROWNUMPERPAGE = 10;
+
+	@Autowired
+	private CommSeqMapper commSeqMapper;
 
 	private IDataMapper<T> dataMapper;
 	private IDataMapperWithBlob<T> dataMapperWithBlob;
@@ -135,6 +141,24 @@ public abstract class AbstractBusinessService<T> implements IBusinessService<T> 
 				throws Throwable {
 			return method.invoke(proxied, args);
 		}
+	}
+
+	@Override
+	public int getNextVal(String sequenceName) {
+
+		Map<String, Integer> map = this.commSeqMapper.getNextVal(sequenceName);
+
+		// TODO Auto-generated method stub
+		return map.get("value");
+	}
+
+	@Override
+	public synchronized int getCurVal(String sequenceName) {
+
+		Map<String, Integer> map = this.commSeqMapper.getCurrVal(sequenceName);
+
+		// TODO Auto-generated method stub
+		return map.get("value");
 	}
 
 }

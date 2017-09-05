@@ -1,5 +1,6 @@
 package com.framework.mybatis.service.impl;
 
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -9,8 +10,9 @@ import com.framework.mybatis.service.IBusinessService;
 import com.framework.mybatis.service.ICommonService;
 
 @Service
+@Transactional
 public class CommonServiceImpl<T> extends AbstractBusinessService<T> implements
-		IBusinessService<T>,ICommonService<T>{
+		IBusinessService<T>, ICommonService<T> {
 
 	private BaseDao baseDao;
 
@@ -46,5 +48,4 @@ public class CommonServiceImpl<T> extends AbstractBusinessService<T> implements
 		return 0;
 	}
 
-	
 }

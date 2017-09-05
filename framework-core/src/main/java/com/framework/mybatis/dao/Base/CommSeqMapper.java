@@ -23,6 +23,7 @@ public interface CommSeqMapper extends IDataMapperByPage<CommSeq>,
 	 * @return 指定序列的下一个值，key 序列名，value为值 <br>
 	 *         取得序列下一个值时，序列当前值发生更改
 	 */
+
 	public Map<String, Integer> getNextVal(String sequenceName);
 
 }

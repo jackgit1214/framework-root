@@ -1,6 +1,10 @@
 package com.framework.mybatis.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,6 +38,52 @@ public class CommonServiceImplTest extends BaseMybatisTest {
 
 		Assert.assertNotNull(modules);
 		Assert.assertEquals(10, modules.size());
+	}
+
+	public static ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
+
+	@Test
+	public void testSeqenceName() {
+
+		ExecutorService es = Executors.newCachedThreadPool();
+
+		for (int i = 0; i < 15000; i++) {
+			es.execute(new Runnable() {
+
+				@Override
+				public void run() {
+					int nextVal = commonService.getNextVal("t_test1");
+
+					if (!map.containsKey(Integer.toString(nextVal))) {
+						map.put(Integer.toString(nextVal),
+								Integer.toString(nextVal));
+					} else {
+
+						System.out.println(nextVal + " is exists.");
+					}
+				}
+			});
+		}
+
+		try {
+			Thread.sleep(60000);
+			System.out.println("--------------------------------------------");
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+
+				System.out.println("key= " + entry.getKey() + " and value= "
+						+ entry.getValue());
+			}
+			System.out.println(map.size());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@Test
+	public void testSeqenceName1() {
+		int nextVal = commonService.getNextVal("t_test1");
 	}
 
 	@Override

@@ -17,13 +17,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 
 import com.framework.mybatis.dao.Base.BaseDao;
-import com.framework.mybatis.dao.Base.CommSeqMapper;
 import com.framework.mybatis.dao.Base.IDataMapper;
 import com.framework.mybatis.dao.Base.IDataMapperByPage;
 import com.framework.mybatis.dao.Base.IDataMapperCRUD;
 import com.framework.mybatis.dao.Base.IDataMapperWithBlob;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
+import com.system.mybatis.dao.CommSeqMapper;
 
 public abstract class AbstractBusinessService<T> implements IBusinessService<T> {
 

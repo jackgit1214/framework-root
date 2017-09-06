@@ -1,5 +1,6 @@
 package com.framework.mybatis.service.impl;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +48,7 @@ public class CommonServiceImplTest extends BaseMybatisTest {
 
 		ExecutorService es = Executors.newCachedThreadPool();
 
-		for (int i = 0; i < 15000; i++) {
+		for (int i = 0; i < 1; i++) {
 			es.execute(new Runnable() {
 
 				@Override
@@ -66,7 +67,11 @@ public class CommonServiceImplTest extends BaseMybatisTest {
 		}
 
 		try {
-			Thread.sleep(60000);
+
+			File ftest = new File("c:/test.txt");
+			// ftest.
+			boolean isexis = ftest.delete();
+			Thread.sleep(100);
 			System.out.println("--------------------------------------------");
 			for (Map.Entry<String, String> entry : map.entrySet()) {
 
@@ -83,6 +88,7 @@ public class CommonServiceImplTest extends BaseMybatisTest {
 
 	@Test
 	public void testSeqenceName1() {
+		@SuppressWarnings("unused")
 		int nextVal = commonService.getNextVal("t_test1");
 	}
 

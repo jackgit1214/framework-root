@@ -1,7 +1,9 @@
-package com.framework.mybatis.dao.Base;
+package com.system.mybatis.dao;
 
 import java.util.Map;
 
+import com.framework.mybatis.dao.Base.IDataMapperByPage;
+import com.framework.mybatis.dao.Base.IDataMapperCRUD;
 import com.framework.mybatis.model.CommSeq;
 
 public interface CommSeqMapper extends IDataMapperByPage<CommSeq>,

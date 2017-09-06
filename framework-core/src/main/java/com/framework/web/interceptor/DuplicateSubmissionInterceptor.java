@@ -87,10 +87,13 @@ public class DuplicateSubmissionInterceptor extends HandlerInterceptorAdapter {
 		if (annotation != null) {
 			boolean needRemoveSession = annotation.needRemoveToken();
 			if (needRemoveSession) {
-				boolean isSuccess = (boolean) request.getAttribute("isSuccess");
-
-				if (isSuccess)
-					request.getSession(false).removeAttribute("token");
+				Object obj = request.getAttribute("isSuccess");
+				if (obj != null) {
+					boolean isSuccess = (boolean) request
+							.getAttribute("isSuccess");
+					if (isSuccess)
+						request.getSession(false).removeAttribute("token");
+				}
 			}
 		}
 		super.postHandle(request, response, handler, modelAndView);

@@ -1,7 +1,6 @@
 package com.museum.web;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +15,11 @@ import com.framework.common.anaotation.DuplicateSubmission;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
 import com.framework.web.controller.BaseController;
+import com.museum.common.aop.NeedCode;
 import com.museum.model.CollInfo;
-import com.museum.model.CommCode;
 import com.museum.service.CollInfoService;
 import com.museum.service.CommCodeService;
 import com.system.common.SysConstant;
-import com.system.model.SysCodeTree;
 import com.system.mybatis.service.ISysCodeService;
 
 @Controller
@@ -42,6 +40,7 @@ public class CollInfoController extends BaseController {
 		return mav;
 	}
 
+	@NeedCode(codeType = { "wwly", "zdlb" }, commCodeType = { "share-currency" })
 	@RequestMapping("/list")
 	public ModelAndView dataList(QueryModel queryModel, Integer pageNo,
 			Integer pageNum) {
@@ -59,16 +58,6 @@ public class CollInfoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		List<SysCodeTree> wwlycodes = sysCodeService.getCodeDataByCodeid(null,
-				"wwly");
-
-		mav.addObject("wwlycodes", wwlycodes);
-		mav.addObject("zdlbcodes",
-				sysCodeService.getCodeDataByCodeid(null, "zdlb"));
-
-		List<CommCode> commcodes = this.commCodeServiceImpl.getCommCodes(
-				"share", "currency");
-		mav.addObject("commcodes", commcodes);
 
 		mav.addObject("param", JSON.toJSONString(queryModel));
 		mav.addObject("page", page);

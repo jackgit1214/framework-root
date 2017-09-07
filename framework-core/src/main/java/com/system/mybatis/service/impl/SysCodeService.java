@@ -80,10 +80,29 @@ public class SysCodeService extends AbstractBusinessService<SysCode> implements
 		criteria.andEqualTo("applyto", 2);
 		if (codetype != null && !"".equals(codetype))
 			criteria.andEqualTo("codetype", codetype);
+
 		queryModel.setOrderByClause("code");
 		List<SysCodeTree> datas = this.sysCodeMapper.selectCodeTree(queryModel);
 
 		return datas;
 	}
 
+	@Override
+	public List<SysCode> getCodeData(String[] codeTypes) {
+
+		QueryModel queryModel = new QueryModel();
+		QueryModel.Criteria criteria = queryModel.createCriteria();
+
+		// 2代码是指标型管理数据，需要动态添加
+		criteria.andEqualTo("applyto", 2);
+		for (String codeType : codeTypes) {
+			queryModel.or().andEqualTo("codetype", codeType);
+		}
+
+		queryModel.setOrderByClause("code");
+
+		List<SysCode> datas = this.sysCodeMapper.selectByCondition(queryModel);
+
+		return datas;
+	}
 }

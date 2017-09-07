@@ -12,11 +12,12 @@ import com.system.model.SysCodeTree;
 public interface ISysCodeService extends IBusinessService<SysCode> {
 
 	public int saveCode(SysCode sysCode);
-	
+
 	public int delete(String[] ids);
 
 	public int delete(String id);
 
-	List<SysCodeTree> getCodeDataByCodeid(String codeid,String codetype);
-	
+	List<SysCodeTree> getCodeDataByCodeid(String codeid, String codetype);
+
+	List<SysCode> getCodeData(String[] codeTypes);
 }

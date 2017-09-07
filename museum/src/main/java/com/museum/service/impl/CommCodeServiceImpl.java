@@ -65,4 +65,16 @@ public class CommCodeServiceImpl extends AbstractBusinessService<CommCode>
 		return this.findObjects(queryModel);
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public List<CommCode> getCommCodes(String[] codeTypes) {
+
+		QueryModel queryModel = new QueryModel();
+
+		for (String codeType : codeTypes) {
+			queryModel.or().andEqualTo("tablename", codeType);
+		}
+		List<CommCode> datas = this.findObjects(queryModel);
+		return datas;
+	}
 }

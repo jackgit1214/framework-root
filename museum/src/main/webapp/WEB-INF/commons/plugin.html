@@ -33,7 +33,7 @@
                         		<#if message_index<5>
 		                            <div class="media">
 		                                <div class="pull-left">
-		                                    <img width="40" src="${request.contextPath}/system/user/image/${message.fromUserId}" alt="">
+		                                    <img width="40" class="user-image" src="${request.contextPath}/system/user/image/${message.fromUserId}" alt="">
 		                                </div>
 		                                <div class="media-body">
 		                                    <small class="text-muted">${message.fromName!'系统消息'} - ${DateUtil.fromToday(message.createDate)}</small><br>

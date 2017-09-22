@@ -43,15 +43,15 @@
 											<td>${collInfo.colldate?date}</td>
 											<td>${collInfo.price!''}</td>
 											<td>
-												<@pub.outputCommCode codes=commcodes id="currency" value="${collInfo.currency!''}" ></@pub.outputCommCode>
+												<@pub.outputCommCode codes=share\-currency id="currency" value="${collInfo.currency!''}" ></@pub.outputCommCode>
 												
 											</td>
 											<td>${collInfo.collname!''}</td>
 											<td>
-											<@pub.outputCode codetype="zdlb" codes=zdlbcodes id="culmaterial" value="${collInfo.culmaterial!''}" ></@pub.outputCode>
+											<@pub.outputCode codetype="zdlb" codes=zdlb id="culmaterial" value="${collInfo.culmaterial!''}" ></@pub.outputCode>
 											</td>
 											<td>
-											<@pub.outputCode codetype="wwly" codes=wwlycodes id="culrootin" value="${collInfo.culrootin!''}" ></@pub.outputCode>	
+											<@pub.outputCode codetype="wwly" codes=wwly id="culrootin" value="${collInfo.culrootin!''}" ></@pub.outputCode>	
 											</td>
 											<td>${collInfo.culcondition!''}</td>
 											<td>${collInfo.collpath!''}</td>

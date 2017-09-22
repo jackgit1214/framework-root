@@ -54,7 +54,7 @@
 							<label>币种：</label>
 						</div>
 						<div class="col-md-1 text-left">
-							<label><@pub.outputCommCode codes=commcodes id="currency"
+							<label><@pub.outputCommCode codes=share\-currency id="currency"
 								value="${collInfo.currency!''}" ></@pub.outputCommCode></label>
 						</div>
 
@@ -66,9 +66,7 @@
 							<label for="logincode" class=" control-label text-right p-r-0">来源：</label>
 						</div>
 						<div class="col-md-1 text-left">
-							<label><@pub.outputCode codetype="wwly" codes=wwlycodes
-								id="culrootin" value="${collInfo.culrootin!''}"
-								></@pub.outputCode> </label>
+							<label><@pub.outputCode codetype="wwly" codes=wwly id="culrootin" value="${collInfo.culrootin!''}"></@pub.outputCode> </label>
 						</div>
 					</div>
 					<div class="row">

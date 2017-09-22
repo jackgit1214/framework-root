@@ -61,6 +61,8 @@
 	<!-- 
 	<script src="js/select.min.js"></script> -->
 	<!-- Custom Select -->
+	
+	<script src="js/bootstrap-modal.js"></script>
 	<script src="js/bootstrap-select.js"></script>
 	<script src="js/defaults-zh_CN.js"></script>
 	<script src="js/chosen.min.js"></script>
@@ -240,12 +242,17 @@
 	 	 </select>
 	
      <script type="text/javascript">
+     
+     
      	$(function(){
      		
      		$.getJSON("<@projectpath/>/public/widget/getCommCodes",{table:"${tablename}",field:"${fieldname}"},function(data){
 				var codes = data.codes;
-				var $obj = $("#${id}");
+				var id = "${id}";
+				var $obj = $("#"+escapeJquery(id));
+				console.log(codes);
 				$.each(codes,function(i,obj){
+					
 						if (obj.code=="${value}")
 							$obj.append("<option selected value="+obj.code+">"+obj.codename+"</option> ");
 						else

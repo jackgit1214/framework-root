@@ -1,8 +1,9 @@
 <script type=text/javascript>
-	$.extend($.SystemApp.appraisalinfoJscript,{
-		editJscript:{
+	$.extend($.SystemApp.appraisalinfoJscript, {
+		editJscript : {
 			init_UI : function() {
-			
+				var $parent = $("#editappraisalinfo").parent();
+				$parent.addClass("m-0 p-0");
 			}
 		}
 	});
@@ -13,15 +14,26 @@
 <div id="editappraisalinfo" class="div_detail">
 	<form id="appraisalinfoform" name="appraisalinfoform"
 		class="form-validation-1 form-horizontal">
-			<input type="hidden" name="token" value='${token}'>
-			<input type="hidden"  id="AppraisalID" name="appraisalid" value='${appraisalinfo.appraisalid!''}'>	
-			<input type="hidden"  id="CulID" name="culid" value='${appraisalinfo.culid!''}'>			
-			<input type="hidden"  id="apprBatchNo" name="apprBatchNo" value='${appraisalinfo.apprBatchNo!''}'>
-			<input type="hidden"  id="apprBatchNo" name="apprBatchNo" value='${appraisalinfo.apprBatchNo!''}'>	
-			<input type="hidden"  id="updatingUid" name="updatingUid" value='${appraisalinfo.updatingUid!''}'>	
-			<input type="hidden"  id="updatingDate" name="updatingDate" value='${appraisalinfo.updatingDate!''}'>		
-				<div class="form-group">
-					<label for="logincode" class="col-md-2 control-label p-r-0">申请人：</label>
+		<div class="tab-container tile m-b-0 ">
+			<ul class="nav tab nav-tabs">
+				<li class="active"><a href="#appraisalinfo">鉴定信息</a></li>
+				<li><a href="#experts">专家鉴定意见</a></li>
+			</ul>
+			<div class="tab-content" style="height:520px;">
+				<div class="tab-pane active" id="appraisalinfo">
+					<input type="hidden" name="token" value='${token}'> <input
+						type="hidden" id="AppraisalID" name="appraisalid"
+						value='${appraisalinfo.appraisalid!''}'> <input
+						type="hidden" id="CulID" name="culid"
+						value='${appraisalinfo.culid!''}'> 
+						<input type="hidden" 	id="apprBatchNo" name="apprBatchNo"	value='${appraisalinfo.apprBatchNo!''}'> 
+						<input
+						type="hidden" id="updatingUid" name="updatingUid"
+						value='${appraisalinfo.updatingUid!''}'> <input
+						type="hidden" id="updatingDate" name="updatingDate"
+						value='${appraisalinfo.updatingDate!''}'>
+					<div class="form-group">
+						<label for="logincode" class="col-md-2 control-label p-r-0">申请人：</label>
 						<div class="col-md-4 p-l-0">
 							<input type="text" id="Proposer" name="proposer" data-label="申请人"
 								value="${appraisalinfo.proposer!''}"
@@ -30,46 +42,54 @@
 						</div>
 						<label for="logincode" class="col-md-2 control-label p-r-0">申请时间：</label>
 						<div class="col-md-4 p-l-0">
-							<div class="input-group date form_datetime" data-date="1949-10-01"  data-date-format="yyyy-MM-dd"  data-link-format="yyyy-mm-dd">
-							  	<input type="text" id="ApplicationDate" name="applicationdate" data-label="申请时间"
-								value="${(appraisalinfo.applicationdate?date)!''}" readonly 
-								class="input-sm validate[required] form-control  datepicker hasDatepicker" />
-							    <span class="input-group-addon "><i class="glyphicon glyphicon-calendar"></i></span>
+							<div class="input-group date form_datetime"
+								data-date="1949-10-01" data-date-format="yyyy-MM-dd"
+								data-link-format="yyyy-mm-dd">
+								<input type="text" id="ApplicationDate" name="applicationdate"
+									data-label="申请时间"
+									value="${(appraisalinfo.applicationdate?date)!''}" readonly
+									class="input-sm validate[required] form-control  datepicker hasDatepicker" />
+								<span class="input-group-addon "><i
+									class="glyphicon glyphicon-calendar"></i></span>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						
+
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定类型：</label>
-						<div class="col-md-4 p-l-0">
-							<@pub.selectCommCode tablename="appraisalinfo" fieldname="Appr_Type" id="apprType" value="${appraisalinfo.apprType!''}" >
-							</@pub.selectCommCode>
-						</div>
+						<div class="col-md-4 p-l-0"><@pub.selectCommCode
+							tablename="appraisalinfoApprType" fieldname="Appr_Type"
+							id="apprType" value="${appraisalinfo.apprType!''}" >
+							</@pub.selectCommCode></div>
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定时间：</label>
 						<div class="col-md-4 p-l-0">
-						
-							<div class="input-group date form_datetime" data-date="1949-10-01"  data-date-format="yyyy-MM-dd"  data-link-format="yyyy-mm-dd">
-							  	<input type="text" id="Start_Date" name="startDate" data-label="鉴定时间"
-								value="${(appraisalinfo.startDate?date)!''}" readonly
-								class="input-sm validate[required] form-control datepicker hasDatepicker"/>
-	
-							    <span class="input-group-addon "><i class="glyphicon glyphicon-calendar"></i></span>
+
+							<div class="input-group date form_datetime"
+								data-date="1949-10-01" data-date-format="yyyy-MM-dd"
+								data-link-format="yyyy-mm-dd">
+								<input type="text" id="Start_Date" name="startDate"
+									data-label="鉴定时间" value="${(appraisalinfo.startDate?date)!''}"
+									readonly
+									class="input-sm validate[required] form-control datepicker hasDatepicker" />
+
+								<span class="input-group-addon "><i
+									class="glyphicon glyphicon-calendar"></i></span>
 							</div>
 						</div>
-						
+
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定原因：</label>
 						<div class="col-md-10 p-l-0">
-							<textarea id="ApplicationReasons" name="applicationreasons" data-label="鉴定原因"
-								 class="form-control m-b-10" >${appraisalinfo.applicationreasons!''}</textarea>
+							<textarea id="ApplicationReasons" name="applicationreasons"
+								data-label="鉴定原因" class="form-control m-b-10">${appraisalinfo.applicationreasons!''}</textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定地点：</label>
 						<div class="col-md-10 p-l-0">
 							<textarea id="Appr_Locate" name="apprLocate" data-label="鉴定地点"
-								 class="form-control m-b-10" >${appraisalinfo.apprLocate!''}</textarea>
+								class="form-control m-b-10">${appraisalinfo.apprLocate!''}</textarea>
 						</div>
 					</div>
 					<div class="form-group">
@@ -77,83 +97,169 @@
 						<div class="col-md-4 p-l-0">
 							<input type="text" id="Compere" name="compere" data-label="鉴定负责人"
 								value="${appraisalinfo.compere!''}"
-								class="input-sm  form-control"
-								placeholder="请输入" />
+								class="input-sm  form-control" placeholder="请输入" />
 						</div>
 						<label for="logincode" class="col-md-2 control-label p-r-0">估价：</label>
 						<div class="col-md-4 p-l-0">
-							<input type="text" id="Appr_B0256" name="apprB0256" data-label="估价"
-								value="${appraisalinfo.apprB0256!''}"
-								class="input-sm form-control"
-								placeholder="请输入" />
+							<input type="text" id="Appr_B0256" name="apprB0256"
+								data-label="估价" value="${appraisalinfo.apprB0256!''}"
+								class="input-sm form-control" placeholder="请输入" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定意见：</label>
 						<div class="col-md-10 p-l-0">
-							<textarea  id="Appr_Opinion" name="apprOpinion" data-label="鉴定意见"
-								 class="form-control m-b-10" >${appraisalinfo.apprOpinion!''}</textarea>
+							<textarea id="Appr_Opinion" name="apprOpinion" data-label="鉴定意见"
+								class="form-control m-b-10">${appraisalinfo.apprOpinion!''}</textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">文物名称：</label>
 						<div class="col-md-4 p-l-0">
-							<input type="text" id="Appr_A0102" name="apprA0102" data-label="文物名称"
-								value="${appraisalinfo.apprA0102!''}"
+							<input type="text" id="Appr_A0102" name="apprA0102"
+								data-label="文物名称" value="${appraisalinfo.apprA0102!''}"
 								class="input-sm validate[required] form-control"
 								placeholder="请输入" />
 						</div>
 						<label for="logincode" class="col-md-2 control-label p-r-0">文物级别：</label>
-						<div class="col-md-4 p-l-0">
-							<@pub.selectCode codetype="cpjb" id="apprB0401" value="${appraisalinfo.apprB0401!''}" >
-							</@pub.selectCode>
-							
-						</div>						
+						<div class="col-md-4 p-l-0"><@pub.selectCode codetype="cpjb"
+							id="apprB0401" value="${appraisalinfo.apprB0401!''}" >
+							</@pub.selectCode></div>
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">文物质地：</label>
-						<div class="col-md-4 p-l-0">
-						
-							<@pub.selectCode codetype="zdlb" id="apprA0610" value="${appraisalinfo.apprA0610!''}" >
-							</@pub.selectCode>
-							
-						</div>
+						<div class="col-md-4 p-l-0"><@pub.selectCode codetype="zdlb"
+							id="apprA0610" value="${appraisalinfo.apprA0610!''}" >
+							</@pub.selectCode></div>
 						<label for="logincode" class="col-md-2 control-label p-r-0">文物年代：</label>
 						<div class="col-md-4 p-l-0">
-							<input type="text" id="Appr_A0310" name="apprA0310" data-label="文物年代"
-								value="${appraisalinfo.apprA0310!''}"
+							<input type="text" id="Appr_A0310" name="apprA0310"
+								data-label="文物年代" value="${appraisalinfo.apprA0310!''}"
 								class="input-sm validate[required] form-control"
 								placeholder="请输入" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定专家：</label>
-						
+
 						<div class="col-md-10 p-l-0">
-							<textarea  id="Appraiser" name="appraiser" data-label="鉴定专家"
-								 class="form-control m-b-10" >${appraisalinfo.appraiser!''}</textarea>
+							<textarea id="Appraiser" name="appraiser" data-label="鉴定专家"
+								class="form-control m-b-10">${appraisalinfo.appraiser!''}</textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="logincode" class="col-md-2 control-label p-r-0">鉴定状态：</label>
-						<div class="col-md-4 p-l-0">
-							<@pub.selectCommCode tablename="coll_info" fieldname="isAppraisal" id="Status" value="${appraisalinfo.status!''}" >
-							</@pub.selectCommCode>
-							
-						</div>
+						<div class="col-md-4 p-l-0"><@pub.selectCommCode
+							tablename="coll_info-isAppraisal" fieldname="isAppraisal"
+							id="Status" value="${appraisalinfo.status!''}" >
+							</@pub.selectCommCode></div>
 						<label for="logincode" class="col-md-2 control-label p-r-0">证书编号：</label>
 						<div class="col-md-4 p-l-0">
-							<input type="text" id="CertificateNo" name="certificateno" data-label="证书编号"
-								value="${appraisalinfo.certificateno!''}"
+							<input type="text" id="CertificateNo" name="certificateno"
+								data-label="证书编号" value="${appraisalinfo.certificateno!''}"
 								class="input-sm validate[required] form-control"
 								placeholder="请输入" />
 						</div>
-						
+
 					</div>
+				</div>
+				<div class="tab-pane" id="experts">
+					<div id="expertdatas">
+						<input type="hidden" id="delIds" name="delIds" value=""/>	
+					<#if expertIdeas?exists && (expertIdeas?size>0)>
+						<input type="hidden" id="expertNum" value="${expertIdeas?size}"/>
+						
+						<#list expertIdeas as expertIdea >
+							<div class="expertdata" >
+								<input data-field="appraisalideaid" type="hidden" id="expertIdeas[${expertIdea_index}].appraisalideaid" name="expertIdeas[${expertIdea_index}].appraisalideaid" 
+									value="${expertIdea.appraisalideaid!''}"/>
+								<div class="form-group">
+									<label for="logincode" class="col-md-2 control-label p-r-0">专家姓名：</label>
+									<div class="col-md-3 p-l-0">
+										<input type="text"
+											data-field="expertId" id="expertIdeas[${expertIdea_index}].expertId" name="expertIdeas[${expertIdea_index}].expertId"
+											data-label="专家姓名" value="${expertIdea.expertId!''}"
+											class="input-sm validate[required] form-control"
+											placeholder="请输入" />
+									</div>
+									<label for="logincode" class="col-md-2 control-label p-r-0">时间：</label>
+									<div class="col-md-3 p-l-0">
+										<div class="input-group date form_datetime"
+												data-date="1949-10-01" data-date-format="yyyy-MM-dd"
+												data-link-format="yyyy-mm-dd">
+												<input type="text"
+													data-field="apprdate" id="expertIdeas[${expertIdea_index}].apprdate" name="expertIdeas[${expertIdea_index}].apprdate"
+													data-label="鉴定时间" data-field="apprdate"
+													value="${(expertIdea.apprdate?date)!''}" readonly
+													class="input-sm  form-control datepicker hasDatepicker" />
+												<span class="input-group-addon "><i
+													class="glyphicon glyphicon-calendar"></i></span>
+											</div>
+									</div>
+									<div class="col-md-2">
+										<input type="button" value="删除" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageDelExpertIdea('${expertIdea.appraisalideaid!''}');" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="logincode" class="col-md-2 control-label p-r-0">专家意见：</label>
+									<div class="col-md-8 p-l-0">
+										<textarea data-field="apprexpertOpinion" id="expertIdeas[${expertIdea_index}].apprexpertOpinion" name="expertIdeas[${expertIdea_index}].apprexpertOpinion"
+											data-label="专家意见："
+											class="input-sm validate[required] form-control"
+											placeholder="请输入" >${expertIdea.apprexpertOpinion!''}</textarea>
+									</div>
+								</div>
+							</div>
+						</#list>
+					<#else>
+						<input type="hidden" id="expertNum" value="0"/>
+						<div class="expertdata" data-index="0">
+							<input data-field="appraisalideaid" type="hidden" id="expertIdeas[0].appraisalideaid" name="expertIdeas[0].appraisalideaid" 
+									value=""/>
+							<div class="form-group">
+									<label for="logincode" class="col-md-2 control-label p-r-0">专家姓名：</label>
+									<div class="col-md-3 p-l-0">
+										<input type="text" data-field="expertId" id="expertIdeas[0].expertId" name="expertIdeas[0].expertId"
+											data-label="专家姓名" value=""  class="input-sm  form-control" placeholder="请输入" />
+									</div>
+									<label for="logincode" class="col-md-2 control-label p-r-0">时间：</label>
+									<div class="col-md-3 p-l-0">
+										<div class="input-group date form_datetime"
+												data-date="1949-10-01" data-date-format="yyyy-MM-dd"
+												data-link-format="yyyy-mm-dd">
+												<input type="text" id="expertIdeas[0].apprdate" name="expertIdeas[0].apprdate"
+													data-label="鉴定时间" data-field="apprdate"
+													value="" readonly
+													class="input-sm  form-control datepicker hasDatepicker" />
+												<span class="input-group-addon "><i
+													class="glyphicon glyphicon-calendar"></i></span>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<input type="button" value="删除" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageDelExpertIdea('');" />
+									</div>
+							</div>
+							<div class="form-group">
+									<label for="logincode" class="col-md-2 control-label p-r-0">专家意见：</label>
+									<div class="col-md-8 p-l-0">
+										<textarea data-field="apprexpertOpinion" id="expertIdeas[0].apprexpertOpinion" name="expertIdeas[0].apprexpertOpinion" class="input-sm  form-control"></textarea>
+									</div>
+							</div>
+							
+						</div>	
+					</#if>
+					
+					</div>
+					<input type="button" value="增加" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageAddExpertInfo();" />
+					
+				</div>
+			</div>
+		</div>
 	</form>
 	<div class="modal-footer">
 		<div class="text-center">
-			<button type="submit" class="btn btn-sm" onclick="$.SystemApp.appraisalinfoJscript.save('appraisalinfoform');">保存</button>
+			<button type="submit" class="btn btn-sm"
+				onclick="$.SystemApp.appraisalinfoJscript.save('appraisalinfoform');">保存</button>
 			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
 		</div>
 	</div>

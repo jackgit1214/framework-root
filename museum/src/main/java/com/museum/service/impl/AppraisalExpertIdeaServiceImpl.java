@@ -17,30 +17,26 @@ import com.framework.mybatis.dao.Base.BaseDao;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.service.AbstractBusinessService;
 import com.framework.web.util.SessionManager;
-import com.museum.dao.AppraisalinfoMapper;
+import com.museum.dao.AppraisalExpertIdeaMapper;
 import com.museum.model.AppraisalExpertIdea;
-import com.museum.model.Appraisalinfo;
 import com.museum.service.AppraisalExpertIdeaService;
-import com.museum.service.AppraisalinfoService;
 import com.system.model.SysUser;
 
 @Service
 @Transactional
-public class AppraisalinfoServiceImpl extends
-		AbstractBusinessService<Appraisalinfo> implements AppraisalinfoService {
+public class AppraisalExpertIdeaServiceImpl extends
+		AbstractBusinessService<AppraisalExpertIdea> implements
+		AppraisalExpertIdeaService {
 
 	@Autowired
-	private AppraisalinfoMapper appraisalinfoMapper;
-
-	@Autowired
-	private AppraisalExpertIdeaService appraisalExpertIdeaServiceImpl;
+	private AppraisalExpertIdeaMapper appraisalExpertIdeaMapper;
 
 	public BaseDao getDao() {
-		return this.appraisalinfoMapper;
+		return this.appraisalExpertIdeaMapper;
 	}
 
 	public int delete(String recordId) {
-		int rows = this.appraisalinfoMapper.deleteByPrimaryKey(recordId);
+		int rows = this.appraisalExpertIdeaMapper.deleteByPrimaryKey(recordId);
 		this.logger.debug("rows: {}", rows);
 		return rows;
 	}
@@ -50,54 +46,41 @@ public class AppraisalinfoServiceImpl extends
 		QueryModel queryModel = new QueryModel();
 		for (String id : recordIds) {
 			QueryModel.Criteria criteria = queryModel.createCriteria();
-			criteria.andEqualTo("AppraisalID", id);
-			this.appraisalExpertIdeaServiceImpl.deleteByDataId(id);
-			rows = rows + this.appraisalinfoMapper.deleteByPrimaryKey(id);
+			criteria.andEqualTo("AppraisalIdeaID", id);
+			rows = rows + this.appraisalExpertIdeaMapper.deleteByPrimaryKey(id);
 		}
-		this.logger.debug("删除鉴定数据: {}条", rows);
+		this.logger.debug("rows: {}", rows);
+		return rows;
+	}
+
+	public int save(AppraisalExpertIdea record) {
+		int rows = 0;
+		if (record.getAppraisalideaid() == null
+				|| record.getAppraisalideaid() == "") {
+			String uuid = UUIDUtil.getUUID();
+			record.setAppraisalideaid(uuid);
+			record.setUpdatingDate(DateFormatUtils.format(
+					Calendar.getInstance(), "yyyyMMddHHmmsss"));
+			record.setUpdatingUid(this.getSessionUser().getUserid());
+			rows = this.appraisalExpertIdeaMapper.insert(record);
+		} else {
+			// rows = this.appraisalExpertIdeaMapper.updateByPrimaryKey(record);
+			rows = this.appraisalExpertIdeaMapper
+					.updateByPrimaryKeySelective(record);
+		}
+		this.logger.debug("rows: {}", rows);
 		return rows;
 	}
 
 	@Override
-	public int save(Appraisalinfo record,
-			List<AppraisalExpertIdea> expertIdeas, String delIds) {
-		int rows = 0;
-		rows = this.save(record);
+	public List<AppraisalExpertIdea> getExpertIdeaByBussId(String id) {
 
-		// 删除 的鉴定意见数据
-		if (delIds != null && !"".equals(delIds)) {
-			String[] tmpDelIds = delIds.split(",");
-			this.appraisalExpertIdeaServiceImpl.delete(tmpDelIds);
-		}
-		// 存储鉴定意见数据
-		for (AppraisalExpertIdea expertIdea : expertIdeas) {
-			expertIdea.setDataid(record.getAppraisalid());
-			rows = rows + this.appraisalExpertIdeaServiceImpl.save(expertIdea);
-		}
-
-		this.logger.debug("rows: {}", rows);
-		return rows;
-	}
-
-	public int save(Appraisalinfo record) {
-		int rows = 0;
-		if (record.getAppraisalid() == null || record.getAppraisalid() == "") {
-			String uuid = UUIDUtil.getUUID();
-
-			int seqVal = this.getNextVal(sequenceName);
-			record.setApprBatchNo(record.getApprType()
-					+ DateFormatUtils.format(Calendar.getInstance(), "yyyyMM")
-					+ String.format("%04d", seqVal)); // 批次号，自动生成，类型加年月，加顺序号
-			record.setAppraisalid(uuid);
-			record.setUpdatingDate(DateFormatUtils.format(
-					Calendar.getInstance(), "yyyyMMddHHmmsss"));
-			record.setUpdatingUid(this.getSessionUser().getUserid());
-			rows = this.appraisalinfoMapper.insert(record);
-		} else {
-			rows = this.appraisalinfoMapper.updateByPrimaryKey(record);
-		}
-		this.logger.debug("rows: {}", rows);
-		return rows;
+		QueryModel queryModel = new QueryModel();
+		QueryModel.Criteria criteria = queryModel.createCriteria();
+		criteria.andEqualTo("DataId", id);
+		List<AppraisalExpertIdea> datas = this.findObjects(queryModel);
+		// TODO Auto-generated method stub
+		return datas;
 	}
 
 	private SysUser getSessionUser() {
@@ -110,5 +93,20 @@ public class AppraisalinfoServiceImpl extends
 		if (session == null)
 			return null;
 		return (SysUser) session.getUser();
+	}
+
+	@Override
+	public int deleteByDataId(String id) {
+
+		int rows = 0;
+		QueryModel queryModel = new QueryModel();
+		QueryModel.Criteria criteria = queryModel.createCriteria();
+		criteria.andEqualTo("dataId", id);
+		rows = rows
+				+ this.appraisalExpertIdeaMapper.deleteByCondition(queryModel);
+
+		this.logger.debug("删除 专家意见数据: {}条，dataid为：{}", rows, id);
+		// TODO Auto-generated method stub
+		return rows;
 	}
 }

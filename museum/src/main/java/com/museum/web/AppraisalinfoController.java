@@ -1,6 +1,7 @@
 package com.museum.web;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.framework.common.anaotation.DuplicateSubmission;
+import com.framework.common.binding.anaotation.FormList;
 import com.framework.mybatis.model.QueryModel;
 import com.framework.mybatis.util.PageResult;
 import com.framework.web.controller.BaseController;
 import com.museum.common.aop.NeedCode;
+import com.museum.model.AppraisalExpertIdea;
 import com.museum.model.Appraisalinfo;
+import com.museum.service.AppraisalExpertIdeaService;
 import com.museum.service.AppraisalinfoService;
 import com.museum.service.CommCodeService;
 import com.system.common.SysConstant;
@@ -28,6 +32,9 @@ public class AppraisalinfoController extends BaseController {
 
 	@Autowired
 	private AppraisalinfoService appraisalinfoServiceImpl;
+
+	@Autowired
+	private AppraisalExpertIdeaService appraisalExpertIdeaServiceImpl;
 
 	@Autowired
 	private ISysCodeService sysCodeService;
@@ -70,6 +77,8 @@ public class AppraisalinfoController extends BaseController {
 	@RequestMapping("/showEdit")
 	@DuplicateSubmission(needSaveToken = true)
 	public ModelAndView showEdit(String id) {
+
+		ModelAndView mav = new ModelAndView("appraisalinfo/edit");
 		Appraisalinfo appraisalinfo = this.appraisalinfoServiceImpl
 				.findObjectById(id);
 		if (appraisalinfo == null) {
@@ -77,8 +86,11 @@ public class AppraisalinfoController extends BaseController {
 			appraisalinfo.setApplicationdate(Calendar.getInstance().getTime());
 			appraisalinfo.setUpdatingDate(Calendar.getInstance().getTime()
 					.toString());
+		} else {
+			List<AppraisalExpertIdea> expertIdeas = this.appraisalExpertIdeaServiceImpl
+					.getExpertIdeaByBussId(id);
+			mav.addObject("expertIdeas", expertIdeas);
 		}
-		ModelAndView mav = new ModelAndView("appraisalinfo/edit");
 		mav.addObject("appraisalinfo", appraisalinfo);
 		return mav;
 	}
@@ -86,16 +98,21 @@ public class AppraisalinfoController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/update")
 	@DuplicateSubmission(needRemoveToken = true)
-	public ModelMap addOrUpdate(Appraisalinfo record) throws Exception {
+	public ModelMap addOrUpdate(Appraisalinfo record,
+			@FormList("expertIdeas") List<AppraisalExpertIdea> expertIdeas,
+			String delIds) throws Exception {
 		ModelMap modelMap = new ModelMap();
-		int rows = this.appraisalinfoServiceImpl.save(record);
+		int rows = this.appraisalinfoServiceImpl.save(record, expertIdeas,
+				delIds);
 
 		if (rows <= 0)
 			modelMap.addAttribute("isSuccess", false);
 
 		modelMap.addAttribute("successRows", rows);
 		modelMap.addAttribute("data", record);
+
 		return modelMap;
+
 	}
 
 	@ResponseBody

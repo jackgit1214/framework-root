@@ -1,6 +1,9 @@
 package com.museum.service;
 
+import java.util.List;
+
 import com.framework.mybatis.service.IBusinessService;
+import com.museum.model.AppraisalExpertIdea;
 import com.museum.model.Appraisalinfo;
 
 public interface AppraisalinfoService extends IBusinessService<Appraisalinfo> {
@@ -12,4 +15,7 @@ public interface AppraisalinfoService extends IBusinessService<Appraisalinfo> {
 	int delete(String[] recordIds);
 
 	int save(Appraisalinfo record);
+
+	int save(Appraisalinfo record, List<AppraisalExpertIdea> expertIdeas,
+			String delIds);
 }

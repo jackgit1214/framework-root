@@ -63,7 +63,6 @@ public class AppraisalinfoServiceImpl extends
 			List<AppraisalExpertIdea> expertIdeas, String delIds) {
 		int rows = 0;
 		rows = this.save(record);
-
 		// 删除 的鉴定意见数据
 		if (delIds != null && !"".equals(delIds)) {
 			String[] tmpDelIds = delIds.split(",");

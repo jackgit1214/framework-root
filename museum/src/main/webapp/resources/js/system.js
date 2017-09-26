@@ -1217,6 +1217,7 @@ $.SystemApp.appraisalinfoJscript = {
 			};
 			var $this = $(event.target);
 			var $cloneData = $this.parent().parent().parent().clone();
+			$cloneData.find(".btn_add").remove();
 			$this.parent().parent().parent().remove();
 			if ($(".expertdata").length==0){
 				$cloneData = this._handleCloneDiv($cloneData);
@@ -1230,7 +1231,7 @@ $.SystemApp.appraisalinfoJscript = {
 			
 			var $cloneData = $expertData.clone();
 			
-			
+			$expertData.find(".btn_add").remove();
 			$cloneData = this._handleCloneDiv($cloneData);
 			
 			$expertData.after($cloneData);

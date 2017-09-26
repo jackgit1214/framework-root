@@ -4,6 +4,12 @@
 			init_UI : function() {
 				var $parent = $("#editappraisalinfo").parent();
 				$parent.addClass("m-0 p-0");
+				
+				if($('.overflow')[0]) {
+					var overflowRegular, overflowInvisible = false;
+					overflowRegular = $('.overflow').niceScroll();
+					
+				};
 			}
 		}
 	});
@@ -164,7 +170,7 @@
 					</div>
 				</div>
 				<div class="tab-pane" id="experts">
-					<div id="expertdatas">
+					<div id="expertdatas" style="height:500px;" class="overflow">
 						<input type="hidden" id="delIds" name="delIds" value=""/>	
 					<#if expertIdeas?exists && (expertIdeas?size>0)>
 						<input type="hidden" id="expertNum" value="${expertIdeas?size}"/>
@@ -175,7 +181,7 @@
 									value="${expertIdea.appraisalideaid!''}"/>
 								<div class="form-group">
 									<label for="logincode" class="col-md-2 control-label p-r-0">专家姓名：</label>
-									<div class="col-md-3 p-l-0">
+									<div class="col-md-4 p-l-0">
 										<input type="text"
 											data-field="expertId" id="expertIdeas[${expertIdea_index}].expertId" name="expertIdeas[${expertIdea_index}].expertId"
 											data-label="专家姓名" value="${expertIdea.expertId!''}"
@@ -196,18 +202,23 @@
 													class="glyphicon glyphicon-calendar"></i></span>
 											</div>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-1">
 										<input type="button" value="删除" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageDelExpertIdea('${expertIdea.appraisalideaid!''}');" />
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="logincode" class="col-md-2 control-label p-r-0">专家意见：</label>
-									<div class="col-md-8 p-l-0">
+									<div class="col-md-9 p-l-0">
 										<textarea data-field="apprexpertOpinion" id="expertIdeas[${expertIdea_index}].apprexpertOpinion" name="expertIdeas[${expertIdea_index}].apprexpertOpinion"
 											data-label="专家意见："
-											class="input-sm validate[required] form-control"
+											class="input-sm form-control"
 											placeholder="请输入" >${expertIdea.apprexpertOpinion!''}</textarea>
 									</div>
+									<#if expertIdea_index+1 == expertIdeas?size>
+										<div class="col-md-1 btn_add" >
+											<input type="button" value="增加" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageAddExpertInfo();" />
+										</div>
+									</#if>
 								</div>
 							</div>
 						</#list>
@@ -218,7 +229,7 @@
 									value=""/>
 							<div class="form-group">
 									<label for="logincode" class="col-md-2 control-label p-r-0">专家姓名：</label>
-									<div class="col-md-3 p-l-0">
+									<div class="col-md-4 p-l-0">
 										<input type="text" data-field="expertId" id="expertIdeas[0].expertId" name="expertIdeas[0].expertId"
 											data-label="专家姓名" value=""  class="input-sm  form-control" placeholder="请输入" />
 									</div>
@@ -235,23 +246,25 @@
 													class="glyphicon glyphicon-calendar"></i></span>
 										</div>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-1">
 										<input type="button" value="删除" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageDelExpertIdea('');" />
 									</div>
 							</div>
 							<div class="form-group">
 									<label for="logincode" class="col-md-2 control-label p-r-0">专家意见：</label>
-									<div class="col-md-8 p-l-0">
+									<div class="col-md-9 p-l-0">
 										<textarea data-field="apprexpertOpinion" id="expertIdeas[0].apprexpertOpinion" name="expertIdeas[0].apprexpertOpinion" class="input-sm  form-control"></textarea>
 									</div>
+									<div class="col-md-1 btn_add" >
+										<input type="button" value="增加" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageAddExpertInfo();" />
+									</div>
+									
 							</div>
 							
 						</div>	
 					</#if>
 					
 					</div>
-					<input type="button" value="增加" class="btn btn-xs" onclick = "$.SystemApp.appraisalinfoJscript.pageAddExpertInfo();" />
-					
 				</div>
 			</div>
 		</div>

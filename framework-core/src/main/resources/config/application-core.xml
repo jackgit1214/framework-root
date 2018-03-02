@@ -19,27 +19,7 @@
  	<context:component-scan base-package="com.framework.common.aspect" />
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
-	<beans profile="jpa">
-		<bean id="entityManagerFactory"
-			class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-			p:dataSource-ref="dataSource">
-			<property name="jpaVendorAdapter">
-				<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
-					p:database="${jpa.database}" p:showSql="${jpa.showSql}" />
-			</property>
-			<property name="persistenceUnitName" value="simple" />
-			<property name="packagesToScan" value="com.system" />
-		</bean>
-
-		<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
-			p:entityManagerFactory-ref="entityManagerFactory" />
-		<bean
-			class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-
-		<context:component-scan base-package="com.system.jpa" />
-		<context:component-scan base-package="com.framework.jpa" />
-		<aop:aspectj-autoproxy proxy-target-class="true"/>  
-	</beans>
+	
 	<beans profile="mybatis">
 		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 			<property name="dataSource" ref="dataSource"></property>

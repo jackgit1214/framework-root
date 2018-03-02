@@ -15,28 +15,6 @@
 	<bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
-	<beans profile="jpa">
-		<bean id="commonDao" class="com.framework.jpa.dao.impl.CommonDaoResolver">
-			<qualifier value="commonDao" />
-		</bean>
-
-		<bean class="com.framework.jpa.dao.impl.CommonDaoResolver">
-			<qualifier value="commonDao1" />
-		</bean>
-
-		<bean class="com.framework.jpa.dao.impl.CommonDaoResolver">
-			<qualifier value="commonDao2" />
-		</bean>
-
-		<bean class="com.framework.jpa.dao.impl.CommonDaoResolver">
-			<qualifier value="commonDao3" />
-		</bean>
-
-
-		<bean class="com.framework.jpa.dao.impl.PageDaoResolver">
-			<qualifier value="pageDAO" />
-		</bean>
-	</beans>
 
 	<beans profile="mybatis">
 		

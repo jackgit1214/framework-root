@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="expression" name="expression" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <serviceTask id="execExpression" name="计算表达式" activiti:expression="${myBean.print(name)}" activiti:resultVariableName="returnValue"></serviceTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <userTask id="usertask1" name="在用户任务上添加表达式">
+      <extensionElements>
+        <activiti:taskListener event="create" class="com.my.activititest.listener.MyTaskListener"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <serviceTask id="getAuthenticatedUserId" name="获取流程启动人" activiti:expression="${authenticatedUserId}" activiti:resultVariableName="authenticatedUserIdForTest"></serviceTask>
+    <serviceTask id="executionExample" name="Execution变量" activiti:expression="${myBean.printBkey(execution)}" activiti:resultVariableName="businessKey"></serviceTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="getAuthenticatedUserId"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="executionExample" targetRef="usertask1"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="getAuthenticatedUserId" targetRef="execExpression"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="execExpression" targetRef="executionExample"></sequenceFlow>
+    <userTask id="usertask2" name="User Task" activiti:assignee="lishi"></userTask>
+    <sequenceFlow id="flow6" sourceRef="usertask1" targetRef="usertask2"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow7" sourceRef="usertask2" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway1" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isRetreat=="false"}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="exclusivegateway1" targetRef="usertask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isRetreat=="true"}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_expression">
+    <bpmndi:BPMNPlane bpmnElement="expression" id="BPMNPlane_expression">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="20.0" y="123.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="execExpression" id="BPMNShape_execExpression">
+        <omgdc:Bounds height="55.0" width="105.0" x="380.0" y="113.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="80.0" y="351.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
+        <omgdc:Bounds height="79.0" width="157.0" x="620.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="getAuthenticatedUserId" id="BPMNShape_getAuthenticatedUserId">
+        <omgdc:Bounds height="61.0" width="137.0" x="165.0" y="107.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="executionExample" id="BPMNShape_executionExample">
+        <omgdc:Bounds height="65.0" width="141.0" x="573.0" y="105.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="276.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="320.0" y="368.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="55.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="165.0" y="137.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="643.0" y="170.0"></omgdi:waypoint>
+        <omgdi:waypoint x="698.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="302.0" y="137.0"></omgdi:waypoint>
+        <omgdi:waypoint x="380.0" y="140.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="485.0" y="140.0"></omgdi:waypoint>
+        <omgdi:waypoint x="573.0" y="137.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="620.0" y="289.0"></omgdi:waypoint>
+        <omgdi:waypoint x="381.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="328.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="340.0" y="368.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="320.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="115.0" y="368.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="360.0" y="388.0"></omgdi:waypoint>
+        <omgdi:waypoint x="618.0" y="412.0"></omgdi:waypoint>
+        <omgdi:waypoint x="698.0" y="329.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

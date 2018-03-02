@@ -1,0 +1,211 @@
+<script type=text/javascript>
+	var indexJscript = {
+		dialogObj : null,
+		indextree:null,
+		setting:function(){
+			var tmpsetting = homepage.treesetting;
+			 $.extend(tmpsetting,{
+				 check:{
+						enable: false
+					},
+			 	async: {
+					enable: true,
+					//contentType:"application/json",
+					url:homepage.sysContextPath + "/system/dataindex/getIndexdata",
+					autoParam:["id","pId"]
+				},
+				callback: {
+					onClick: function(event, treeId, treeNode){
+						indexJscript.refreshDataList(treeNode);
+					},
+					beforeClick:function(treeId, treeNode){
+						if (!treeNode.parent){ //末级指标直接修改
+							indexJscript.indextree.selectNode(treeNode.getParentNode(),false);
+							indexJscript.refreshDataList(treeNode.getParentNode());
+							indexJscript.showEditIndex(true,treeNode.data);
+							return false;
+						}else {
+					        return true;
+					    }
+					}
+				}
+			 });
+			return tmpsetting;
+		},
+		refreshDataList:function(treeNode){
+			var pid = treeNode.id ;
+			var cond= {};
+			cond['superid'] = pid;
+			
+			var param1 ={
+					pageNo:1,
+					param:cond
+			};
+			$.divLoad("#systemData",homepage.sysContextPath +"/system/dataindex/list",param1,function(){
+				
+			});
+		},
+		init_tree : function(treeData) {
+			
+			this.indextree = $.fn.zTree.init($("#indextree"), this.setting(), treeData);
+			var nodes = this.indextree.getNodes();
+			
+			if (nodes.length >0)
+				this.indextree.expandNode(nodes[0]);
+		},
+		init_UI : function() {
+			
+			$(".divleft-right").adaptParentSize();
+			$(".divright").adaptParentWidth(-202);
+			$(".divright").adaptParentHeight();
+			$(".divleft").adaptParentHeight();
+			var queryAreaHeight = 0 - $(".queryarea").height();
+			$("#systemData").adaptParentHeight(queryAreaHeight);
+			
+			var nodes = this.indextree.getNodes();
+			if (nodes.length>0) {
+				this.indextree.selectNode(nodes[0]);
+				this.refreshDataList(nodes[0]);
+			}			
+		},
+		showEditIndex : function(isEdit,indexid) {
+			var $this = this;
+			var _params = {};
+			if (isEdit) {
+				if (indexid ==null || indexid == ''){
+					var selectValue = $("#indexgrid").gridtable("checkValue");
+				
+					if (selectValue == null || selectValue == ''
+							|| selectValue.length <= 0) {
+						alert("请选择要编辑的数据");
+						return;
+					}
+					_params = {
+						'id' : selectValue[0]
+					};
+				}else{
+					_params.id = indexid;
+				}
+			}
+			var nodes = this.indextree.getSelectedNodes();
+			
+			if (nodes.length <= 0){
+				alert("请选择上级节点！");
+				return ;
+			}
+			_params.indexid=nodes[0].indexid;
+			_params.indexname=nodes[0].indexname;
+			var dialogP = {
+				height : 500,
+				width : 700,
+				title : "藏品指标编辑",
+				buttons : {
+					'保存' : function() {
+						var $that = $(this);
+						indexJscript.dialogObj.indexSave(function(data) {
+							$this.refreshTree(nodes[0],data,isEdit);
+							//$this.indextree.reAsyncChildNodes(nodes[0], "refresh"); 会闪一下
+							$that.dialogE("close");
+						});
+					}
+				},
+				args : _params,
+				callback : function() {
+					indexJscript.dialogObj = indexEditJscript;
+				}
+			};
+			
+			$.openDialog(homepage.sysContextPath + "/system/dataindex/showEditIndex",
+					dialogP);
+		},
+		refreshTree:function(node,data,isEdit){
+			var $this = this;
+			if (node.open==true){
+				var newNode = {name:data.indexname,id:data.indexid,data:data.id};
+				if (isEdit){
+					newNode=$this.indextree.getNodeByParam("indexid",data.indexid, null);
+					newNode.name = data.indexname;
+					$this.indextree.updateNode(newNode);
+				}else
+					$this.indextree.addNodes(node, newNode);
+			}
+			else
+				$this.indextree.expandNode(node,true,false,false,false);
+			
+		},
+		delIndex : function() {
+			var $this = this;
+			var selectValue = $("#indexgrid").gridtable("checkValue");
+
+			if (selectValue == null || selectValue == ''
+					|| selectValue.length <= 0) {
+				alert("请选择要删除的数据");
+				return;
+			}
+			if (!confirm("您确定删除这些数据吗？"))
+				return;
+			var data = {
+				ids : selectValue
+			};
+			
+			$.post(homepage.sysContextPath + "/system/dataindex/deleteIndex", data,
+					function(data) {
+						if (data.successRows > 0) {
+							$(".scrollPageBar").toolbar("refresh");
+							$.each(selectValue,function(i,obj){
+								var node = $this.indextree.getNodeByParam("data",obj, null);
+								$this.indextree.removeNode(node,false);
+							});
+							alert("数据删除成功！");
+							$that.dialogE("close");
+					}
+			});
+		},
+		finddata : function() {
+			var data = $("#queryForm").serialize();
+			$.divLoad("#systemData", homepage.sysContextPath
+					+ "/system/dataindex/list", data, function(data) {
+
+			});
+
+		}
+	};
+
+	$(function() {
+		indexJscript.init_tree(${dataindex});
+		indexJscript.init_UI();
+		
+	});
+</script>
+
+<div class="divleft-right ">
+
+	<div class="divleft ui-corner-all ui-widget-content" style="width: 200px;overflow:auto;">
+		<ul id="indextree" class="ztree"></ul>
+	</div>
+	<div class="divright">
+		<!-- 查询区域 -->
+		<div class="queryarea content" style="height: 30px;">
+			<form id="queryForm">
+				<table>
+					<tr>
+						<td><label for="username">指标编码：</label></td>
+						<td><input name="param['indexid']" id="param['indexid']"
+							value="" /></td>
+						<td><label for="logincode">指标名称：</label></td>
+						<td><input name="param['indexname']" id="param['indexname']"
+							value="" /></td>
+						<td><button type="button" title="查询"
+								data-icon="ui-icon-arrowreturnthick-1-w"
+								onclick="indexJscript.finddata();" value="查询">查询</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<!-- 数据显示区域 -->
+		<div id="systemData" class="dataarea" >
+			
+		</div>
+	</div>
+</div>

@@ -9,7 +9,7 @@
 	<artifactId>framework-core</artifactId>
 	<name>framework-core</name>
 	 <properties>
-        <spring.version>4.1.0.RELEASE</spring.version>
+        <spring.version>4.3.0.RELEASE</spring.version>
     </properties>
 	<dependencies>
 		<dependency>
@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mchange</groupId>
@@ -133,7 +133,7 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
-			<version>1.10.0.RELEASE</version>
+			<version>1.12.11.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -187,11 +187,6 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>1.0.0.Final</version>
-		</dependency>
-		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.3.6.Final</version>
@@ -201,11 +196,7 @@
 		  <artifactId>freemarker</artifactId>
 		  <version>2.3.26-incubating</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
@@ -222,6 +213,11 @@
 			<version>1.2.5</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>4.2.3.RELEASE</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

@@ -1,0 +1,32 @@
+<div class="toolbar" id="testtoolbar">
+		<input id="" type="button" value="新增"
+			onclick="sysCodeJscript.showEdit();" /> 
+		<input id="" type="button" data-icon="ui-icon-wrench"
+			value="修改" onclick="sysCodeJscript.showEdit(true);" />
+		<button id="button" title="删除" value="删除"
+			data-icon="ui-icon-arrowreturnthick-1-w" onclick="sysCodeJscript.del();">删除</button>
+	</div>
+<div class="divgridtable" id="codegrid" data-checkbox="#chk_select">
+	<table style="width: 100%">
+		<thead>
+			<tr>
+				<td style="width: 20px;"><input type="checkbox" id="chk_select"
+					data-subcheck="subcheck" /></td>
+				<td style="width: 100px;">编码</td>
+				<td style="width: 300px;">名称</td>
+				<td>备注</td>
+			</tr>
+		</thead>
+		<#if page.pageDatas??> <#list page.pageDatas as codedata>
+		<tr>
+			<td><input type="checkbox" name="subcheck"
+				value="${(codedata.codeid)!}"></td>
+			<td>${codedata.code?html}</td>
+			<td>${codedata.codename?html}</td>
+			<td>${(codedata.remark)!}</td>
+		</tr>
+		</#list> </#if>
+	</table>
+</div>
+<div class="scrollPageBar" data-curpage="${page.curPage}" data-totalpage="${page.lastPage}" data-param='${param!}'
+		data-recordcount="${page.pageSize}" data-linktarget="systemData" data-pagelink="<@pub.projectpath/>/system/code/list"></div>

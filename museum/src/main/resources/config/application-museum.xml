@@ -33,6 +33,7 @@
 	</bean>
 	
 	<context:component-scan base-package="com.museum" />
+	
 	<beans profile="mybatis">
 
 		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

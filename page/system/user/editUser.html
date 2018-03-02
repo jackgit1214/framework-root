@@ -1,0 +1,126 @@
+<script type=text/javascript>
+	var userEditJscript = {
+		init_UI : function() {
+			$("#editUser").adaptParentSize();
+			$("#editUser").detail({handleForm:"#userform"});
+			$("#gender1").buttonset();
+			
+			
+
+		},
+		userSave:function(callback){
+			
+			
+			var isValid= $("#editUser").detail("checkValidation");
+			
+			if (!isValid)
+				return false;
+			
+			var data = $("#userform").serializeArray();
+		
+			$.post(homepage.sysContextPath + "/system/user/updateUser",data,function(data){
+				if(data.successRows > 0 ){
+					$(".scrollPageBar").toolbar("refresh");
+					alert("数据保存成功！");
+					if (callback!=undefined && $.isFunction(callback))
+						callback();
+				}else{
+					alert("数据保存失败！");
+				}
+				
+			});
+		}
+	};
+
+	$(function() {
+		userEditJscript.init_UI();
+		$("#check_role").click(function(){
+			$("input[name='roleids']").prop('checked',this.checked);
+		});
+	});
+</script>
+<div id="editUser" class="div_detail divleft-right">
+	<form id="userform" name="userform">
+		<div style="width: 420px;margin-top: 10px" class="divleft">
+			<fieldset>
+				<legend>用户信息</legend>
+				<div style="height:360px;">
+				<input type="hidden" id="userid" name='userid'
+					value="${user.userid!''}" />
+				<table>
+					<tr>
+						<td align="right"><label>登录名：</label></td>
+						<td><input type="text" id="logincode" data-label="登录名" name="logincode"
+							value="${user.logincode!''}" required /></td>
+						
+					</tr>
+					<tr>
+						<td>姓名：</td>
+						<td><input type="text" id="username" name="username" data-label="姓名"
+							value="${user.username!''}" required /></td>
+					</tr>					
+					<tr>
+						<td align="right"><label>性别：</label></td>
+						<td><div id="gender1">
+							 
+						      <input type="radio" id="man" name="gender"  value="1" <#if user.gender!0==1> checked
+							  </#if>  >
+						      <label for="man">男</label>
+						 
+						      <input type="radio" id="woman" name="gender" <#if user.gender!0==0> checked
+							  </#if> value="0">
+						      <label for="woman">女</label>
+					 	</div></td>
+					</tr>
+					<tr>
+					
+						<td>年龄：</td>
+						<td><input type="text" id="age" name="age"
+							value="${user.age!''}" data-label="年龄" data-rule-digits="true" /></td>
+					</tr>					
+					<tr>
+						<td>电话：</td>
+						<td><input type="text" id="phone" data-label="电话" data-rule-isMobile="true" name="phone"
+							value="${user.phone!''}" /></td>
+						
+					</tr>
+					<tr>
+						<td>Email：</td>
+						<td><input type="text" id="email" name="email" data-rule-email="true"
+							value="${user.email!''}" /></td>
+					</tr>
+					<tr>
+						<td>地址：</td>
+						<td><input type="text" id="address"
+							name="address" value="${user.address!''}" /></td>
+					</tr>
+				</table>
+				</div>
+			</fieldset>
+		</div>
+		<div style="width: 250px;margin-top: 10px" class="divright">
+			<fieldset>
+				<legend>所属角色</legend>
+				<legend style="left: 150px;">
+					<label for="check">全选</label><input type="checkbox" id="check_role">
+				</legend>
+				<div style="height:360px;overflow: auto; ">
+					<ul>
+					<#list roles as role>
+						<li>
+							<#if role.roledesc =="1"> 
+								<input type="checkbox" checked  value="${role.roleid}" 
+								 name="roleids"/>
+							<#else>
+								<input type="checkbox"  value="${role.roleid}" 
+								 name="roleids"/>
+							</#if>
+							${role.rolename?html} 
+						</li>
+					</#list>
+					</ul>
+				</div>
+			</fieldset>
+		</div>
+	</form>
+</div>

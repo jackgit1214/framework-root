@@ -1,0 +1,107 @@
+<script type=text/javascript>
+	$.extend($.SystemApp.restorationreceiptJscript,{
+		editJscript:{
+			init_UI : function() {
+			
+			}
+		}
+	});
+	$(function() {
+		$.SystemApp.restorationreceiptJscript.editJscript.init_UI();
+	});
+</script>
+<div id="editrestorationreceipt" class="div_detail">
+	<form id="restorationreceiptform" name="restorationreceiptform"
+		class="form-validation-1 form-horizontal">
+			<input type="hidden" name="token" value='${token}'>
+				
+					<div class="form-group">
+						<label for="logincode" class="col-md-2 control-label p-r-0">修复回执单ID：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="RestorationReceiptID" name="restorationreceiptid" data-label="修复回执单ID"
+								value="${restorationreceipt.restorationreceiptid!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+				
+						<label for="logincode" class="col-md-2 control-label p-r-0">实际修复人，参照修复方案中的预计修复人进行编辑：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="ReceiptPerson" name="receiptperson" data-label="实际修复人，参照修复方案中的预计修复人进行编辑"
+								value="${restorationreceipt.receiptperson!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<label for="logincode" class="col-md-2 control-label p-r-0">修复完成后收回验收日期，作为完成的修复日期：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="Back_Date" name="backDate" data-label="修复完成后收回验收日期，作为完成的修复日期"
+								value="${restorationreceipt.backDate!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+				
+						<label for="logincode" class="col-md-2 control-label p-r-0">修复方法：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="RestorationMethod" name="restorationmethod" data-label="修复方法"
+								value="${restorationreceipt.restorationmethod!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<label for="logincode" class="col-md-2 control-label p-r-0">用于显示修复档案的验收人；外修业务时，“验收人”记录“专家签字”：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="Censor" name="censor" data-label="用于显示修复档案的验收人；外修业务时，“验收人”记录“专家签字”"
+								value="${restorationreceipt.censor!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+				
+						<label for="logincode" class="col-md-2 control-label p-r-0">验收结果：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="Rest_Checkout" name="restCheckout" data-label="验收结果"
+								value="${restorationreceipt.restCheckout!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<label for="logincode" class="col-md-2 control-label p-r-0">1:未验收；2:验收通过；3：验收不通过：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="ReceiptStatus" name="receiptstatus" data-label="1:未验收；2:验收通过；3：验收不通过"
+								value="${restorationreceipt.receiptstatus!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+				
+						<label for="logincode" class="col-md-2 control-label p-r-0">作为业务信息的录入者，与系统用户表 Sys_User 关联：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="Updating_UID" name="updatingUid" data-label="作为业务信息的录入者，与系统用户表 Sys_User 关联"
+								value="${restorationreceipt.updatingUid!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<label for="logincode" class="col-md-2 control-label p-r-0">更新日期：</label>
+						<div class="col-md-4 p-l-0">
+							<input type="text" id="Updating_Date" name="updatingDate" data-label="更新日期"
+								value="${restorationreceipt.updatingDate!''}"
+								class="input-sm validate[required] form-control"
+								placeholder="请输入" />
+						</div>
+				
+		
+	</form>
+	<div class="modal-footer">
+		<div class="text-center">
+			<button type="submit" class="btn btn-sm" onclick="$.SystemApp.restorationreceiptJscript.save('restorationreceiptform');">保存</button>
+			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+</div>

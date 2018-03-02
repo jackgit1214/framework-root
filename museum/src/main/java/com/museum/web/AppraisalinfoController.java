@@ -74,6 +74,14 @@ public class AppraisalinfoController extends BaseController {
 		return mav;
 	}
 
+	@RequestMapping("/apply")
+	@ResponseBody
+	public ModelMap apply(String id, String applyType) {
+		ModelMap modelMap = new ModelMap();
+		// this.appraisalinfoServiceImpl.
+		return modelMap;
+	}
+
 	@RequestMapping("/showEdit")
 	@DuplicateSubmission(needSaveToken = true)
 	public ModelAndView showEdit(String id) {

@@ -1,0 +1,82 @@
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.culturalreliccopyJscript.showEdit();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="$.SystemApp.culturalreliccopyJscript.showEdit(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.culturalreliccopyJscript.del();">删除</button>
+		</header>
+
+<div class=" table-con">
+	<div id="tableHover_culturalreliccopy" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+									<td>复制登记任务ID</td>
+									<td>作为逻辑外键，与出库凭证表 Cul_OVMain 的 OutVoucher_ID 关联</td>
+									<td>1: 馆内文物复制，2: 馆外文物复制</td>
+									<td>从文物基础表 Cul_MainCul1/2/3（文物一、二、三）中提取文物信息（对于“复制业务类型”为“2:馆外文物复制”的复制原件文物而言，文物基础表中的“管理类型”为“外来复制原件”）</td>
+									<td>复制日期</td>
+									<td>复制人</td>
+									<td>复制目的</td>
+									<td>仅接收数字0至9的组合，单位为"件"。</td>
+									<td>仅接收数字0至9的组合，单位为"件"。</td>
+									<td>1:未确认，2:已确认</td>
+									<td>作为业务信息的录入者，与系统用户表 Sys_User 关联</td>
+									<td>更新日期</td>
+									<td>复制方法</td>
+									<td>复制过程</td>
+									<td>备注</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas?? >
+							<#list page.pageDatas as culturalreliccopy >
+							<tr>
+								<td><input type="checkbox" name="subcheck" class="list-check"
+										value="${culturalreliccopy.culturalreliccopyid!''}"></td>
+											<td>${culturalreliccopy.culturalreliccopyid!''}</td>
+											<td>${culturalreliccopy.outvoucherId!''}</td>
+											<td>${culturalreliccopy.copyType!''}</td>
+											<td>${culturalreliccopy.culid!''}</td>
+											<td>${culturalreliccopy.copyDate!''}</td>
+											<td>${culturalreliccopy.copyMan!''}</td>
+											<td>${culturalreliccopy.copyPurpose!''}</td>
+											<td>${culturalreliccopy.estimateCopyQty!''}</td>
+											<td>${culturalreliccopy.actualCopyQty!''}</td>
+											<td>${culturalreliccopy.copyStatus!''}</td>
+											<td>${culturalreliccopy.updatingUid!''}</td>
+											<td>${culturalreliccopy.updatingDate!''}</td>
+											<td>${culturalreliccopy.copyMothod!''}</td>
+											<td>${culturalreliccopy.copyProcess!''}</td>
+											<td>${culturalreliccopy.remark!''}</td>
+							</tr>
+							</#list>
+						</#if>	
+
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}"   data-totalpage= "${page.lastPage}" 
+				data-param= '${param!}'    data-recordcount= "${page.pageSize}" 
+				data-linktarget="#systemData" data-pagelink="/culturalreliccopy/list">
+				<div class="pull-left attrs">
+					第${page.curPage} 页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	});
+</script>

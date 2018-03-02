@@ -1,0 +1,121 @@
+<script type=text/javascript>
+	var roleJscript = {
+		dialogObj:null,
+		init_UI : function() {
+			var queryAreaHeight = 0 - $(".queryarea").height();
+			$("#systemData").adaptParentHeight(queryAreaHeight);
+			
+		},
+		showEditRole : function(isEdit) {
+			var _params = {};
+			if (isEdit){
+				var selectValue =  $(".divgridtable").gridtable("checkValue");
+				if (selectValue==null || selectValue == '' || selectValue.length <=0){
+					alert("请选择要编辑的数据");
+					return ;
+				}
+				_params = {'roleid':selectValue[0]};
+			}
+			var dialogP = {
+				height : 550,
+				width : 750,
+				title : "角色编辑",
+				buttons : {
+					'保存' : function() {
+						var $that = $(this);
+						roleJscript.dialogObj.roleSave(function(){
+							$that.dialogE( "close" );
+						});
+					}
+				},
+				args:_params,
+				callback:function(){
+					roleJscript.dialogObj =roleEditJscript;
+				}
+			};
+			$.openDialog(homepage.sysContextPath + "/system/role/showEditRole",
+					dialogP);
+			
+		},
+		delRole:function(){
+			
+			var selectValue =  $(".divgridtable").gridtable("checkValue");
+			
+			if (selectValue==null || selectValue == '' || selectValue.length <=0){
+				alert("请选择要删除的数据");
+				return ;
+			}
+			
+			if (!confirm("您确定删除这些数据吗？"))
+				return ;
+			 var data = {ids:selectValue};
+
+			 $.post(homepage.sysContextPath + "/system/role/deleteRole",data,function(data){
+				if(data.successRows > 0 ){
+					$(".scrollPageBar").toolbar("refresh");
+					alert("数据删除成功！");
+				}
+			});  
+		},
+		findRole:function(){
+
+			var data = $("#queryForm").serialize();
+			$.divLoad("#systemData",homepage.sysContextPath + "/system/role/list",data,function(data){
+			
+			}); 
+		}
+	};
+
+	$(function() {
+		roleJscript.init_UI();
+		$(window).resize(function() {
+			roleJscript.init_UI();
+		});
+	});
+</script>
+
+<!-- 查询区域 -->
+<div class="queryarea content" style="height:30px;">
+	<form id="queryForm" name="queryForm">
+	<table>
+		<tr>
+			<td><label for="rolename">角色名称：</label></td>
+			<td><input name="param['rolename']" id="param['rolename']" value=""/></td>
+			<td><button type="button" title="查询" data-icon="ui-icon-arrowreturnthick-1-w" onclick="roleJscript.findRole();" value="查询">查询</button></td>
+		</tr>
+	</table>
+	</form>
+</div>
+
+<!-- 数据显示区域 -->
+<div id="systemData" class="dataarea">
+	<div class="toolbar">
+		<input id="" type="button" value="新增"
+			onclick="roleJscript.showEditRole();" /> 
+		<input id="" type="button" data-icon="ui-icon-wrench"
+			value="修改" onclick="roleJscript.showEditRole(true);" />
+		<button id="button" title="删除" value="删除"
+			data-icon="ui-icon-arrowreturnthick-1-w" onclick="roleJscript.delRole();">删除</button>
+	</div>
+	<div class="divgridtable"  data-checkbox="#chkobj">
+		<table style="width: 100%">
+		<thead>
+			<tr>
+				<td style="width: 20px;"><input type="checkbox"  id="chkobj"
+					data-subcheck="subcheck" /></td>
+				<td style="width: 200px;">名称</td>
+				<td >描述</td>
+			</tr>
+		</thead>
+		<#if page.pageDatas??> <#list page.pageDatas as role>
+		<tr>
+			<td><input type="checkbox" name="subcheck" value="${(role.roleid)!}"></td>
+				<td>${role.rolename?html}</td>
+				<td>${role.roledesc?html}</td>
+		</tr>
+		</#list> </#if>
+	</table>
+	</div>
+	<div class="scrollPageBar" data-curpage="${page.curPage}" data-totalpage="${page.lastPage}" data-param="{}"
+		data-recordcount="${page.pageSize}" data-linktarget="systemData" data-pagelink="<@pub.projectpath/>/system/role/list"></div>
+</div>

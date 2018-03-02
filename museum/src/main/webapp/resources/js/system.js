@@ -997,6 +997,25 @@ $.SystemApp.collInfoJscript = {
 		$.SystemApp.commonOper.del("/collinfo/delete", "tableHover_collInfo");
 
 	},
+	apply:function(){
+		var selectValue = $.SystemApp.checkbox("#tableHover_collInfo");
+		if (selectValue == null || selectValue == '' || selectValue.length <= 0) {
+			alert("请选择数据后再申请！");
+			return;
+		};
+		var data = {
+			ids : selectValue
+		};
+//		if (paramData!=undefined)
+//			$.extend(data,paramData);
+		$.post($.SystemApp.contextPath + "/appraisalinfo/apply", data, function(data) {
+			if (data.successRows > 0) {
+				$.SystemApp.pagetoolbar.refreshData();
+				alert("数据删除成功！");
+			}
+		});
+		
+	},
 	save : function(formObject) {
 		$.SystemApp.commonOper.save("/collinfo/update", formObject);
 

@@ -1,0 +1,61 @@
+<div id="editCode" class="div_detail">
+	<form id="codeform" name="codeform">
+		<input type="hidden" id="codeid" name='codeid' value="${sysCode.codeid!''}" />
+		<input type="hidden" id="codetype" name='codetype' value="${sysCode.codetype!''}" />
+		<input type="hidden" id="content" name='content' value="${sysCode.content!''}" />
+		<input type="hidden" id="superid" name='superid' value="${sysCode.superid!''}" />
+		<input type="hidden" id="leve" name='leve' value="${sysCode.leve!''}" />
+		<input type="hidden" id="applyto" name='applyto' value="${sysCode.applyto!''}" />
+		<table>
+			<tr>
+				<td align="right"><label>编码：</label></td>
+				<td><input type="text" id="code" name="code"
+					data-label="编码" value="${sysCode.code!''}" required
+					placeholder="enter content" /></td>
+
+			</tr>
+			<tr>
+				<td align="right"><label>名称：</label></td>
+				<td><input type="text" id="codename" name="codename"
+					data-label="名称" value="${sysCode.codename!''}" required
+					placeholder="enter content" /></td>
+			</tr>
+			<tr>
+				<td align="right"><label>备注：</label></td>
+				<td><input type="text" id="breviary" name="remark"
+					data-label="备注" value="${sysCode.remark!''}"
+					placeholder="enter content" /></td>
+			</tr>
+		</table>
+
+	</form>
+</div>
+<script type=text/javascript>
+	var codeEditJscript = {
+		init_UI : function() {
+			$("#editCode").detail({handleForm:"#codeform"});
+		},
+		dataSave:function(callback){
+			var isValid= $("#editCode").detail("checkValidation");
+			if (!isValid)
+				return false;
+
+			var data = $("#codeform").serializeArray();
+			$.post(homepage.sysContextPath+ "/system/code/updateCode", data,function(data) {
+					if (data.successRows > 0) {
+						$(".scrollPageBar").toolbar("refresh");
+						alert("数据保存成功！");
+						if (callback != undefined	&& $.isFunction(callback))
+								callback(data.codedata);
+					} else {
+						alert("数据保存失败！");
+					}
+			});
+
+		}
+	};
+
+	$(function() {
+		codeEditJscript.init_UI();
+	});
+</script>

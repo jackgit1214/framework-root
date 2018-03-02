@@ -1,0 +1,116 @@
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.restorationinfoJscript.showEdit();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="$.SystemApp.restorationinfoJscript.showEdit(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.restorationinfoJscript.del();">删除</button>
+		</header>
+
+<div class=" table-con">
+	<div id="tableHover_restorationinfo" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+									<td>修复ID</td>
+									<td>档案号</td>
+									<td>作为逻辑外键，与出库凭证表 Cul_OVMain 的 OutVoucher_ID 关联</td>
+									<td>从文物基础表 Cul_MainCul1/2/3（文物一、二、三）中提取文物信息</td>
+									<td>破损情况/残损情况，由出库凭证形成修复任务档案后，需立即填写，然后才能编辑修复方案。另外，该项用于在回执单中显示“文物残损情况”</td>
+									<td>1:内修，2:外修。</td>
+									<td>来自于出库凭证的出库日期，作为开始的修复日期</td>
+									<td>要达到的标准，由出库凭证形成修复任务档案后，需立即填写，然后才能编辑修复方案</td>
+									<td>由出库凭证形成修复任务档案后，需立即填写，然后才能编辑修复方案</td>
+									<td>与系统代码表 Sys_Code 的 Code 关联，其 CodeType ='RepairGroup'，Superior_Code <> 'xxx'</td>
+									<td>文物的数量限制，文物一般为一套几件等，这里指具体数量</td>
+									<td>建档日期</td>
+									<td>归库日期</td>
+									<td>修复开始时间</td>
+									<td>修复结束时间</td>
+									<td>外修业务时使用，指总体修复造价，仅接收数字0至9、小数点（小数点后2位）的组合</td>
+									<td>外修业务时使用，指修复周期天数(手工单据中的“修复时间”)，仅接收数字0至9的组合。</td>
+									<td>外修业务时使用</td>
+									<td>根据修复回执单的“修复方法”进行调整编辑</td>
+									<td>修复主持人</td>
+									<td>参与修复人员</td>
+									<td>验收情况</td>
+									<td>验收人</td>
+									<td>文物交接人员</td>
+									<td>文物破损程度</td>
+									<td>根据修复回执单的“验收结果”进行调整编辑</td>
+									<td>1:待修复，2:已修复</td>
+									<td>修复方案</td>
+									<td>修复备注</td>
+									<td>建档人</td>
+									<td>作为业务信息的录入者，与系统用户表 Sys_User 关联</td>
+									<td>更新日期</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas?? >
+							<#list page.pageDatas as restorationinfo >
+							<tr>
+								<td><input type="checkbox" name="subcheck" class="list-check"
+										value="${restorationinfo.restorationinfoid!''}"></td>
+											<td>${restorationinfo.restorationinfoid!''}</td>
+											<td>${restorationinfo.restorationfileno!''}</td>
+											<td>${restorationinfo.outvoucherId!''}</td>
+											<td>${restorationinfo.culid!''}</td>
+											<td>${restorationinfo.actuality!''}</td>
+											<td>${restorationinfo.restorationtype!''}</td>
+											<td>${restorationinfo.distillDate!''}</td>
+											<td>${restorationinfo.restDesire!''}</td>
+											<td>${restorationinfo.restHistory!''}</td>
+											<td>${restorationinfo.restGroup!''}</td>
+											<td>${restorationinfo.restCount!''}</td>
+											<td>${restorationinfo.datefile!''}</td>
+											<td>${restorationinfo.returndate!''}</td>
+											<td>${restorationinfo.repairbegintime!''}</td>
+											<td>${restorationinfo.repairendtime!''}</td>
+											<td>${restorationinfo.assessment!''}</td>
+											<td>${restorationinfo.restPeriod!''}</td>
+											<td>${restorationinfo.expertSignature!''}</td>
+											<td>${restorationinfo.restCourse!''}</td>
+											<td>${restorationinfo.restPeople!''}</td>
+											<td>${restorationinfo.restPersonnel!''}</td>
+											<td>${restorationinfo.acceptancesitu!''}</td>
+											<td>${restorationinfo.acceptancepeople!''}</td>
+											<td>${restorationinfo.relicshanper!''}</td>
+											<td>${restorationinfo.relicsdamex!''}</td>
+											<td>${restorationinfo.restCheckout!''}</td>
+											<td>${restorationinfo.restStatus!''}</td>
+											<td>${restorationinfo.restProject!''}</td>
+											<td>${restorationinfo.restRemark!''}</td>
+											<td>${restorationinfo.keeppeople!''}</td>
+											<td>${restorationinfo.updatingUid!''}</td>
+											<td>${restorationinfo.updatingDate!''}</td>
+							</tr>
+							</#list>
+						</#if>	
+
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}"   data-totalpage= "${page.lastPage}" 
+				data-param= '${param!}'    data-recordcount= "${page.pageSize}" 
+				data-linktarget="#systemData" data-pagelink="/restorationinfo/list">
+				<div class="pull-left attrs">
+					第${page.curPage} 页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	});
+</script>

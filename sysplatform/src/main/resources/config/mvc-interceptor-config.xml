@@ -34,6 +34,7 @@
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/resource/**"/>
 			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/index"/>
 			<mvc:exclude-mapping path="/"/>
 			<ref bean="sessionInterceptor" />
 		</mvc:interceptor>

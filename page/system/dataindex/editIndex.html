@@ -1,0 +1,107 @@
+<div id="editIndex" class="div_detail">
+	<form id="indexform" name="indexform">
+		<input type="hidden" id="id" name='id' value="${sysIndexitem.id!''}" />
+		<table>
+			<tr>
+				<td align="right"><label>指标编码：</label></td>
+				<td><input type="text" id="indexid" name="indexid"
+					data-label="指标编码" value="${sysIndexitem.indexid!''}" required
+					placeholder="enter content" /></td>
+
+			</tr>
+			<tr>
+				<td align="right"><label>指标名称：</label></td>
+				<td><input type="text" id="indexname" name="indexname"
+					data-label="指标名称" value="${sysIndexitem.indexname!''}" required
+					placeholder="enter content" /></td>
+			</tr>
+			<tr>
+				<td align="right"><label>数据类型：</label></td>
+				<td><input type="text" id="idatatype" name="idatatype"
+					data-label="数据类型" value="${sysIndexitem.idatatype!''}" required
+					placeholder="enter content" /></td>
+
+			</tr>
+			<tr>
+				<td align="right"><label>是否选择：</label></td>
+				<td><input type="text" id="iseltype" name="iseltype"
+					data-label="是否选择" value="${sysIndexitem.iseltype!''}" 
+					placeholder="enter content" /></td>
+			</tr>
+			<tr>
+				<td align="right"><label>上级指标：</label></td>
+				<td><input type="text" readonly
+					 value="${sysIndexitem.remark!''}" /><input type="hidden" id="superid" name="superid"
+					 value="${sysIndexitem.superid!''}" /></td>
+			</tr>
+			<tr>
+				<td align="right"><label>核心指标：</label></td>
+				<td>
+					<div id="core">
+
+						<input type="radio" id="core1" name="iscore" value="1"<#if
+						(sysIndexitem.iscore?? && sysIndexitem.iscore=="1")> checked
+						</#if> > <label for="core1">是</label> <input type="radio"
+							id="core0" name="iscore"<#if (sysIndexitem.iscore?? &&
+						sysIndexitem.iscore=="0")> checked </#if> value="0"> <label
+							for="core0">否</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="right"><label>必填：</label></td>
+				<td>
+					<div id="required">
+
+						<input type="radio" id="require1" name="isrequired" value="1"<#if
+						sysIndexitem.isrequired??&& sysIndexitem.isrequired=="1"> checked
+						</#if> > <label for="require1">是</label> <input type="radio"
+							id="require0" name="isrequired"<#if
+						sysIndexitem.isrequired??&& sysIndexitem.isrequired=="0"> checked
+						</#if> value="0"> <label for="require0">否</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="right"><label>摘要：</label></td>
+				<td><input type="text" id="breviary" name="breviary"
+					data-label="摘要" value="${sysIndexitem.breviary!''}"
+					placeholder="enter content" /></td>
+			</tr>
+		</table>
+
+	</form>
+</div>
+<script type=text/javascript>
+	var indexEditJscript = {
+		init_UI : function() {
+			$("#editIndex").detail({handleForm:"#indexform"});
+			$("#required").buttonset();
+			$("#core").buttonset();
+		},
+		indexSave:function(callback){
+			var isValid= $("#editIndex").detail("checkValidation");
+			if (!isValid)
+				return false;
+
+			var data = $("#indexform").serializeArray();
+			$.post(homepage.sysContextPath+ "/system/dataindex/updateIndex", data,
+					function(data) {
+							if (data.successRows > 0) {
+								$(".scrollPageBar").toolbar("refresh");
+									alert("数据保存成功！");
+									if (callback != undefined
+											&& $.isFunction(callback))
+										callback(data.indexdata);
+							} else {
+									alert("数据保存失败！");
+							}
+					});
+
+		}
+	};
+
+	$(function() {
+		indexEditJscript.init_UI();
+	});
+</script>

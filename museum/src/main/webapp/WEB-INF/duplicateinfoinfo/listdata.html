@@ -1,0 +1,86 @@
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.duplicateinfoinfoJscript.showEdit();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="$.SystemApp.duplicateinfoinfoJscript.showEdit(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.duplicateinfoinfoJscript.del();">删除</button>
+		</header>
+
+<div class=" table-con">
+	<div id="tableHover_duplicateinfoinfo" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+									<td>复制登记明细ID</td>
+									<td>从文物基础表 Cul_MainCul1/2/3（文物一、二、三）中提取文物信息</td>
+									<td>原总登记号，作为复制品编号（手工管理的编号）</td>
+									<td>复制后可能发生变化</td>
+									<td>与系统代码表 Sys_Code 的 CodeType（='cpjb'）关联（Superior_Code <> 'xxx'）</td>
+									<td>复制品质地类别</td>
+									<td>复制品尺寸</td>
+									<td>复制品尺寸单位</td>
+									<td>复制品容积</td>
+									<td>复制品容积单位</td>
+									<td>复制品质量</td>
+									<td>复制品质量单位</td>
+									<td>复制后可能发生变化</td>
+									<td>作为业务信息的录入者，与系统用户表 Sys_User 关联</td>
+									<td>更新日期</td>
+									<td>对应复制任务信息，可以为空</td>
+									<td>remark</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas?? >
+							<#list page.pageDatas as duplicateinfoinfo >
+							<tr>
+								<td><input type="checkbox" name="subcheck" class="list-check"
+										value="${duplicateinfoinfo.duplicateinfoid!''}"></td>
+											<td>${duplicateinfoinfo.duplicateinfoid!''}</td>
+											<td>${duplicateinfoinfo.culid!''}</td>
+											<td>${duplicateinfoinfo.b0213!''}</td>
+											<td>${duplicateinfoinfo.a0102!''}</td>
+											<td>${duplicateinfoinfo.b0401!''}</td>
+											<td>${duplicateinfoinfo.a0601!''}</td>
+											<td>${duplicateinfoinfo.a1611!''}</td>
+											<td>${duplicateinfoinfo.a1612!''}</td>
+											<td>${duplicateinfoinfo.a1621!''}</td>
+											<td>${duplicateinfoinfo.a1622!''}</td>
+											<td>${duplicateinfoinfo.a1631!''}</td>
+											<td>${duplicateinfoinfo.a1632!''}</td>
+											<td>${duplicateinfoinfo.destination!''}</td>
+											<td>${duplicateinfoinfo.updatingUid!''}</td>
+											<td>${duplicateinfoinfo.updatingDate!''}</td>
+											<td>${duplicateinfoinfo.culturalreliccopyid!''}</td>
+											<td>${duplicateinfoinfo.remark!''}</td>
+							</tr>
+							</#list>
+						</#if>	
+
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}"   data-totalpage= "${page.lastPage}" 
+				data-param= '${param!}'    data-recordcount= "${page.pageSize}" 
+				data-linktarget="#systemData" data-pagelink="/duplicateinfoinfo/list">
+				<div class="pull-left attrs">
+					第${page.curPage} 页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	});
+</script>

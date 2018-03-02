@@ -1,0 +1,38 @@
+<div class="toolbar" id="testtoolbar">
+		<input id="" type="button" value="新增"
+			onclick="indexJscript.showEditIndex();" /> 
+		<input id="" type="button" data-icon="ui-icon-wrench"
+			value="修改" onclick="indexJscript.showEditIndex(true);" />
+		<button id="button" title="删除" value="删除"
+			data-icon="ui-icon-arrowreturnthick-1-w" onclick="indexJscript.delIndex();">删除</button>
+	</div>
+<div class="divgridtable" id="indexgrid" data-checkbox="#chk_select">
+	<table style="width: 100%">
+		<thead>
+			<tr>
+				<td style="width: 20px;"><input type="checkbox" id="chk_select"
+					data-subcheck="subcheck" /></td>
+				<td style="width: 100px;">指标编码</td>
+				<td style="width: 100px;">指标名称</td>
+				<td style="width: 100px;">数据类型</td>
+				<td style="width: 100px;">上级指标</td>
+				<td style="width: 100px;">是否核心</td>
+				<td>摘要</td>
+			</tr>
+		</thead>
+		<#if page.pageDatas??> <#list page.pageDatas as indexdata>
+		<tr>
+			<td><input type="checkbox" name="subcheck"
+				value="${(indexdata.id)!}"></td>
+			<td>${indexdata.indexid?html}</td>
+			<td>${indexdata.indexname?html}</td>
+			<td>${indexdata.idatatype?html}</td>
+			<td>${(indexdata.superid)!}</td>
+			<td>${(indexdata.iscore)!}</td>
+			<td>${(indexdata.breviary)!}</td>
+		</tr>
+		</#list> </#if>
+	</table>
+</div>
+<div class="scrollPageBar" data-curpage="${page.curPage}" data-totalpage="${page.lastPage}" data-param='${param!}'
+		data-recordcount="${page.pageSize}" data-linktarget="systemData" data-pagelink="<@pub.projectpath/>/system/dataindex/list"></div>

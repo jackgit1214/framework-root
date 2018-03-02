@@ -12,6 +12,9 @@
 			onclick="$.SystemApp.collInfoJscript.showEdit(true);" />
 		<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
 			onclick="$.SystemApp.collInfoJscript.del();">删除</button>
+			
+		<button id="button" title="鉴定申请" value="鉴定申请" class="btn btn-sm m-r-5"
+			onclick="$.SystemApp.collInfoJscript.apply();">鉴定申请</button>	
 	</div>	
 </header>
 
@@ -19,8 +22,6 @@
 	<div id="tableHover_collInfo" class=" tile table-data overflow m-b-5">
 
 		<#if page.pageDatas?? > <#list page.pageDatas as collInfo >
-
-
 		<div class="col-md-11">
 			<div class="panel panel-default tile">
 				<div class="panel-heading">

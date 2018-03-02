@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+<head>
+<meta name="viewport"
+	content="width=device-width, height=device-height,initial-scale=1.0, maximum-scale=1.0" />
+<meta name="format-detection" content="telephone=no">
+<meta charset="UTF-8">
+
+<meta name="description" content="Violate Responsive Admin Template">
+<meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
+
+<title>附件上传页</title>
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Library -->
+	<script src="js/jquery-ui.min.js"></script>
+<!-- CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-select.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="css/form.css" rel="stylesheet">
+<link href="css/media-player.css" rel="stylesheet">
+<link href="css/calendar.css" rel="stylesheet">
+<link href="css/icons.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<link href="css/generics.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css"	href="css/zTreeStyle/metro.css" />
+<link href="css/file-manager.css" rel="stylesheet">
+
+<link href="css/fileinput.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+</head>
+ <body id="skin-blur-violate">
+  <div class="container kv-main">
+
+	<input id="input-1" name="input-1[]" type="file" class="file"/>
+
+    <input id="input-1a" name="input-1a[]" type="file" class="file" multiple class="file-loading" data-allowed-file-extensions='["csv", "txt"]'/>
+
+    <input id="input-24" name="input24[]" file-data="{busstype:'1',dataid:'234565'}"  type="file" multiple class="file-loading"/>
+    
+    
+ 
+    <script>
+   
+  
+    $(document).on('ready', function() {
+    	
+    	
+    	$.getJSON("/resources/resources/getAttaData",{"param[attatype]":'1'},function(data){
+    		
+    		var initData =[];
+        	var initDataCon=[];
+    		var attachments = data.attachments
+    		console.log(attachments);
+    		$.each(attachments,function(i,attachment){
+    			//var dataCon = {caption:attachment.filename,size:attachment.filesize,width:'150px',extra:{ids:[attachment.attaid]}};
+    			var dataCon = {caption:attachment.filename,key:i,extra:{ids:[attachment.attaid]}};
+    			if (attachment.attatype=="1"){
+    				initData.push("/resources/"+"public/image/"+attachment.attaid+"?permission=3");
+    				$.extend(dataCon,{type:"image"});
+    			}else{
+    				
+    				initData.push("/resources/public/doc/"+attachment.attaid);
+    				$.extend(dataCon,{type:"object"});
+    			}
+    			
+    			initDataCon.push(dataCon);
+    			
+    			
+    		});
+
+            
+            
+            $("#input-1").fileinput({
+            	language: "zh",
+            	initialPreview:initData,
+    	        initialPreviewAsData: true,
+    	        initialPreviewConfig:initDataCon,
+    	        allowedPreviewTypes:['image', 'html', 'text', 'video', 'audio', 'flash', 'object'],
+    	        uploadUrl: "/resources/resources/update",
+                deleteUrl: "/resources/resources/delete",
+                uploadExtraData:   	 {dataid:'123', busstype: '1',attano:'1'},
+                showCaption: false,
+                showBrowse: false,
+                showPreview: true,
+                showRemove: true,
+                showUpload: true,
+                showCancel: false,
+                showClose: false,
+                showUploadedThumbs: false,
+                overwriteInitial: false,
+                fileActionSettings:{
+                	showDrag:false
+                },
+                previewSettings: {
+                    image: {width: "auto", height: "80px;"},
+                    html: {width: "213px", height: "160px"},
+                    text: {width: "213px", height: "160px"},
+                    video: {width: "213px", height: "160px"},
+                    audio: {width: "213px", height: "80px"},
+                    flash: {width: "213px", height: "160px"},
+                    object: {width: "160px", height: "auto"},
+                    pdf: {width: "160px", height: "160px"},
+                    other: {width: "160px", height: "160px"}
+                },
+                layoutTemplates:{
+                	actions:'', //不显示功能区域
+                	footer: '<div class="file-thumbnail-footer">\n' +
+                    '    <div class="file-footer-caption" title="{caption}">{caption}</div>\n</div>'
+                }
+            });
+            
+            $("#input-1a").fileinput({
+            	language: "zh",
+            	initialPreview:initData,
+    	        initialPreviewAsData: true,
+    	        initialPreviewConfig:{},
+    	        allowedPreviewTypes:['image', 'html', 'text', 'video', 'audio', 'flash', 'object'],
+    	        uploadUrl: "/resources/resources/update",
+                deleteUrl: "/resources/resources/delete",
+                uploadExtraData:   	 {dataid:'123', busstype: '1',attano:'1'},
+                showCaption: true,
+                showBrowse: true,
+                showPreview: true,
+                showRemove: true,
+                showUpload: true,
+                showCancel: true,
+                showClose: true,
+                showUploadedThumbs: true,
+                previewSettings: {
+                    image: {width: "auto", height: "80px;"},
+                    html: {width: "213px", height: "160px"},
+                    text: {width: "213px", height: "160px"},
+                    video: {width: "213px", height: "160px"},
+                    audio: {width: "213px", height: "80px"},
+                    flash: {width: "213px", height: "160px"},
+                    object: {width: "160px", height: "auto"},
+                    pdf: {width: "160px", height: "160px"},
+                    other: {width: "160px", height: "160px"}
+                }
+            });
+            
+            $("#input-24").fileinput({
+            	language: "zh",
+            	initialPreview:initData,
+    	        initialPreviewAsData: true,
+    	        initialPreviewConfig:initDataCon,
+    	        allowedPreviewTypes:['image', 'html', 'text', 'video', 'audio', 'flash', 'object'],
+    	        uploadUrl: "/resources/resources/update",
+                deleteUrl: "/resources/resources/delete",
+                uploadExtraData:   	 {dataid:'123', busstype: '1',attano:'1'},
+                showCaption: true,
+                overwriteInitial: false,
+                showBrowse: true,
+                showPreview: true,
+                showRemove: true,
+                showUpload: true,
+                showCancel: true,
+                showClose: true,
+                showUploadedThumbs: true,
+                fileActionSettings:{
+                	showDrag:true
+                },
+                previewSettings: {
+                    image: {width: "auto", height: "80px;"},
+                    html: {width: "213px", height: "160px"},
+                    text: {width: "213px", height: "160px"},
+                    video: {width: "213px", height: "160px"},
+                    audio: {width: "213px", height: "80px"},
+                    flash: {width: "213px", height: "160px"},
+                    object: {width: "160px", height: "auto"},
+                    pdf: {width: "160px", height: "160px"},
+                    other: {width: "160px", height: "160px"}
+                },
+                layoutTemplates:{
+                	actions:'<div class="filepreview-action" style="position:relative;float:right;top:-108px;height:0px;">{delete}</div>', //不显示功能区域
+                	actionDelete:'<button type="button" class="kv-file-remove btn btn-xs btn-default" ' +
+                    'title="{removeTitle}" {dataUrl}{dataKey}>{removeIcon}</button>\n',
+                    actionZoom:'',
+                    actionDrag:'',
+                	footer: '<div class="file-thumbnail-footer">\n' +
+                    '    <div class="file-footer-caption" title="{caption}">{caption}</div>\n</div>{actions}'//只显示文件名信息
+                }
+            });
+            
+            $('#input-24').on('filepredelete', function(event, key, jqXHR, data) {
+               
+            }).on('filedeleted', function(event, key, jqXHR, data) {
+				alert("ccccccccccc");
+			});
+    	});
+                  
+    });
+    
+   
+    </script>
+
+</div>
+                
+	<!-- jQuery -->
+
+	<!-- jQuery UI -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- jQuery Easing - Requirred for Lightbox + Pie Charts-->
+
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	
+	
+	
+	<script src="js/fileinput.js?aa=11"></script>
+	<script src="js/canvas-to-blob.min.js"></script>
+	<script src="js/purify.min.js"></script>
+	<script src="js/sortable.min.js"></script>
+	<script src="js/fileinput.zh.js"></script>
+	<!--  Form Related -->
+	<script src="js/validation/validate.min.js"></script>
+	<!-- jQuery Form Validation Library -->
+	<script src="js/validation/validationEngine.min.js"></script>
+	<!-- jQuery Form Validation Library - requirred with above js -->
+	<!-- 
+	<script src="js/select.min.js"></script> -->
+	<!-- Custom Select -->
+	<script src="js/bootstrap-select.js"></script>
+	<script src="js/defaults-zh_CN.js"></script>
+	<script src="js/chosen.min.js"></script>
+	<!-- Custom Multi Select -->
+	<script src="js/datetimepicker.min.js"></script>
+	<!-- Date & Time Picker -->
+	<script src="js/colorpicker.min.js"></script>
+	<!-- Color Picker -->
+	<script src="js/icheck.js"></script>
+	<!-- Custom Checkbox + Radio -->
+	<script src="js/autosize.min.js"></script>
+	<!-- Textare autosize -->
+	<script src="js/toggler.min.js"></script>
+	<!-- Toggler -->
+	<script src="js/input-mask.min.js"></script>
+	<!-- Input Mask -->
+	<script src="js/spinner.min.js"></script>
+	<!-- Spinner -->
+	<script src="js/slider.min.js"></script>
+	<!-- Input Slider -->
+	<script src="js/fileupload.min.js"></script>
+	<!-- File Upload -->
+
+	<!-- Text Editor -->
+	<script src="js/editor2.min.js"></script>
+	<!-- WYSIWYG Editor -->
+	<script src="js/markdown.min.js"></script>
+	<!-- Markdown Editor -->
+	<!-- Charts -->
+	<script src="js/charts/jquery.flot.js"></script>
+	<!-- Flot Main -->
+	<script src="js/charts/jquery.flot.time.js"></script>
+	<!-- Flot sub -->
+	<script src="js/charts/jquery.flot.animator.min.js"></script>
+	<!-- Flot sub -->
+	<script src="js/charts/jquery.flot.resize.min.js"></script>
+	<!-- Flot sub - for repaint when resizing the screen -->
+	<script src="js/charts/jquery.flot.orderBar.js"></script>
+	<!-- Flot Bar chart -->
+	<script src="js/charts/jquery.flot.pie.min.js"></script>
+	<!-- Flot Pie chart -->
+
+	<script src="js/sparkline.min.js"></script>
+	<!-- Sparkline - Tiny charts -->
+	<script src="js/easypiechart.js"></script>
+	<!-- EasyPieChart - Animated Pie Charts -->
+	<script src="js/charts.js"></script>
+	<!-- All the above chart related functions -->
+
+	<!-- Map -->
+	<script src="js/maps/jvectormap.min.js"></script>
+	<!-- jVectorMap main library -->
+	<script src="js/maps/usa.js"></script>
+	<!-- USA Map for jVectorMap -->
+
+	<!-- Media -->
+	<script src="js/media-player.min.js"></script>
+	<!-- Video Player -->
+
+	<!-- UX -->
+	<script src="js/scroll.min.js"></script>
+	<!-- Custom Scrollbar -->
+
+	<!-- Other -->
+	<script src="js/calendar.min.js"></script>
+	<!-- Calendar -->
+	<script src="js/feeds.min.js"></script>
+	<!-- News Feeds -->
+	<script src="js/file-manager/elfinder.min.js"></script>
+	<!-- File Manager -->
+<!--[if lt IE 9]>
+  <script src="js/html5shiv.js"></script>
+  <script src="js/respond.js"></script>
+<![endif]-->
+	<!-- ztree -->
+	<script type="text/javascript" src="js/jquery.ztree.all-3.5.js"></script>
+	<!-- All JS functions -->
+	<script src="js/functions.js"></script>
+	<script src="js/system.js"></script>
+	<script type="text/javascript">
+			$.SystemApp.contextPath = "";
+	</script> 
+</body>
+ </html>

@@ -1,0 +1,76 @@
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.restorationprojectJscript.showEdit();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="$.SystemApp.restorationprojectJscript.showEdit(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.restorationprojectJscript.del();">删除</button>
+		</header>
+
+<div class=" table-con">
+	<div id="tableHover_restorationproject" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+									<td>修复方案ID</td>
+									<td>主持人</td>
+									<td>预计修复人，用于修复回执单、修复档案中的实际修复人的编辑</td>
+									<td>方案制定人</td>
+									<td>方案审定人</td>
+									<td>领导审批</td>
+									<td>领导审批</td>
+									<td>修复方案内容</td>
+									<td>使用材料</td>
+									<td>1:未审批，2:审批通过，3:审批未通过</td>
+									<td>作为业务信息的录入者，与系统用户表 Sys_User 关联</td>
+									<td>更新日期</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas?? >
+							<#list page.pageDatas as restorationproject >
+							<tr>
+								<td><input type="checkbox" name="subcheck" class="list-check"
+										value="${restorationproject.restorationprojectid!''}"></td>
+											<td>${restorationproject.restorationprojectid!''}</td>
+											<td>${restorationproject.compere!''}</td>
+											<td>${restorationproject.restPerson!''}</td>
+											<td>${restorationproject.restProjectFramer!''}</td>
+											<td>${restorationproject.restProjectAssessor!''}</td>
+											<td>${restorationproject.director!''}</td>
+											<td>${restorationproject.curator!''}</td>
+											<td>${restorationproject.restProject!''}</td>
+											<td>${restorationproject.adoptiveMaterial!''}</td>
+											<td>${restorationproject.restStatus!''}</td>
+											<td>${restorationproject.updatingUid!''}</td>
+											<td>${restorationproject.updatingDate!''}</td>
+							</tr>
+							</#list>
+						</#if>	
+
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}"   data-totalpage= "${page.lastPage}" 
+				data-param= '${param!}'    data-recordcount= "${page.pageSize}" 
+				data-linktarget="#systemData" data-pagelink="/restorationproject/list">
+				<div class="pull-left attrs">
+					第${page.curPage} 页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$.SystemApp.initComponents();
+		$.SystemApp.pagetoolbar.toolbarInit();
+	});
+</script>

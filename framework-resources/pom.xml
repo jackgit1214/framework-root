@@ -13,11 +13,6 @@
   <description>framework-resources</description>
   <dependencies>
   	<dependency>
-  		<groupId>com.framework</groupId>
-  		<artifactId>framework-core</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
   		<groupId>commons-fileupload</groupId>
   		<artifactId>commons-fileupload</artifactId>
   		<version>1.3.1</version>
@@ -31,7 +26,17 @@
 			<groupId>jmagick</groupId>
 			<artifactId>jmagick</artifactId>
 			<version>6.6.9</version>
-		</dependency>  	
+		</dependency>
+		<dependency>
+			<groupId>com.framework</groupId>
+			<artifactId>framework-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+			<version>6.0.0</version>
+		</dependency>
   </dependencies>
   <build>
 		<plugins>
@@ -48,7 +53,7 @@
 				<configuration>
 					<forkMode>once</forkMode>
 					<argLine>-Dfile.encoding=UTF-8</argLine>  <!-- 执行单元测试时的中文乱码问题 -->
-
+					<skipTests>true</skipTests>
 				</configuration>
 
 			</plugin>

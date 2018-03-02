@@ -373,7 +373,7 @@ public class IM4ImageHandler extends AbstractImageHandler implements
 	public Map<String, String> getImageInfo(String imagePath) {
 
 		long startTime = System.currentTimeMillis();
-		Map<String, String> imageInfo = new HashMap<>();
+		Map<String, String> imageInfo = new HashMap<String, String>();
 		try {
 			IMOperation op = new IMOperation();
 			op.format("%w,%h,%d/%f,%Q,%b,%e,%f");

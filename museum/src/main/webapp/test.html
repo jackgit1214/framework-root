@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<head>
+<meta name="viewport"
+	content="width=device-width, height=device-height,initial-scale=1.0, maximum-scale=1.0" />
+<meta name="format-detection" content="telephone=no">
+<meta charset="UTF-8">
+
+<meta name="description" content="Violate Responsive Admin Template">
+<meta name="keywords" content="Super Admin, Admin, Template, Bootstrap">
+
+<title>test</title>
+	<script src="resources/js/jquery.min.js"></script>
+	<!-- jQuery Library -->
+	<script src="resources/js/jquery-ui.min.js"></script>
+	<script type="text/javascript">
+		 var commons = {
+		 	  _name:"test",
+		 		init:function(myname){
+		 		
+		 			this._name= myname;
+		 		},
+		 		dance:function(){
+		 			alert("上级方法");
+		 			return this._name+":dancing";
+		 		}
+		 		
+		};
+		
+		var comExtend = {};
+		$.extend(comExtend,commons,{
+			parentObj:commons,
+			swingSword: function(){
+				return true;
+			},
+			init:function(myname){
+				if (myname==undefined||myname=="")
+					myname="my name";
+				this._name = myname;
+				this.parentObj.init(myname);
+				
+				
+			},
+			dance:function(){
+				var _return = this.parentObj.dance();
+				alert("本级方法");
+				return _return;
+			}
+		});
+			
+		comExtend.init("新人");
+		comExtend.dance();	
+	</script>
+	
+
+</head>
+
+<body>
+    
+asdfasfasdf
+	<div id="testdiv">
+	
+	</div>
+	<input type="button" id="button111" value="test" onclick="testContent();"/>  
+ </body>
+ 	<!-- jQuery -->
+	<script type="text/javascript">
+
+	
+		function modifyText() {
+			  alert('jdlfsdfsf44444444');
+		}
+		$("#testdiv").bind("DOMNodeInserted", function () {
+		    alert("inserted content");
+		}); 
+		
+		
+		document.getElementById("testdiv").addEventListener("DOMNodeInserted",function(){
+			alert("ccccc content");
+		});
+		
+		function testContent(){
+			
+			//$("#testdiv").html("vvvvvvvvvvvvvvvv");
+			
+			document.getElementById("testdiv").innerHTML = "jlsfjkasdf";
+		}
+
+
+
+	</script>
+ </html>

@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -31,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 // ,"classpath:config/db/test-data.xml"
+// 项目 中使用EnableWebMvc,此注解必须
+@WebAppConfiguration
 @ContextConfiguration(locations = { "classpath:config/application-museum.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @Transactional

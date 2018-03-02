@@ -1,0 +1,39 @@
+<div class="toolbar" id="testtoolbar">
+	<input id="" type="button" value="新增"
+		onclick="userJscript.showEditUser();" /> <input id="" type="button"
+		value="修改" onclick="userJscript.showEditUser(true);" />
+	<button id="button" title="删除" value="删除"
+		data-icon="ui-icon-arrowreturnthick-1-w" onclick="userJscript.delUser();">删除</button>
+</div>
+<div class="divgridtable" data-checkbox="#chk_select">
+	<table style="width: 100%">
+		<thead>
+			<tr>
+				<td style="width: 20px;"><input type="checkbox" id="chk_select"
+					data-subcheck="subcheck" /></td>
+				<td style="width: 100px;">姓名</td>
+				<td style="width: 100px;">登录名</td>
+				<td style="width: 40px;">性别</td>
+				<td style="width: 100px;">电话</td>
+				<td style="width: 100px;">Email</td>
+				<td>地址</td>
+			</tr>
+		</thead>
+		<#if page.pageDatas??> <#list page.pageDatas as user>
+		<tr>
+			<td><input type="checkbox" name="subcheck" value="${(user.userid)!}"></td>
+				<td>${user.username?html}</td>
+				<td>${user.logincode?html}</td>
+				<td><#if '${(user.gender)!}' == "1">男<#else>女</#if></td>
+				<td>${(user.phone)!}</td>
+				<td>${(user.email)!}</td>
+				<td>${(user.address)!}</td>
+		</tr>
+		</#list> </#if>
+	</table>
+</div>
+<div class="scrollPageBar" data-curpage="${page.curPage}"
+	data-totalpage="${page.lastPage}" data-param='${param!}'
+	data-recordcount="${page.pageSize}" data-linktarget="systemData"
+	data-pagelink="<@pub.projectpath/>/system/user/list">
+</div>

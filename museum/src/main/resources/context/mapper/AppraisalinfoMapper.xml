@@ -28,9 +28,11 @@
     <result column="Appr_Opinion" jdbcType="VARCHAR" property="apprOpinion" />
     <result column="Appr_Remark" jdbcType="VARCHAR" property="apprRemark" />
     <result column="Status" jdbcType="CHAR" property="status" />
+    <result column="CertificateNo" jdbcType="VARCHAR" property="certificateno" />
+    <result column="applyDataId" jdbcType="VARCHAR" property="applyDataId" />
     <result column="Updating_UID" jdbcType="VARCHAR" property="updatingUid" />
     <result column="Updating_Date" jdbcType="VARCHAR" property="updatingDate" />
-    <result column="CertificateNo" jdbcType="VARCHAR" property="certificateno" />
+    
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -41,7 +43,7 @@
     AppraisalID, Appr_Batch_No, CulID, Appr_A0102, Appr_B0401, Appr_A0610, Appr_A0310, 
     Appr_B0256, Appr_Type, Proposer, ApplicationDate, ApplicationReasons, ApplicationRemark, 
     Start_Date, End_Date, Appr_Locate, Compere, Appraiser, Appr_Opinion, Appr_Remark, 
-    Status, Updating_UID, Updating_Date, CertificateNo
+    Status, Updating_UID, Updating_Date, CertificateNo,applyDataId
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
@@ -76,7 +78,7 @@
       ApplicationRemark, Start_Date, End_Date, 
       Appr_Locate, Compere, Appraiser, 
       Appr_Opinion, Appr_Remark, Status, 
-      Updating_UID, Updating_Date, CertificateNo
+      Updating_UID, Updating_Date, CertificateNo,applyDataId
       )
     values (#{appraisalid,jdbcType=VARCHAR}, #{apprBatchNo,jdbcType=VARCHAR}, #{culid,jdbcType=VARCHAR}, 
       #{apprA0102,jdbcType=VARCHAR}, #{apprB0401,jdbcType=VARCHAR}, #{apprA0610,jdbcType=VARCHAR}, 
@@ -86,6 +88,7 @@
       #{apprLocate,jdbcType=VARCHAR}, #{compere,jdbcType=VARCHAR}, #{appraiser,jdbcType=VARCHAR}, 
       #{apprOpinion,jdbcType=VARCHAR}, #{apprRemark,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
       #{updatingUid,jdbcType=VARCHAR}, #{updatingDate,jdbcType=VARCHAR}, #{certificateno,jdbcType=VARCHAR}
+      , #{applyDataId,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.museum.model.Appraisalinfo">
@@ -168,6 +171,10 @@
       <if test="certificateno != null">
         CertificateNo,
       </if>
+      <if test="applyDataId != null">
+        applyDataId,
+      </if>
+      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="appraisalid != null">
@@ -242,6 +249,10 @@
       <if test="certificateno != null">
         #{certificateno,jdbcType=VARCHAR},
       </if>
+      <if test="applyDataId != null">
+        #{applyDataId,jdbcType=VARCHAR},
+      </if>
+      
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.museum.model.Appraisalinfo">
@@ -321,6 +332,9 @@
       <if test="certificateno != null">
         CertificateNo = #{certificateno,jdbcType=VARCHAR},
       </if>
+      <if test="applyDataId != null">
+        applyDataId = #{applyDataId,jdbcType=VARCHAR},
+      </if>
     </set>
     where AppraisalID = #{appraisalid,jdbcType=VARCHAR}
   </update>
@@ -353,7 +367,9 @@
       Status = #{status,jdbcType=CHAR},
       Updating_UID = #{updatingUid,jdbcType=VARCHAR},
       Updating_Date = #{updatingDate,jdbcType=VARCHAR},
-      CertificateNo = #{certificateno,jdbcType=VARCHAR}
+      CertificateNo = #{certificateno,jdbcType=VARCHAR},
+      applyDataId = #{applyDataId,jdbcType=VARCHAR}
+      
     where AppraisalID = #{appraisalid,jdbcType=VARCHAR}
   </update>
   <select id="selectByCondition" resultMap="BaseResultMap">
@@ -477,6 +493,10 @@
       <if test="record.certificateno != null">
         CertificateNo = #{record.certificateno,jdbcType=VARCHAR},
       </if>
+       <if test="record.certificateno != null">
+        applyDataId = #{record.applyDataId,jdbcType=VARCHAR},
+      </if>
+      
     </set>
     <if test="queryModel != null">
       <include refid="public.Update_By_Where_Clause" />
@@ -512,7 +532,9 @@
       Status = #{record.status,jdbcType=CHAR},
       Updating_UID = #{record.updatingUid,jdbcType=VARCHAR},
       Updating_Date = #{record.updatingDate,jdbcType=VARCHAR},
-      CertificateNo = #{record.certificateno,jdbcType=VARCHAR}
+      CertificateNo = #{record.certificateno,jdbcType=VARCHAR},
+      applyDataId = #{record.applyDataId,jdbcType=VARCHAR}
+      
     <if test="queryModel != null">
       <include refid="public.Update_By_Where_Clause" />
     </if>

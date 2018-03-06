@@ -32,11 +32,6 @@
 			<artifactId>framework-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-engine</artifactId>
-			<version>6.0.0</version>
-		</dependency>
   </dependencies>
   <build>
 		<plugins>

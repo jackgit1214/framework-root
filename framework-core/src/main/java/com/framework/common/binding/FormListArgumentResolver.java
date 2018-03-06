@@ -48,7 +48,6 @@ import org.springframework.web.util.WebUtils;
 import com.framework.common.binding.anaotation.FormList;
 import com.framework.common.binding.anaotation.MapWapper;
 
-
 /**
  * Resolves method arguments annotated with {@code @ModelAttribute} and handles
  * return values from methods annotated with {@code @ModelAttribute}.
@@ -85,12 +84,13 @@ public class FormListArgumentResolver implements HandlerMethodArgumentResolver,
 	 */
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		
-		 if (parameter.hasParameterAnnotation(FormList.class)) {
-	            return true;
-	        }
-	        return false;
+
+		if (parameter.hasParameterAnnotation(FormList.class)) {
+			return true;
+		}
+		return false;
 	}
+
 	/**
 	 * Resolve the argument from the model or if not found instantiate it with
 	 * its default if it is available. The model attribute is then populated
@@ -115,52 +115,58 @@ public class FormListArgumentResolver implements HandlerMethodArgumentResolver,
 		Object bindObject = null;
 		List<BindingResult> bindingResults = new ArrayList<BindingResult>();
 		if (Collection.class.isAssignableFrom(paramType) || paramType.isArray()) {
-			Class<?> genericClass = this.getGenericClass(parameter,0);
-			if (genericClass == null)	return null;
+			Class<?> genericClass = this.getGenericClass(parameter, 0);
+			if (genericClass == null)
+				return null;
 			Map<String, Object> mappedValues = createMappedValues(genericClass,
-					webRequest, parameter, prefix, binderFactory,bindingResults);
+					webRequest, parameter, prefix, binderFactory,
+					bindingResults);
 			if (!mappedValues.isEmpty()) {
 				List<Object> targetObject = new ArrayList<Object>(
 						mappedValues.values());
 				bindObject = binder.convertIfNecessary(targetObject, paramType);
 			}
 		} else if (MapWapper.class.isAssignableFrom(paramType)) {
-			Class<?> genericClass = this.getGenericClass(parameter,1);
-			if (genericClass == null)	return null;
+			Class<?> genericClass = this.getGenericClass(parameter, 1);
+			if (genericClass == null)
+				return null;
 			Map<String, Object> mappedValues = createMappedValues(genericClass,
-					webRequest, parameter, prefix, binderFactory,bindingResults);
+					webRequest, parameter, prefix, binderFactory,
+					bindingResults);
 			if (!mappedValues.isEmpty()) {
 				Map<String, Object> targetObject = new HashMap<String, Object>();
 				for (Map.Entry<String, Object> entry : mappedValues.entrySet()) {
 					String key = entry.getKey();
-					key = key.substring(key.indexOf("[") + 1,
-							key.indexOf("]"));
+					key = key.substring(key.indexOf("[") + 1, key.indexOf("]"));
 					targetObject.put(key, entry.getValue());
 				}
-				MapWapper<String,Object> mw = new MapWapper<String, Object>();
+				MapWapper<String, Object> mw = new MapWapper<String, Object>();
 				mw.setInnerMap(targetObject);
 				bindObject = binder.convertIfNecessary(mw, paramType);
 			}
 
 		}
-		Map<String, Object> bindingResultModel = new LinkedHashMap<String, Object>(2);	
-		BindingResult bindingResultTotal = new BeanPropertyBindingResult(bindObject, prefix);
-		if (bindingResults.size() > 0 ){
-			for (BindingResult bindingResult:bindingResults){
+		Map<String, Object> bindingResultModel = new LinkedHashMap<String, Object>(
+				2);
+		BindingResult bindingResultTotal = new BeanPropertyBindingResult(
+				bindObject, prefix);
+		if (bindingResults.size() > 0) {
+			for (BindingResult bindingResult : bindingResults) {
 				if (bindingResult.hasErrors())
 					throw new BindException(bindingResult);
 			}
 		}
-		
-		bindingResultModel.put(prefix,bindObject);
-		bindingResultModel.put(BindingResult.MODEL_KEY_PREFIX+prefix,bindingResultTotal);
+
+		bindingResultModel.put(prefix, bindObject);
+		bindingResultModel.put(BindingResult.MODEL_KEY_PREFIX + prefix,
+				bindingResultTotal);
 
 		mavContainer.removeAttributes(bindingResultModel);
 		mavContainer.addAllAttributes(bindingResultModel);
 		return bindObject;
 	}
 
-	private Class<?> getGenericClass(MethodParameter parameter,int paramOrder) {
+	private Class<?> getGenericClass(MethodParameter parameter, int paramOrder) {
 		Class<?> genericClass = null;
 		Class<?> paramType = parameter.getParameterType();
 		if (paramType.isArray()) {
@@ -317,14 +323,15 @@ public class FormListArgumentResolver implements HandlerMethodArgumentResolver,
 	 */
 	private Map<String, Object> createMappedValues(Class<?> genericClass,
 			NativeWebRequest webRequest, MethodParameter parameter,
-			String prefix, WebDataBinderFactory binderFactory,List<BindingResult> bindingResult) throws Exception {
+			String prefix, WebDataBinderFactory binderFactory,
+			List<BindingResult> bindingResult) throws Exception {
 		ServletRequest servletRequest = (ServletRequest) webRequest
 				.getNativeRequest();
 		Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-		
+
 		// 将数组提取为一个一个的KEY，这里是集合必须要有prefix + '['
 		Set<String> keySet = getSortedKeySet(servletRequest, prefix + '[');
-		
+
 		for (String key : keySet) {
 			Object genericObj = null;
 			if (key.endsWith(separator)) {

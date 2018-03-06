@@ -11,7 +11,9 @@
 	<packaging>war</packaging>
 	<name>museum_bootstrap</name>
 	<description>museum_bootstrap</description>
-
+<properties>
+        <spring.version>4.3.0.RELEASE</spring.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -39,12 +41,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-websocket</artifactId>
-			<version>4.1.0.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-messaging</artifactId>
-			<version>4.1.0.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>

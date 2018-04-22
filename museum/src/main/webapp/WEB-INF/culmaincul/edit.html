@@ -1,0 +1,136 @@
+<script type=text/javascript>
+	$.extend($.SystemApp.culMainCulJscript, {
+		editJscript : {
+			init_UI : function() {
+				var $parent = $("#editculMainCul").parent();
+				$parent.addClass("m-0 p-0");
+				$.SystemApp.culMainCulJscript.init_tree(${dataindex});
+			},
+			indexSelectChange:function(value){
+				var $this = $(this);
+				var tmpid = $this.attr("id");
+				tmpid = tmpid.replace("seltypevalue","normaldata");
+				var $obj = $("#"+escapeJquery(tmpid))
+				$obj.val(value);
+			}
+		}
+	});
+	$(function() {
+		$.SystemApp.culMainCulJscript.editJscript.init_UI();
+		$("#uploadFile").fileInputCustom({
+            title: "请上传附件",
+            data:{
+            	busiType:1,//当前文件类型，是指那类型的开附件，如征集等
+            	dataIds:'${culMainCul.culid!''}'  //附件的数据ID
+            },
+            fileinput: {
+            },
+            fileListContainer:"#attachmentslist",
+            showContainer:'#attachments',
+            //显示文件类型 edit=可编辑  detail=明细 默认为明细
+            showType:'edit',
+            //弹出窗口 执行上传附件后的回调函数(window:false不调用此方法)
+            window:true
+        });
+		
+		
+	});
+</script>
+<div id="editculMainCul" class="div_detail">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="tile p-5 overflow " style="height: 500px;">
+				<ul id="indextree" class="ztree"></ul>
+			</div>
+		</div>
+		<div class="col-md-7">
+		
+			<form id="culMainCulform" name="culMainCulform"
+				class="form-validation-1 form-horizontal">
+				<div id="indexdatas" class="tile overflow p-15" style="height: 500px;">
+					<input type="hidden" name="token" value='${token}'> <input
+						type="hidden" id="CULID" name="culid"
+						value="${culMainCul.culid!''}" /> <input type="hidden"
+						id="CULUNIT" name="culunit" value="${culMainCul.culunit!''}" />
+
+					<#list culIndexData as item>
+						<#assign validate=""/>
+						<#if item.sysIndexitem.isrequired=='1' || item.sysIndexitem.iscore=='1'>
+							<#assign validate="validate[required]"/>
+						</#if>
+						<div class="div_${item.sysIndexitem.indexid}" ">
+							<input type="hidden"
+								id="culData[${item_index}].datadetailid" name="culData[${item_index}].datadetailid" value="${item.datadetailid!''}" />
+								<input type="hidden"
+								id="culData[${item_index}].culindexid" name="culData[${item_index}].culindexid" value="${item.sysIndexitem.indexid}" />
+								<input type="hidden"
+								id="culData[${item_index}].culid" name="culData[${item_index}].culid" value="${culMainCul.culid!''}" />
+							<div class="form-group ">
+								<label for="${item.sysIndexitem.indexid}" class="col-md-4 control-label p-r-0">${item.sysIndexitem.indexname}：</label>
+								<div class="col-md-8 p-l-0">
+									<#if item.sysIndexitem.iseltype != '' >
+										<input type="hidden"
+												id="culData[${item_index}].normaldata" name="culData[${item_index}].normaldata" value="${item.normaldata!''}" />
+										<@pub.selectCode codetype="${item.sysIndexitem.iseltype}" id="culData[${item_index}].seltypevalue" event="$.SystemApp.culMainCulJscript.editJscript.indexSelectChange" value="${item.seltypevalue!''}" >
+										</@pub.selectCode>
+									<#else>
+										<#if item.sysIndexitem.idatatype == 'varchar' >
+											<input type="text" id="culData[${item_index}].normaldata" name="culData[${item_index}].normaldata"
+												data-label="${item.sysIndexitem.indexname}" value="${item.normaldata!''}"
+												class="input-sm  form-control ${validate!''} "
+												placeholder="请输入" />
+										</#if>
+										<#if item.sysIndexitem.idatatype == 'integer' >
+											<input type="text" id="culData[${item_index}].normaldata" name="culData[${item_index}].normaldata"
+												data-label="${item.sysIndexitem.indexname}" value="${item.normaldata!''}"
+												class="input-sm  form-control ${validate!''} validate[custom[integer]]"
+												placeholder="请输入" />
+										</#if>
+										<#if item.sysIndexitem.idatatype == 'float' >
+											<input type="text" id="culData[${item_index}].normaldata" name="culData[${item_index}].normaldata"
+												data-label="${item.sysIndexitem.indexname}" value="${item.normaldata!''}"
+												class="input-sm  form-control ${validate!''} validate[custom[number]]"
+												placeholder="请输入" />
+										</#if>
+										<#if item.sysIndexitem.idatatype == 'text' >
+											<input type="text" id="culData[${item_index}].clobdata" name="culData[${item_index}].clobdata"
+												data-label="${item.sysIndexitem.indexname}" value="${item.stringClobData!''}"
+												class="input-sm  form-control ${validate!''}"
+												placeholder="请输入" />
+										</#if>
+										<#if item.sysIndexitem.idatatype == 'date' >
+											<div class="input-group date form_datetime"
+												data-date="1949-10-01" data-date-format="yyyy-MM-dd"
+												data-link-format="yyyy-mm-dd">
+												<input type="text" id="culData[${item_index}].normaldata" name="culData[${item_index}].normaldata"
+													data-label="${item.sysIndexitem.indexname}"
+													value="${item.normaldata!''}" readonly
+													class="input-sm  ${validate!''} form-control  datepicker hasDatepicker" />
+												<span class="input-group-addon "><i
+													class="glyphicon glyphicon-calendar"></i></span>
+											</div>
+										</#if>
+									</#if>	
+								</div>
+							</div>
+						</div>
+					</#list>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-2">
+			<div id="attachmentslist" >  
+			</div>  
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div class="text-center">
+			<button type="submit" class="btn btn-sm"
+				onclick="$.SystemApp.culMainCulJscript.save('culMainCulform');">保存</button>
+			<div class="btn btn-default btn-file" id="uploadFile">
+                    <i class="fa fa-paperclip"></i> 上传附件
+         </div>	
+			<button type="button" class="btn btn-sm" data-dismiss="modal">关闭</button>
+		</div>
+	</div>
+</div>

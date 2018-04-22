@@ -1,0 +1,65 @@
+		<header class="listview-header media p-5">
+			<input type="button" value="新增" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.culMainCulJscript.showEdit();" /> <input id="" type="button"
+				class="btn btn-sm m-r-5" value="修改"
+				onclick="$.SystemApp.culMainCulJscript.showEdit(true);" />
+			<button id="button" title="删除" value="删除" class="btn btn-sm m-r-5"
+				onclick="$.SystemApp.culMainCulJscript.del();">删除</button>
+		</header>
+
+<div class=" table-con">
+	<div id="tableHover_culMainCul" class=" tile table-data m-b-5">
+		<div class="table-responsive overflow  " data-checkbox="#chk_select">
+			<table class="table table-bordered table-hover table-striped tile">
+				<thead>
+					<tr>
+						<td style="width: 20px;"><input type="checkbox"
+							class="list-parent-check" id="chk_select"
+							data-subcheck="subcheck" /></td>
+									<td>文物名称</td>
+									
+									<#list showcols as showcol>
+										<td>${showcol.indexname}</td>
+									</#list>	
+									<td>是否审核</td>
+									<td>审核人员</td>
+					</tr>
+				</thead>
+				<#if page.pageDatas?? >
+							<#list page.pageDatas as culMainCul >
+							<tr>
+								<td><input type="checkbox" name="subcheck" class="list-check"
+										value="${culMainCul.culid!''}"></td>
+											<td>${culMainCul.culname!''}</td>
+											
+											<#list showcols as showcol>
+												<td>${culMainCul.culCustomDataDisp['${showcol.colname}']!''}</td>
+											</#list>
+											<td>${culMainCul.isaudit!''}</td>
+											<td>${culMainCul.audituser!''}</td>
+							</tr>
+							</#list>
+						</#if>	
+
+			</table>
+		</div>
+	</div>
+	<div class="media listview-header  m-t-5 p-5 pagetoolbar"
+				data-curpage="${page.curPage}"   data-totalpage= "${page.lastPage}" 
+				data-param= '${param!}'    data-recordcount= "${page.pageSize}" 
+				data-linktarget="#systemData" data-pagelink="/culmaincul/list">
+				<div class="pull-left attrs">
+					第${page.curPage} 页，共${page.lastPage}页</div>
+				<div class="pull-right">
+					<ul class="pagination">
+
+					</ul>
+				</div>
+			</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+	
+	});
+</script>

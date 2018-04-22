@@ -171,7 +171,7 @@ $.SystemApp.initContentArea = function() {
 
 };
 $.SystemApp.initComponents = function() {
-
+	
 	// check box
 	if ($('input:checkbox, input:radio')[0]) {
 
@@ -228,8 +228,7 @@ $.SystemApp.initComponents = function() {
 			}
 		});
 
-	}
-	;
+	};
 
 	/** form components */
 	if ($("[class*='form-validation']")[0]) {
@@ -253,13 +252,21 @@ $.SystemApp.initComponents = function() {
 
 	// Select
 	if ($('.selectpicker')[0]) {
+		
 		$('.selectpicker').selectpicker({
 			style : 'form-control'
 		});
-
+		
+		//**调试信息
+//		var kkk = $(".selectpicker");
+//		kkk.each(function(obj,i){
+//			var _this = $(this);
+//			console.log(_this.data('codetype'));
+//		});
+		
 		$('.selectpicker').on('loaded.bs.select', function(e) {
 			var _this = $(this);
-
+			
 			_this.selectpicker('val', _this.data("value"));
 		});
 	}
@@ -472,8 +479,7 @@ $.SystemApp.initMenu = function(menuUrl) {
 					$ul.append($li);
 				});
 		return $ul;
-	}
-	;
+	};
 
 };
 
@@ -1414,6 +1420,114 @@ $.SystemApp.duplicateinfoinfoJscript = {
 			var data = $("#"+formobject).serialize();
 
 			$.SystemApp.divLoad("#systemData", "/duplicateinfoinfo/list", data,
+					function() {
+
+					});
+		}
+	};
+
+
+
+
+$.SystemApp.culMainCulJscript = {
+		
+		dialogObj : null,
+		indextree:null,
+		init_UI : function() {
+				$.SystemApp.divLoad("#systemData", "/culmaincul/list", '',
+					function() {
+
+					});
+		},
+		setting:function(){
+			var tmpsetting = $.SystemApp.treesetting;
+			var $that = this;
+			 $.extend(tmpsetting,{
+				 check:{
+						enable: false
+					},
+			 	async: {
+					enable: true,
+					url:$.SystemApp.contextPath + "/system/dataindex/getIndexdata",
+					autoParam:["id","pId"]
+				},
+				callback: {
+					onClick: function(event, treeId, treeNode){
+						$that.filterData(treeNode);
+					},
+					beforeClick:function(treeId, treeNode){
+						
+					}
+				}
+			 });
+			return tmpsetting;
+		},		
+		showEdit : function(isEdit) {
+			var _this = this;
+			_this.dialogObj = $.SystemApp.commonOper.showEdit(isEdit,"/culmaincul/showEdit","tableHover_culMainCul","文物信息编辑",810);
+
+		},
+		del : function() {
+			$.SystemApp.commonOper.del("/culmaincul/delete","tableHover_culMainCul");
+			
+		},
+		save : function(formObject) {
+			$.SystemApp.commonOper.save("/culmaincul/update",formObject);
+			
+		},
+		find : function(formobject) {
+			var data = $("#"+formobject).serialize();
+
+			$.SystemApp.divLoad("#systemData", "/culmaincul/list", data,
+					function() {
+
+					});
+		},
+		init_tree : function(treeData) {
+			this.indextree = $.fn.zTree.init($("#indextree"), this.setting(), treeData);
+			var nodes = this.indextree.getNodes();
+			if (nodes.length >0){
+				this.indextree.selectNode(nodes[0]);
+				this.indextree.expandNode(nodes[0]);
+			}
+		},
+		filterData:function(treeNode){
+			var pId= treeNode.id ;
+			if (treeNode.level==0) //根节点不作处理
+				return ;
+			var allObj = $("div[class^='div_']","#editculMainCul");
+			var showObj = $("div[class^='div_"+pId+"'] ","#editculMainCul");
+			allObj.hide();
+			showObj.show();
+		}
+	};
+
+
+$.SystemApp.culShowCustomJscript = {
+		dialogObj : null,
+		init_UI : function() {
+				$.SystemApp.divLoad("#systemData", "/culshowcustom/list", '',
+					function() {
+
+					});
+		},
+		showEdit : function(isEdit) {
+			var _this = this;
+			_this.dialogObj = $.SystemApp.commonOper.showEdit(isEdit,"/culshowcustom/showEdit","tableHover_culShowCustom","文物信息编辑");
+
+		},
+		del : function() {
+			$.SystemApp.commonOper.del("/culshowcustom/delete","tableHover_culShowCustom");
+			
+		},
+		save : function(formObject) {
+			$.SystemApp.commonOper.save("/culshowcustom/update",formObject);
+			
+		},
+		find : function(formobject) {
+			var data = $("#"+formobject).serialize();
+
+			$.SystemApp.divLoad("#systemData", "/culshowcustom/list", data,
 					function() {
 
 					});

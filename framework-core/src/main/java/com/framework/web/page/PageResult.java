@@ -12,7 +12,7 @@ import java.util.List;
 public class   PageResult implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6405087297327140471L;
 
@@ -20,13 +20,13 @@ public class   PageResult implements Serializable {
 	 * 当前页的记录列表
 	 */
 	private List<?> pageDatas;
-    
+
 	/**
 	 * 缓冲数据存储上页及下页，是否可提高速度有待验证
 	 */
 	private List<?> nextPageDatas;
 	private List<?> priorPageDatas;
-	
+
 	/**
 	 * 当前页开始行
 	 */
@@ -51,7 +51,7 @@ public class   PageResult implements Serializable {
 	 * 第一页
 	 */
 	private int firstPage=1;
-	
+
 	/**
 	 * 上一页的页码
 	 */
@@ -72,40 +72,43 @@ public class   PageResult implements Serializable {
 	 */
 	private int curPage;
 
+	public PageResult() {
 
-	public PageResult(int curPage,  int totalRowNum,int pageRowNum) {
-		
+	}
+
+	public PageResult(int curPage, int totalRowNum, int pageRowNum) {
+
 		this.pageRowNum = pageRowNum;
 		this.totalRowNum = totalRowNum;
-		
+
 		//总页数，即最后一页的页码，总行数除以每页行数
 		//IEEEremainder
 		if (totalRowNum%pageRowNum >0 )
 			this.lastPage = totalRowNum / pageRowNum + 1;
 		else
 			this.lastPage = totalRowNum / pageRowNum;
-		
+
 		if (this.lastPage == 0)
 			this.lastPage = 1;
-		
+
 		if (curPage > this.lastPage)
 			this.curPage = this.lastPage;
 		else
 			this.curPage = curPage;
-		
-		
+
+
 		//当前页的开始行
 		this.startRow = (this.curPage-1)  * pageRowNum + 1;
 		//当前页的结束行
 		this.endRow = this.curPage * pageRowNum;
 		if (this.endRow > this.totalRowNum)
 			this.endRow = this.totalRowNum;
-		
+
 		if (this.curPage == this.firstPage)
 			this.prevPage = 0; //为0是表示没有前页
 		else
 			this.prevPage = this.curPage - 1;
-		
+
 		if (this.curPage == this.lastPage)
 			this.nextPage = 0;
 		else
@@ -234,6 +237,6 @@ public class   PageResult implements Serializable {
 
 
 	//get set method
-	
-	
+
+
 }

@@ -9,7 +9,7 @@
   <name>framework-core-jpa</name>
   <description>framework-core-jpa</description>
   <properties>
-        <spring.version>4.1.0.RELEASE</spring.version>
+        <spring.version>5.2.1.RELEASE</spring.version>
     </properties>
   <dependencies>
 		<dependency>
